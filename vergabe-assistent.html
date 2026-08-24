@@ -303,7 +303,7 @@ function App() {
             e("h1", { style: { fontSize: 17, fontWeight: 700, color: "#3E403F", margin: 0, lineHeight: 1.3 }}, "Vergabe-Assistent ", e("span", { style: { color: "#1678A9" }}, "Saarland"))
           )
         ),
-        e("div", { className: "header-meta", style: { textAlign: "right", fontSize: 11, color: "#8a8a8a", lineHeight: 1.5 }}, "Saarland", e("br"), "Vergabeerlass 2025 · EU-SW 2026", e("br"), "Stand 07/2026 · v3", e("br"), e("span", { style: { fontWeight: 600 }}, lizenzKopfzeile()))
+        e("div", { className: "header-meta", style: { textAlign: "right", fontSize: 11, color: "#8a8a8a", lineHeight: 1.5 }}, e("a", { href: "index.html", style: { color: "#1678A9", textDecoration: "none", fontWeight: 600 }}, "← Übersicht"), e("br"), "Saarland", e("br"), "Vergabeerlass 2025 · EU-SW 2026", e("br"), "Stand 07/2026 · v3", e("br"), e("span", { style: { fontWeight: 600 }}, lizenzKopfzeile()))
       )
     ),
     e("div", { style: { maxWidth: 640, margin: "0 auto", padding: "20px 16px 60px" }},
@@ -447,7 +447,7 @@ function App() {
           "Entwickelt und gepflegt von 2Rat – Büro für Radverkehrsplanung · Armin Jung · Radverkehrsplaner EIPOS · www.2rat.org"
         ),
         e("p", { style: { fontSize: 10, color: "#a1a1aa", margin: "6px 0 0", lineHeight: 1.6 }},
-          lizenzKopfzeile() + " · Lizenziert an AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland"
+          "Lizenziert an AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland"
         )
       )
     )
