@@ -10,30 +10,62 @@
 --green:#659444;--green-dark:#4a7332;--green-light:#eef5e6;--blue:#1678A9;--blue-dark:#115d85;--blue-light:#e8f4fa}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--gray);line-height:1.6}
+
 .header{background:var(--white);border-bottom:3px solid var(--green);padding:18px 20px}
 .header-inner{max-width:980px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:14px}
 .header-left{display:flex;align-items:center;gap:14px}
-.header-logo{height:38px}
+.header-logo{height:38px;width:auto}
 .header-sub{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-light)}
 .header-title{font-size:17px;font-weight:700;color:var(--gray);line-height:1.3}
 .header-title span{color:var(--green)}
 .header-right{text-align:right;font-size:11px;color:var(--gray-light);line-height:1.5}
+
 .main{max-width:980px;margin:0 auto;padding:32px 20px 60px}
-.intro{background:var(--white);border:1px solid var(--gray-border);border-radius:8px;padding:18px 20px;margin-bottom:22px}
+.intro{background:var(--white);border:1px solid var(--gray-border);border-radius:8px;padding:18px 20px;margin-bottom:26px}
 .intro h1{font-size:22px;margin-bottom:10px}
 .intro p{font-size:15px;color:#555;max-width:70ch}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:16px}
-.card{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--gray-border);border-left:4px solid var(--green);
-border-radius:8px;padding:18px 20px;text-decoration:none;color:inherit;transition:box-shadow .15s,transform .15s}
-.card:hover{box-shadow:0 3px 12px rgba(0,0,0,.09);transform:translateY(-2px)}
-.card.blue{border-left-color:var(--blue)}
-.card-step{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-light);margin-bottom:4px}
-.card-title{font-size:16px;font-weight:700;margin-bottom:6px}
-.card-text{font-size:13.5px;color:#555;line-height:1.55}
-.hinweis{margin-top:22px;background:var(--blue-light);border-radius:8px;padding:14px 16px;font-size:13px;color:var(--blue-dark)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(400px,100%),1fr));gap:16px}
+
+.card{position:relative;display:flex;flex-direction:column;background:var(--white);
+border:1px solid var(--gray-border);border-radius:8px;padding:20px 22px 16px;
+text-decoration:none;color:inherit;overflow:hidden;
+transition:box-shadow .18s ease,transform .18s ease,border-color .18s ease}
+/* farbige Kante links – wächst beim Überfahren */
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--green);transition:width .18s ease}
+.card:hover,.card:focus-visible{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px);border-color:#c4c4c4}
+.card:hover::before,.card:focus-visible::before{width:7px}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.card-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.card-num{flex:0 0 auto;width:26px;height:26px;border-radius:6px;background:var(--green-light);color:var(--green-dark);
+font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+.card-step{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-light)}
+.card-title{font-size:17px;font-weight:700;margin-bottom:7px;letter-spacing:-.01em}
+.card-text{font-size:13.5px;color:#555;line-height:1.6;flex:1 0 auto}
+.card-open{margin-top:16px;padding-top:12px;border-top:1px solid #ececec;
+font-size:12.5px;font-weight:600;color:var(--green-dark);display:flex;align-items:center;gap:6px}
+.card-open .arrow{transition:transform .18s ease}
+.card:hover .card-open .arrow,.card:focus-visible .card-open .arrow{transform:translateX(4px)}
+
+/* Schritt 4 – Beauftragung: blau abgesetzt */
+.card.blue::before{background:var(--blue)}
+.card.blue .card-num{background:var(--blue-light);color:var(--blue-dark)}
+.card.blue .card-open{color:var(--blue-dark)}
+
+.hinweis{margin-top:24px;background:var(--blue-light);border-radius:8px;padding:14px 16px;font-size:13px;color:var(--blue-dark)}
 .footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--gray-border);font-size:11px;color:var(--gray-light);line-height:1.6}
 .footer a{color:var(--blue);text-decoration:none}
-@media(max-width:640px){.header-inner{flex-direction:column;align-items:flex-start}.header-right{text-align:left}}
+
+@media(max-width:640px){
+  .header-inner{flex-direction:column;align-items:flex-start}
+  .header-right{text-align:left}
+  .card{padding:18px 18px 14px}
+}
+@media(prefers-reduced-motion:reduce){
+  .card,.card::before,.card-open .arrow{transition:none}
+  .card:hover,.card:focus-visible{transform:none}
+}
 </style>
 </head>
 <body>
@@ -41,7 +73,7 @@ border-radius:8px;padding:18px 20px;text-decoration:none;color:inherit;transitio
 <div class="header">
   <div class="header-inner">
     <div class="header-left">
-      <img class="header-logo" id="logo" alt="AGFK-SL" src="">
+      <img class="header-logo" id="logo" alt="AGFK-SL">
       <div>
         <div class="header-sub">Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland</div>
         <div class="header-title">Werkzeuge <span>Radverkehr Saarland</span></div>
@@ -64,31 +96,47 @@ border-radius:8px;padding:18px 20px;text-decoration:none;color:inherit;transitio
   <div class="grid">
 
     <a class="card" href="projekt-check.html">
-      <div class="card-step">Schritt 1 · Einstieg</div>
+      <div class="card-head">
+        <div class="card-num">1</div>
+        <div class="card-step">Einstieg</div>
+      </div>
       <div class="card-title">Projekt-Check Radverkehr</div>
       <div class="card-text">Führt in wenigen Schritten zu Federführung, einzubindenden Stellen
       und Prüfpunkten. Grundlage ist die Zuständigkeitslandkarte Radverkehr Saarland der AGFK-SL.</div>
+      <div class="card-open">Werkzeug öffnen <span class="arrow" aria-hidden="true">→</span></div>
     </a>
 
     <a class="card" href="zustaendigkeiten.html">
-      <div class="card-step">Schritt 2 · Zuständigkeit</div>
+      <div class="card-head">
+        <div class="card-num">2</div>
+        <div class="card-step">Zuständigkeit</div>
+      </div>
       <div class="card-title">Zuständigkeiten Radverkehr</div>
       <div class="card-text">Klärt im Detail, welche Behörde für eine Maßnahme zuständig ist –
       Gemeinde, Landkreis, Regionalverband oder Land – nach StVO und SaarlStrG.</div>
+      <div class="card-open">Werkzeug öffnen <span class="arrow" aria-hidden="true">→</span></div>
     </a>
 
     <a class="card" href="foerdermittel-finder.html">
-      <div class="card-step">Schritt 3 · Finanzierung</div>
+      <div class="card-head">
+        <div class="card-num">3</div>
+        <div class="card-step">Finanzierung</div>
+      </div>
       <div class="card-title">Fördermittel-Finder</div>
       <div class="card-text">Prüft, ob eine Maßnahme unter die Förderrichtlinie Rad- und
       Fußverkehr (FRL-NMOB) fällt, und zeigt Fristen, Quoten und Antragsweg.</div>
+      <div class="card-open">Werkzeug öffnen <span class="arrow" aria-hidden="true">→</span></div>
     </a>
 
     <a class="card blue" href="vergabe-assistent.html">
-      <div class="card-step">Schritt 4 · Beauftragung</div>
+      <div class="card-head">
+        <div class="card-num">4</div>
+        <div class="card-step">Beauftragung</div>
+      </div>
       <div class="card-title">Vergabe-Assistent Saarland</div>
       <div class="card-text">Bestimmt anhand von Auftragswert und Leistungsart das richtige
       Vergabeverfahren – vom Direktauftrag bis zur öffentlichen Ausschreibung.</div>
+      <div class="card-open">Werkzeug öffnen <span class="arrow" aria-hidden="true">→</span></div>
     </a>
 
   </div>
@@ -109,8 +157,8 @@ border-radius:8px;padding:18px 20px;text-decoration:none;color:inherit;transitio
 </main>
 
 <script>
-/* Logo: bis das AGFK-Logo vorliegt, wird das 2Rat-Logo aus den Werkzeugen verwendet.
-   Zum Austauschen: agfk-logo.png ins Repo legen und die Zeile darunter aktivieren. */
+/* Logo: erwartet agfk-logo.png im selben Ordner wie diese Datei.
+   Fehlt die Datei, wird das Bild ausgeblendet – der Kopf zeigt dann nur den Text. */
 var l = document.getElementById('logo');
 l.onerror = function () { l.style.display = 'none'; };
 l.src = 'agfk-logo.png';
