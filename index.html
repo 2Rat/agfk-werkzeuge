@@ -111,9 +111,9 @@ border-radius:8px;padding:16px 18px;text-decoration:none;color:inherit;transitio
 <script>
 /* Logo: bis das AGFK-Logo vorliegt, wird das 2Rat-Logo aus den Werkzeugen verwendet.
    Zum Austauschen: agfk-logo.png ins Repo legen und die Zeile darunter aktivieren. */
-// document.getElementById('logo').src = 'agfk-logo.png';
 var l = document.getElementById('logo');
-if (!l.getAttribute('src')) { l.style.display = 'none'; }
+l.onerror = function () { l.style.display = 'none'; };
+l.src = 'agfk-logo.png';
 </script>
 
 </body>
