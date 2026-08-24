@@ -10,12 +10,12 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --blue:#1678A9;--blue-dark:#115d85;--blue-light:#e8f4fa;
-  --green:#659444;--green-dark:#4a7332;--green-light:#eef5e6;
+  --blue:#114B7D;--blue-dark:#0C3557;--blue-light:#E8EEF4;
+  --green:#14AB9B;--green-dark:#0C7A6C;--green-light:#E3F5F2;
   --gray:#3E403F;--gray-light:#8a8a8a;--gray-border:#d9d9d9;
   --bg:#f9fafb;--white:#ffffff;
   --warn:#d4930a;--warn-bg:#fef9ec;--warn-border:#f0dca0;
-  --info:#1678A9;--info-bg:#e8f4fa;--info-border:#b3d7ea;
+  --info:#114B7D;--info-bg:#E8EEF4;--info-border:#BCCBD9;
 }
 body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--gray);background:var(--bg);min-height:100vh}
 .header{background:var(--white);border-bottom:3px solid var(--green);padding:18px 20px}
@@ -77,14 +77,14 @@ h3{font-size:14px;font-weight:700;margin:0 0 8px}
 .zwarn-item:last-child{margin-bottom:0}
 .notes-item{font-size:12px;color:#6b5900;line-height:1.5;margin-bottom:5px}
 .notes-item:last-child{margin-bottom:0}
-.praxis-box{margin-top:12px;background:var(--green-light);border:1px solid rgba(101,148,68,.25);border-radius:7px;padding:12px 14px}
+.praxis-box{margin-top:12px;background:var(--green-light);border:1px solid rgba(20,171,155,.3);border-radius:7px;padding:12px 14px}
 .praxis-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green-dark);margin-bottom:5px}
 .praxis-item{font-size:12px;color:#3a5a1f;line-height:1.5;margin-bottom:5px}
 .qbadge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.05em;line-height:1.4;padding:1px 5px;border-radius:3px;margin-right:6px;vertical-align:1px;white-space:nowrap}
 .q-g{background:#1e4f7a;color:#fff}
-.q-sl{background:#659444;color:#fff}
+.q-sl{background:#0C7A6C;color:#fff}
 .q-bw{background:#e3e3e3;color:#555}.q-al{background:#f0e6d2;color:#7a5c1e}
-.praxis-legend{margin-top:9px;padding-top:7px;border-top:1px solid rgba(101,148,68,.25);font-size:10px;line-height:1.45;color:#5d7a45}
+.praxis-legend{margin-top:9px;padding-top:7px;border-top:1px solid rgba(20,171,155,.3);font-size:10px;line-height:1.45;color:#0C7A6C}
 .lernbox{margin:0 0 16px;border:1px solid rgba(22,120,169,.30);border-radius:8px;background:var(--blue-light);overflow:hidden}
 .lernbox.inresult{margin:14px 0 0}
 .lernbox>summary{cursor:pointer;list-style:none;padding:12px 15px;color:var(--blue-dark)}
@@ -119,7 +119,7 @@ h3{font-size:14px;font-weight:700;margin:0 0 8px}
 .map-status.show{display:block;margin-top:10px}
 .map-tip{display:none;font-size:11.5px;color:var(--gray-light);margin-top:8px;line-height:1.5}
 .mapwrap.open .map-tip{display:block}
-.map-status .ok{background:var(--green-light);border:1px solid rgba(101,148,68,.3);border-radius:8px;padding:11px 14px;font-size:12.5px;line-height:1.55}
+.map-status .ok{background:var(--green-light);border:1px solid rgba(20,171,155,.35);border-radius:8px;padding:11px 14px;font-size:12.5px;line-height:1.55}
 .map-status .ok b{color:var(--green-dark)}
 .copy-box{margin-top:16px;background:var(--white);border:1.5px solid var(--gray-border);border-radius:10px;overflow:hidden}
 .copy-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;background:var(--blue-light);border-bottom:1px solid var(--gray-border)}
@@ -179,7 +179,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <div class="header-title">Zuständigkeiten <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a href="index.html" style="color:#1678A9;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br>Stand 08/2026 · v34</div>
+    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br>Stand 08/2026 · v34</div>
   </div>
 </div>
 
@@ -208,7 +208,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
     Im Einzelfall bitte Zuständigkeit mit der jeweiligen Behörde prüfen.
     <br>
     <strong style="color:var(--gray)">Entwickelt und gepflegt von 2Rat</strong> – Büro für Radverkehrsplanung · Armin Jung · Radverkehrsplaner EIPOS · <a href="https://www.2rat.org">www.2rat.org</a>
-    <br><span style="display:inline-block;margin-top:5px;opacity:.85">Lizenziert an AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland</span>
+    <br><span style="display:inline-block;margin-top:5px;opacity:.85">Lizenziert an die AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland e.V.</span>
   </footer>
 </main>
 
@@ -244,7 +244,7 @@ const MEASURES=[
 
 const STREETS=[
 {id:"bundeslandstrasse",label:"Bundes- oder Landstraße",icon:"B/L",color:"#dc2626"},
-{id:"gemeindestrasse",label:"Gemeindestraße",icon:"G",color:"#659444"},
+{id:"gemeindestrasse",label:"Gemeindestraße",icon:"G",color:"#14AB9B"},
 {id:"sonstige",label:"Sonstige öffentliche Straße",icon:"S",color:"#8a8a8a"}
 ];
 /* Unterauswahl, wenn Bundes-/Landstraße gewählt wird – hält die Rechtslogik exakt */
@@ -758,9 +758,9 @@ function render(){
 
     let h=`<button class="btn-back" onclick="goStep(${back})">← Zurück</button>
     <div class="badges">
-      <span class="badge" style="background:rgba(22,120,169,.09);color:#1678A9">${r.measure.label}</span>
+      <span class="badge" style="background:rgba(22,120,169,.09);color:#114B7D">${r.measure.label}</span>
       <span class="badge" style="background:${s.color}15;color:${s.color}">${s.label}</span>
-      ${loc?`<span class="badge" style="background:rgba(101,148,68,.09);color:#659444">${loc.label}</span>`:''}
+      ${loc?`<span class="badge" style="background:rgba(20,171,155,.12);color:#14AB9B">${loc.label}</span>`:''}
       ${state.kommune?`<span class="badge" style="background:rgba(62,64,63,.08);color:#3E403F">${state.kommune}</span>`:''}
     </div>
     <div class="result-card">
@@ -802,7 +802,7 @@ function render(){
           boxTitle='Falls eine verkehrsrechtliche Anordnung dazukommt \u2013 '+kk.name;
           vorspann='F\u00fcr den Bau selbst brauchen Sie diese Beh\u00f6rde nicht. Sie wird erst zust\u00e4ndig, wenn daf\u00fcr Kfz-Stellpl\u00e4tze entfallen oder Beschilderung bzw. Markierung ge\u00e4ndert wird.<br>Landkreis / Regionalverband: '+kk.kreis+'<br>';
         }
-        h+='<div class="info-box" style="background:var(--green-light);border-color:rgba(101,148,68,.3)"><div class="info-title" style="color:var(--green-dark)">'+boxTitle+'</div><div class="info-body">'+vorspann+kontaktHtml+'</div></div>';
+        h+='<div class="info-box" style="background:var(--green-light);border-color:rgba(20,171,155,.35)"><div class="info-title" style="color:var(--green-dark)">'+boxTitle+'</div><div class="info-body">'+vorspann+kontaktHtml+'</div></div>';
       }
     }
     if(sEff==="bundesstrasse"||sEff==="landesstrasse1"||sEff==="landesstrasse2"){
@@ -820,7 +820,7 @@ function render(){
       <strong>Eigene Behörden:</strong> Landeshauptstadt Saarbrücken sowie die Mittelstädte Völklingen und St. Ingbert (StVO-Befugnisse übertragen, § 1 Abs. 1 Nr. 8 Mittelstadtverordnung)<br>
       <strong>Oberste Behörde:</strong> Ministerium für Umwelt, Klima, Mobilität, Agrar und Verbraucherschutz (MUKMAV)
     </div></div>`;
-    h+=`<div class="agfk-contact" style="margin-top:16px;background:#eef5e6;border:1px solid rgba(101,148,68,.3);border-radius:8px;padding:13px 16px;font-size:12.5px;line-height:1.6">Fragen offen geblieben? Die <strong style="color:#4a7332">Geschäftsstelle der AGFK-SL</strong> hilft weiter.<br>Europaallee 27, 66113 Saarbrücken<br>Tel.: +49 (0)681 4109 6482 · E-Mail: geschaeftstelle@agfk-sl.de</div>`;
+    h+=`<div class="agfk-contact" style="margin-top:16px;background:#E3F5F2;border:1px solid rgba(20,171,155,.35);border-radius:8px;padding:13px 16px;font-size:12.5px;line-height:1.6">Fragen offen geblieben? Die <strong style="color:#0C7A6C">Geschäftsstelle der AGFK-SL</strong> hilft weiter.<br>Europaallee 27, 66113 Saarbrücken<br>Tel.: +49 (0)681 4109 6482 · E-Mail: geschaeftstelle@agfk-sl.de</div>`;
     h+=`<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-outline" style="width:auto;flex:1;min-width:160px" onclick="window.print()">🖨️ Drucken</button><button class="btn btn-outline" style="width:auto;flex:1;min-width:160px" onclick="resetAll()">Neue Abfrage starten</button></div>`;
     el.innerHTML=h;
   }

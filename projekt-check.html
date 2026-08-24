@@ -8,8 +8,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --blue:#1678A9;--blue-dark:#115d85;--blue-light:#e8f4fa;
-  --green:#659444;--green-dark:#4a7332;--green-light:#eef5e6;
+  --blue:#114B7D;--blue-dark:#0C3557;--blue-light:#E8EEF4;
+  --green:#14AB9B;--green-dark:#0C7A6C;--green-light:#E3F5F2;
   --gray:#3E403F;--gray-light:#8a8a8a;--gray-border:#d9d9d9;
   --bg:#f9fafb;--white:#ffffff;
   --warn:#d4930a;--warn-bg:#fef9ec;--warn-border:#f0dca0;
@@ -72,7 +72,7 @@ h3{font-size:14px;font-weight:700;margin:18px 0 8px}
 .lead-row .who{font-size:13.5px;line-height:1.5}
 .lead-row .who b{color:var(--blue-dark)}
 .tag-list{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:12px;font-weight:600;background:var(--green-light);color:var(--green-dark);border:1px solid rgba(101,148,68,.3);border-radius:6px;padding:4px 10px}
+.tag{font-size:12px;font-weight:600;background:var(--green-light);color:var(--green-dark);border:1px solid rgba(20,171,155,.35);border-radius:6px;padding:4px 10px}
 .tag.added{background:var(--blue-light);color:var(--blue-dark);border-color:rgba(22,120,169,.3)}
 .pruef-list,.steps-list{font-size:13px;line-height:1.7;color:var(--gray)}
 .pruef-list div{padding-left:18px;position:relative}
@@ -93,14 +93,14 @@ h3{font-size:14px;font-weight:700;margin:18px 0 8px}
 .crosslink{display:block;padding:12px 15px;border-radius:8px;border:1.5px solid var(--gray-border);background:var(--white);text-decoration:none;color:var(--gray);font-size:13px;transition:all .15s}
 .crosslink:hover{border-color:var(--blue);background:var(--blue-light)}
 .crosslink b{color:var(--blue)}
-.agfk-contact{margin-top:16px;background:var(--green-light);border:1px solid rgba(101,148,68,.3);border-radius:8px;padding:13px 16px;font-size:12.5px;line-height:1.6}
+.agfk-contact{margin-top:16px;background:var(--green-light);border:1px solid rgba(20,171,155,.35);border-radius:8px;padding:13px 16px;font-size:12.5px;line-height:1.6}
 .agfk-contact b{color:var(--green-dark)}
 .footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--gray-border);font-size:11px;color:var(--gray-light);line-height:1.6}
 .footer a{color:var(--blue);text-decoration:none}
 .tag-legend{display:flex;gap:16px;margin-top:9px;flex-wrap:wrap}
 .leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gray-light)}
 .dot{width:11px;height:11px;border-radius:3px;display:inline-block;border:1px solid}
-.dot.green{background:var(--green-light);border-color:rgba(101,148,68,.4)}
+.dot.green{background:var(--green-light);border-color:rgba(20,171,155,.45)}
 .dot.blue{background:var(--blue-light);border-color:rgba(22,120,169,.4)}
 .kommune-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--white);border:1.5px solid var(--gray-border);border-radius:8px;padding:10px 14px;margin-bottom:18px}
 .kommune-label{font-size:12px;font-weight:600;color:var(--gray-light)}
@@ -199,7 +199,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
     <b>Orientierungshilfe, keine Rechts- oder Fachberatung im Einzelfall.</b> Sie ersetzt keine Einzelfallprüfung und keine formelle Beteiligung der zuständigen Behörden. <span id="standFoot">Stand 08/2026 · v6</span>.
     Datengrundlage: Zuständigkeitslandkarte Radverkehr Saarland (AGFK-SL) sowie StVO, VwV-StVO 2025, StVZustG Saarland, SaarlStrG, FStrG.<br>
     <strong style="color:var(--gray)">Entwickelt und gepflegt von 2Rat</strong> – Büro für Radverkehrsplanung · Armin Jung · Radverkehrsplaner EIPOS · <a href="https://www.2rat.org">www.2rat.org</a>
-    <br><span style="display:inline-block;margin-top:5px;opacity:.85">Lizenziert an AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland</span>
+    <br><span style="display:inline-block;margin-top:5px;opacity:.85">Lizenziert an die AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland e.V.</span>
   </footer>
 </main>
 
@@ -547,7 +547,7 @@ function viewErgebnis(){
         if(kt.note)kontaktHtml+='<br><span style="font-size:11.5px">'+kt.note+'</span>';
         kontaktHtml+='<br>🌐 <a href="https://www.'+kt.web+'" target="_blank" rel="noopener">www.'+kt.web+'</a> <span style="color:var(--gray-light);font-size:11px">(Kontakt recherchiert 07/2026 – im Zweifel auf der Behördenseite prüfen)</span>';
       }
-      h+='<div class="info-box" style="background:var(--green-light);border-color:rgba(101,148,68,.3)"><div class="info-title" style="color:var(--green-dark)">Vor Ort – '+k.name+'</div><div class="info-body">Landkreis / Regionalverband: '+k.kreis+'<br>Zuständige Straßenverkehrsbehörde: '+stvb+kontaktHtml+'</div></div>';
+      h+='<div class="info-box" style="background:var(--green-light);border-color:rgba(20,171,155,.35)"><div class="info-title" style="color:var(--green-dark)">Vor Ort – '+k.name+'</div><div class="info-body">Landkreis / Regionalverband: '+k.kreis+'<br>Zuständige Straßenverkehrsbehörde: '+stvb+kontaktHtml+'</div></div>';
     }
   }
 

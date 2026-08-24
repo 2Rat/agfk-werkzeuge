@@ -19,11 +19,11 @@
     .art-btn:hover { transform: none; }
   }
   .quick-btn { transition: all 0.12s; }
-  .quick-btn:hover { background: #e8f4fa !important; }
+  .quick-btn:hover { background: #E8EEF4 !important; }
   .step-row:hover { background: #f9fafb; }
-  input[type=text]:focus { outline: none; box-shadow: 0 0 0 3px rgba(22,120,169,0.15); border-color: #1678A9; }
+  input[type=text]:focus { outline: none; box-shadow: 0 0 0 3px rgba(22,120,169,0.15); border-color: #114B7D; }
   /* Barrierefreiheit: sichtbarer Fokus */
-  .step-row:focus-visible, .art-btn:focus-visible, .quick-btn:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #1678A9; outline-offset: 2px; }
+  .step-row:focus-visible, .art-btn:focus-visible, .quick-btn:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #114B7D; outline-offset: 2px; }
   /* Druckansicht: nur Branding + Ergebnis */
   @media print {
     body { background: #fff; }
@@ -178,7 +178,7 @@ function StepRow({ text, done, onToggle, type }) {
   const colors = {
     pflicht: { check: "#659444" },
     empfohlen: { check: "#f59e0b" },
-    bedarf: { check: "#1678A9" },
+    bedarf: { check: "#114B7D" },
   };
   const c = colors[type];
   const isWarning = text.startsWith("⚠");
@@ -257,7 +257,7 @@ function VermerkGenerator({ wert, art, verfahren }) {
     ),
     show ? e("div", null,
       e("div", { style: { padding: "0 16px 8px", display: "flex", justifyContent: "flex-end" }},
-        e("button", { onClick: handleCopy, style: { padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer", background: copied ? "#659444" : "#1678A9", color: "#fff", transition: "all 0.2s" }},
+        e("button", { onClick: handleCopy, style: { padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer", background: copied ? "#659444" : "#114B7D", color: "#fff", transition: "all 0.2s" }},
           copied ? "✓ Kopiert!" : "In Zwischenablage kopieren")
       ),
       e("pre", { style: { padding: "14px 16px", margin: 0, fontSize: 12, lineHeight: 1.7, color: "#374151", background: "#f8fafc", whiteSpace: "pre-wrap", fontFamily: "ui-monospace, Consolas, monospace", maxHeight: 280, overflowY: "auto", borderTop: "1px solid #f1f5f9" }}, text)
@@ -293,16 +293,16 @@ function App() {
 
   return e("div", { style: { minHeight: "100vh", background: "#f8fafc" }},
     // Header (2Rat-Branding)
-    e("div", { className: "app-header", style: { background: "#fff", padding: "16px 20px", borderBottom: "3px solid #1678A9" }},
+    e("div", { className: "app-header", style: { background: "#fff", padding: "16px 20px", borderBottom: "3px solid #114B7D" }},
       e("div", { style: { maxWidth: 640, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }},
         e("div", { style: { display: "flex", alignItems: "center", gap: 14 }},
           e("img", { src: "agfk-logo.png", alt: "AGFK-SL", onError: function(ev){ ev.target.style.display = "none"; }, style: { height: 38 }}),
           e("div", null,
             e("div", { style: { fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#8a8a8a" }}, "Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland"),
-            e("h1", { style: { fontSize: 17, fontWeight: 700, color: "#3E403F", margin: 0, lineHeight: 1.3 }}, "Vergabe-Assistent ", e("span", { style: { color: "#1678A9" }}, "Saarland"))
+            e("h1", { style: { fontSize: 17, fontWeight: 700, color: "#3E403F", margin: 0, lineHeight: 1.3 }}, "Vergabe-Assistent ", e("span", { style: { color: "#114B7D" }}, "Saarland"))
           )
         ),
-        e("div", { className: "header-meta", style: { textAlign: "right", fontSize: 11, color: "#8a8a8a", lineHeight: 1.5 }}, e("a", { href: "index.html", style: { color: "#1678A9", textDecoration: "none", fontWeight: 600 }}, "← Übersicht"), e("br"), "Saarland", e("br"), "Vergabeerlass 2025 · EU-SW 2026", e("br"), "Stand 07/2026 · v3")
+        e("div", { className: "header-meta", style: { textAlign: "right", fontSize: 11, color: "#8a8a8a", lineHeight: 1.5 }}, e("a", { href: "index.html", style: { color: "#114B7D", textDecoration: "none", fontWeight: 600 }}, "← Übersicht"), e("br"), "Saarland", e("br"), "Vergabeerlass 2025 · EU-SW 2026", e("br"), "Stand 07/2026 · v3")
       )
     ),
     e("div", { style: { maxWidth: 640, margin: "0 auto", padding: "20px 16px 60px" }},
@@ -319,13 +319,13 @@ function App() {
                 "aria-pressed": art === l.id,
                 style: {
                   flex: 1, padding: "10px 8px", borderRadius: 10,
-                  border: art === l.id ? "2px solid #1678A9" : "2px solid #e2e8f0",
-                  background: art === l.id ? "#e8f4fa" : "#fff",
+                  border: art === l.id ? "2px solid #114B7D" : "2px solid #e2e8f0",
+                  background: art === l.id ? "#E8EEF4" : "#fff",
                   cursor: "pointer", textAlign: "center",
                 }
               },
                 e("div", { style: { fontSize: 20 }}, l.icon),
-                e("div", { style: { fontSize: 12, fontWeight: art === l.id ? 700 : 500, color: art === l.id ? "#115d85" : "#6b7280", marginTop: 2 }}, l.label)
+                e("div", { style: { fontSize: 12, fontWeight: art === l.id ? 700 : 500, color: art === l.id ? "#0C3557" : "#6b7280", marginTop: 2 }}, l.label)
               );
             })
           )
@@ -353,7 +353,7 @@ function App() {
                 onClick: function() { setWertInput(v.toString()); setWert(v); },
                 style: {
                   padding: "4px 10px", borderRadius: 6, fontSize: 11,
-                  border: "1px solid #e2e8f0", background: wert === v ? "#e8f4fa" : "#fff",
+                  border: "1px solid #e2e8f0", background: wert === v ? "#E8EEF4" : "#fff",
                   color: "#64748b", cursor: "pointer",
                   fontFamily: "ui-monospace, monospace", fontWeight: 500,
                 }
@@ -434,9 +434,9 @@ function App() {
       e("div", { className: "suite-links", style: { marginTop: 24, display: "flex", flexDirection: "column", gap: 8 }},
         e("div", { style: { fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8a8a8a" }}, "Passende weitere Werkzeuge"),
         e("a", { href: "foerdermittel-finder.html", style: { display: "block", padding: "11px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, background: "#fff", textDecoration: "none", color: "#3E403F", fontSize: 13, lineHeight: 1.5 }},
-          e("b", { style: { color: "#115d85" }}, "Fördermittel-Finder"), " – Erst die Förderung sichern, dann vergeben (Quote nach FRL-NMOB-Rad-Fuß)"),
+          e("b", { style: { color: "#0C3557" }}, "Fördermittel-Finder"), " – Erst die Förderung sichern, dann vergeben (Quote nach FRL-NMOB-Rad-Fuß)"),
         e("a", { href: "zustaendigkeiten.html", style: { display: "block", padding: "11px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, background: "#fff", textDecoration: "none", color: "#3E403F", fontSize: 13, lineHeight: 1.5 }},
-          e("b", { style: { color: "#115d85" }}, "Zuständigkeiten Radverkehr"), " – Wer ordnet an, wer trägt die Baulast?")
+          e("b", { style: { color: "#0C3557" }}, "Zuständigkeiten Radverkehr"), " – Wer ordnet an, wer trägt die Baulast?")
       ),
       e("footer", { style: { display: "block", marginTop: 16, padding: "12px 16px", borderRadius: 10, background: "rgba(0,0,0,0.02)", border: "1px solid #e2e8f0" }},
         e("p", { style: { fontSize: 10, color: "#a1a1aa", margin: 0, lineHeight: 1.6 }},
@@ -444,10 +444,10 @@ function App() {
         ),
         e("p", { style: { fontSize: 10, color: "#a1a1aa", margin: "6px 0 0", lineHeight: 1.6 }},
           "Entwickelt und gepflegt von 2Rat – Büro für Radverkehrsplanung · Armin Jung · Radverkehrsplaner EIPOS · ",
-          e("a", { href: "https://www.2rat.org", style: { color: "#1678A9", textDecoration: "none" }}, "www.2rat.org")
+          e("a", { href: "https://www.2rat.org", style: { color: "#114B7D", textDecoration: "none" }}, "www.2rat.org")
         ),
         e("p", { style: { fontSize: 10, color: "#a1a1aa", margin: "6px 0 0", lineHeight: 1.6 }},
-          "Lizenziert an AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland"
+          "Lizenziert an die AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland e.V."
         )
       )
     )
