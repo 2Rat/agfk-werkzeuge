@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Zuständigkeiten Radverkehr Saarland – 2Rat</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#1678A9;--blue-dark:#115d85;--blue-light:#e8f4fa;
+  --green:#659444;--green-dark:#4a7332;--green-light:#eef5e6;
+  --gray:#3E403F;--gray-light:#8a8a8a;--gray-border:#d9d9d9;
+  --bg:#f9fafb;--white:#ffffff;
+  --warn:#d4930a;--warn-bg:#fef9ec;--warn-border:#f0dca0;
+  --info:#1678A9;--info-bg:#e8f4fa;--info-border:#b3d7ea;
+}
+body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--gray);background:var(--bg);min-height:100vh}
+.header{background:var(--white);border-bottom:3px solid var(--green);padding:18px 20px}
+.header-inner{max-width:680px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.header-left{display:flex;align-items:center;gap:14px}
+.header-logo{height:38px}
+.header-sub{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-light)}
+.header-title{font-size:17px;font-weight:700;color:var(--gray);line-height:1.3}
+.header-title span{color:var(--blue)}
+.header-right{text-align:right;font-size:11px;color:var(--gray-light);line-height:1.5}
+.main{max-width:680px;margin:0 auto;padding:24px 20px 60px}
+.steps{display:flex;gap:6px;align-items:center;margin-bottom:24px}
+.step-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;transition:all .2s}
+.step-dot.done{background:var(--green);color:#fff}
+.step-dot.active{background:var(--blue);color:#fff}
+.step-dot.pending{background:#e5e7eb;color:#9ca3af}
+.step-line{width:32px;height:2px;transition:all .2s}
+.step-line.done{background:var(--green)}
+.step-line.pending{background:#e5e7eb}
+h2{font-size:17px;font-weight:700;margin:0 0 4px}
+h3{font-size:14px;font-weight:700;margin:0 0 8px}
+.subtitle{font-size:13px;color:var(--gray-light);margin:0 0 14px}
+.hint{font-size:11px;color:var(--gray-light);margin:0 0 14px}
+.cards{display:flex;flex-direction:column;gap:8px}
+.cards.sub{gap:6px}
+.card{padding:14px 18px;border-radius:8px;border:1.5px solid var(--gray-border);background:var(--white);cursor:pointer;transition:all .15s}
+.card:hover{border-color:#bbb}
+.card.active{border:2px solid var(--blue);background:var(--blue-light)}
+.card:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.card-row{display:flex;align-items:center;gap:12px}
+.card-icon{font-size:18px;width:26px;text-align:center;color:var(--green)}
+.card-label{font-weight:600;font-size:14px}
+.card-label.sm{font-size:13px}
+.card-desc{font-size:12px;color:var(--gray-light);margin-top:2px}
+.card-count{font-size:12px;color:var(--gray-light);margin-top:1px}
+.street-badge{display:inline-flex;align-items:center;justify-content:center;width:32px;height:22px;border-radius:4px;color:#fff;font-size:11px;font-weight:700}
+.btn{margin-top:18px;width:100%;padding:13px;border-radius:8px;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-outline{background:transparent;color:var(--blue);border:2px solid var(--blue)}
+.btn-back{background:none;border:none;color:var(--blue);cursor:pointer;font-size:13px;font-weight:600;padding:0;margin-bottom:12px}
+.btn:focus-visible,.btn-back:focus-visible,.footer a:focus-visible,.info-body a:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.badge{display:inline-block;padding:3px 10px;border-radius:5px;font-size:11px;font-weight:600;letter-spacing:.02em}
+.result-card{background:var(--white);border-radius:10px;border:1.5px solid var(--gray-border);overflow:hidden}
+.result-header{background:var(--blue);padding:14px 18px;color:#fff}
+.result-header .label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-bottom:2px}
+.result-header .value{font-size:17px;font-weight:700}
+.result-header .detail{font-size:12px;opacity:.8;margin-top:2px}
+.result-body{padding:16px 18px}
+.field{margin-bottom:14px}
+.field-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-light);margin-bottom:3px}
+.field-value{font-size:14px;font-weight:600}
+.field-detail{font-size:12px;color:var(--gray-light)}
+.notes{background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:7px;padding:12px 14px}
+.notes-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--warn);margin-bottom:5px}
+.zwarn{background:#fdecea;border:1.5px solid #e6b0aa;border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.zwarn-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#b03a2e;margin-bottom:5px}
+.zwarn-item{font-size:12.5px;color:#7b241c;line-height:1.5;margin-bottom:5px}
+.zwarn-item:last-child{margin-bottom:0}
+.notes-item{font-size:12px;color:#6b5900;line-height:1.5;margin-bottom:5px}
+.notes-item:last-child{margin-bottom:0}
+.praxis-box{margin-top:12px;background:var(--green-light);border:1px solid rgba(101,148,68,.25);border-radius:7px;padding:12px 14px}
+.praxis-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green-dark);margin-bottom:5px}
+.praxis-item{font-size:12px;color:#3a5a1f;line-height:1.5;margin-bottom:5px}
+.qbadge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.05em;line-height:1.4;padding:1px 5px;border-radius:3px;margin-right:6px;vertical-align:1px;white-space:nowrap}
+.q-g{background:#1e4f7a;color:#fff}
+.q-sl{background:#659444;color:#fff}
+.q-bw{background:#e3e3e3;color:#555}.q-al{background:#f0e6d2;color:#7a5c1e}
+.praxis-legend{margin-top:9px;padding-top:7px;border-top:1px solid rgba(101,148,68,.25);font-size:10px;line-height:1.45;color:#5d7a45}
+.lernbox{margin:0 0 16px;border:1px solid rgba(22,120,169,.30);border-radius:8px;background:var(--blue-light);overflow:hidden}
+.lernbox.inresult{margin:14px 0 0}
+.lernbox>summary{cursor:pointer;list-style:none;padding:12px 15px;color:var(--blue-dark)}
+.lernbox>summary::-webkit-details-marker{display:none}
+.lernbox-t{display:block;font-size:13.5px;font-weight:700}
+.lernbox-t::before{content:"\25b8  "}
+.lernbox[open] .lernbox-t::before{content:"\25be  "}
+.lernbox-sub{display:block;margin-top:3px;font-size:11.5px;font-weight:400;opacity:.9;line-height:1.45}
+.lernbox-body{padding:13px 15px 15px;background:var(--white);border-top:1px solid rgba(22,120,169,.22);font-size:12.5px;line-height:1.62;color:var(--gray)}
+.lernbox-body p{margin-bottom:8px}
+.lernbox-body b{color:#333}
+.lernbox-merk{margin-top:10px;padding:9px 11px;background:var(--blue-light);border-radius:6px;font-size:12px;color:var(--blue-dark)}
+.praxis-item:last-child{margin-bottom:0}
+.info-box{margin-top:16px;background:var(--blue-light);border-radius:8px;border:1px solid rgba(22,120,169,.19);padding:14px 16px}
+.info-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.info-body{font-size:12px;color:var(--gray);line-height:1.7}
+.footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--gray-border);font-size:11px;color:var(--gray-light);line-height:1.6}
+.footer a{color:var(--blue);text-decoration:none}
+.section{margin-top:18px}
+.hidden{display:none}
+.kommune-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--white);border:1.5px solid var(--gray-border);border-radius:8px;padding:10px 14px;margin-bottom:18px}
+.kommune-label{font-size:12px;font-weight:600;color:var(--gray-light)}
+.kommune-select{flex:1;min-width:200px;padding:8px 10px;border-radius:6px;border:1px solid var(--gray-border);font-size:13px;font-family:inherit;color:var(--gray);background:var(--white);cursor:pointer}
+.kommune-select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.mapwrap{margin-bottom:18px}
+.map-toggle{width:100%;text-align:left;background:var(--white);border:1.5px solid var(--gray-border);border-radius:8px;padding:11px 14px;font-size:13px;font-weight:600;color:var(--blue-dark);cursor:pointer}
+.map-toggle:hover{border-color:var(--blue)}
+.map-toggle:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+#zmap{height:340px;border-radius:8px;border:1.5px solid var(--gray-border);margin-top:10px;display:none;z-index:1}
+.mapwrap.open #zmap{display:block}
+.map-status{display:none}
+.map-status.show{display:block;margin-top:10px}
+.map-tip{display:none;font-size:11.5px;color:var(--gray-light);margin-top:8px;line-height:1.5}
+.mapwrap.open .map-tip{display:block}
+.map-status .ok{background:var(--green-light);border:1px solid rgba(101,148,68,.3);border-radius:8px;padding:11px 14px;font-size:12.5px;line-height:1.55}
+.map-status .ok b{color:var(--green-dark)}
+.copy-box{margin-top:16px;background:var(--white);border:1.5px solid var(--gray-border);border-radius:10px;overflow:hidden}
+.copy-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;background:var(--blue-light);border-bottom:1px solid var(--gray-border)}
+.copy-head-title{font-size:12px;font-weight:700;color:var(--blue-dark);text-transform:uppercase;letter-spacing:.05em}
+.copy-btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer}
+.copy-btn.copied{background:var(--green)}
+.copy-btn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.copy-body{padding:12px 14px;font-size:12px;line-height:1.6;white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;max-height:260px;overflow:auto;color:var(--gray)}
+@media (max-width:520px){
+  .header-inner{flex-direction:column;align-items:flex-start;gap:10px}
+  .header-right{text-align:left}
+}
+@media print{
+  .steps,.btn,.btn-back,.header-right,.copy-btn,.copy-actions{display:none!important}
+  body{background:#fff}
+  .main{padding-top:12px}
+  .result-card,.notes,.praxis-box,.info-box,.agfk-contact,.copy-box{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  .copy-body{max-height:none;overflow:visible}
+}
+</style>
+</head>
+<body>
+<!-- ══ 2Rat Lizenzkontext ══════════════════════════════════════════════
+     Reicht den Organisationsnamen aus dem Tool-Portal an das Werkzeug durch.
+     Reihenfolge: URL-Parameter ?org=  →  sessionStorage (Portal-Login)  →  "2Rat".
+     Ein fehlender Wert blockiert nichts - das Werkzeug bleibt voll nutzbar.
+     ═══════════════════════════════════════════════════════════════════ -->
+<script>
+var LIZENZ_ORG = (function () {
+  function clean(v) { return (v || '').toString().replace(/[<>]/g, '').trim().slice(0, 80); }
+  var o = '';
+  try { o = clean(new URLSearchParams(location.search).get('org')); } catch (e) {}
+  if (!o) { try { o = clean(JSON.parse(sessionStorage.getItem('2rat_s') || '{}').org); } catch (e) {} }
+  if (o) { try { sessionStorage.setItem('2rat_org', o); } catch (e) {} }
+  else { try { o = clean(sessionStorage.getItem('2rat_org')); } catch (e) {} }
+  return o || 'AGFK-SL';
+})();
+function lizenzKopfzeile() { return 'Lizenz: ' + LIZENZ_ORG; }
+function lizenzVermerkZeile() {
+  return 'Bereitgestellt f\u00fcr: ' + LIZENZ_ORG
+       + '\nEntwickelt und gepflegt von 2Rat \u2013 B\u00fcro f\u00fcr Radverkehrsplanung \u00b7 www.2rat.org';
+}
+function lizenzInit() {
+  var n = document.querySelectorAll('[data-lizenz]');
+  for (var i = 0; i < n.length; i++) { n[i].textContent = lizenzKopfzeile(); }
+}
+if (document.readyState !== 'loading') { lizenzInit(); }
+else { document.addEventListener('DOMContentLoaded', lizenzInit); }
+</script>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <img class="header-logo" id="logo" alt="2Rat – Büro für Radverkehrsplanung" src="">
+      <div>
+        <div class="header-sub">Büro für Radverkehrsplanung</div>
+        <div class="header-title">Zuständigkeiten <span>Radverkehr Saarland</span></div>
+      </div>
+    </div>
+    <div class="header-right">Saarland<br>Stand 08/2026 · v34<br><span data-lizenz style="font-weight:600"></span></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="mapwrap" id="mapwrap">
+    <button class="map-toggle" id="mapToggle" aria-expanded="false" onclick="toggleMap()">🗺 Auf der Karte klicken (optional) – Kommune, Straße und Lage werden automatisch erkannt</button>
+    <div id="zmap"></div>
+    <div class="map-tip">💡 Tipp: möglichst <b>mittig auf die Fahrbahn</b> klicken – dann werden Straße und Lage am zuverlässigsten erkannt. Ein direkt daneben liegender Geh-/Radweg wird zusätzlich als „begleitende Radinfrastruktur" angezeigt.</div>
+    <div class="map-status" id="mapStatus"></div>
+  </div>
+  <div class="kommune-bar" id="kommuneBar"></div>
+  <details class="lernbox"><summary><span class="lernbox-t">Gesetz oder Regelwerk? Was davon wirklich verbindlich ist</span><span class="lernbox-sub">StVO · VwV-StVO 2025 · ERA und die übrigen FGSV-Regelwerke · Landesvorgabe Saarland · Musterlösungen Baden-Württemberg</span></summary><div class="lernbox-body">
+    <p><b>StVO</b> – Rechtsverordnung, gilt unmittelbar für alle. Sie regelt, <b>ob</b> etwas angeordnet werden darf.</p>
+    <p><b>VwV-StVO</b> (Fassung vom 03.04.2025, BAnz AT 09.04.2025 B2, in Kraft seit 10.04.2025) – Verwaltungsvorschrift. Sie bindet die Behörde nach innen, nicht die Verkehrsteilnehmenden, und sagt der Straßenverkehrsbehörde, wie sie die StVO anzuwenden hat. Ein Abweichen ist möglich, aber begründungsbedürftig.</p>
+    <p><b>Technische Regelwerke der FGSV</b> (ERA 2010, RASt 06, RMS, RiLSA) – keine Rechtsnormen, sondern anerkannte Regeln der Technik. Sie sagen, <b>wie</b> eine Anlage auszusehen hat. Verbindlich werden sie, weil die VwV-StVO auf sie verweist, weil ein Land sie einführt oder weil ein Fördermittelgeber sie fordert. Wer ohne Begründung darunterbleibt, trägt das Haftungsrisiko.</p>
+    <p><b>Landesvorgaben</b> – im Saarland die Maßgaben und Richtlinien des MUKMAV (05/2023). Formal keine Rechtsnorm, im Förderverfahren praktisch bindend.</p>
+    <p><b>Musterlösungen anderer Länder</b> – etwa Baden-Württemberg. Im Saarland nicht eingeführt: fachliche Orientierung, kein Anspruch darauf und keine Pflicht dazu.</p>
+    <div class="lernbox-merk">Merksatz: StVO und VwV-StVO entscheiden, <b>ob</b> – die technischen Regelwerke entscheiden, <b>wie</b>.</div>
+  </div></details>
+  <div class="steps" id="steps"></div>
+  <div id="content"></div>
+  <footer class="footer">
+    Dieses Tool dient als Orientierungshilfe und ersetzt keine Rechts- oder Fachberatung im Einzelfall.
+    Grundlagen: StVZustG Saarland, StVO, VwV-StVO 2025, SaarlStrG, FStrG, ERA 2010 sowie die Landesvorgabe „Maßgaben und Richtlinien beim Ausbau von Radverkehrsanlagen“ (MUKMAV, Stand 05/2023).
+    Ergänzend die Musterlösungen für Radverkehrsanlagen Baden-Württemberg (Stand 10/2025): im Saarland nicht eingeführt und damit nicht verbindlich, fachlich aber der aktuellste verfügbare Stand – sie nehmen die laufende ERA-Fortschreibung (Veröffentlichung ab 2026 erwartet) in Systematik und Maßen weitgehend vorweg. Empfehlung 2Rat: bei Neu- und Umbauten als Zielwert ansetzen.
+    Im Einzelfall bitte Zuständigkeit mit der jeweiligen Behörde prüfen.
+    <br>
+    <strong style="color:var(--gray)">Entwickelt und gepflegt von 2Rat</strong> – Büro für Radverkehrsplanung · Armin Jung · Radverkehrsplaner EIPOS · <a href="https://www.2rat.org">www.2rat.org</a>
+    <br><span style="display:inline-block;margin-top:5px;opacity:.85"><span data-lizenz></span> · Lizenziert an AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland</span>
+  </footer>
+</main>
+
+<script>
+const LOGO='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACWAJYDASIAAhEBAxEB/8QAHAABAAIDAQEBAAAAAAAAAAAAAAYHBAUIAwIB/8QAPxAAAQQBAgQDBQMHDQEAAAAAAQACAwQFBhEHEiExE0FRCCIyYYEUcZEXM2JzobHRFRYjN0JGU1RWcpOywfD/xAAZAQEAAwEBAAAAAAAAAAAAAAAAAwQFAgH/xAApEQACAgIBAwIFBQAAAAAAAAAAAQIDBBEhBRIxQYETMkJhcRQiUdHh/9oADAMBAAIRAxEAPwDstERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAERUbxD48sx2UlxWlaEN18TjG+1MSWl36LR3/H6Kxj4tuRLtrWyrlZlOJHutetl5IuaMPx+1VSyIGexFWxW6czI2OikA9Rv3XQelM9j9S4GtmcZIX1p27jcbFp8wfmCpMnAuxknYuGRYfUsfLbVb5XoyouM/EfibobVUlinpWpa0uyNnJZJc5riR153Dqw7+XTt59zrdOcbeImqa3jaZ4afb42uDXzCZwjDvTdfPtOa6pZzTs2iNPzTSzTX4YL1pnSBg5vgLvP3uXfyGyk2Dy/EDTOEpYPH6Dry1acDGRyV5S9jxtvzAg7Hckn6rOttVS2/7LkpqPktjGyWpcdWluwNr2nwsdPE13MI3kDmaCO+x3G691UWV4ja8xNI3MnouOpXDg0ySFwG57ea035ccxvt/IdL6Pf/ABVaXUaIvTevZkbyILhl7IqYw/HFhmDMxhOSMkbyVpNy0eZ5T3/EK3MPkamWxlfI0ZRLWnZzMd/98+inpyar/kZJCyM/lZloiKc7CLXajzeN0/i35LK2BBXYQ3m2JJcewG3mVHcZxBo5PS2Sz9KhYdFSlEYjkIaZd3AA+e3dcOyCl2b5PO5b0TNFqtK5puexDb7a7q5Lix0ZdzbEeh8+48ltV2ehERAEREBg6hp2Mjgr1CpZFaexXfFHKRvyFwI3VWcLuC0eldSOy+XuVMqGRFsDPBOzHk/EQeh6bq4VFuJOtsXonBvvXXCSy8bVqzT70rv/AAepVrHuvSdNX1FLKpx21fd9JW/tUU8QcTho4q0Qy81rlhETQHuj6c2+3cdtlUlkW89qG3ozBzZJuYZ4cFCGrO+OGFvhtLy/lIb0dzFxd1W509DrfiZqDNZ6tC+W6yo5lebnDI67i4bMaT0Di3mC3Xs02MBW4t5bHDGyY3KNoeC6K0P6UzMeTL9QO58+vqrma5UVxxm9tcv39Cj01RvunlxWlLhe3qbSp7OV5ukpMTPriZssu73xMqtdCX77/Eff2J2JUFrP1Dww1fjNP5PM5ODLi2wRzm1I6nNUJ26NceUtJHYjcELr9c7e1nf05/ObStLIVft9pjLHiQQgGRof4Yj39QSHbD6rJ+5tNFl8fNvydWN/8eL96i3s6Y7H3cdmJLdKtZc2aMNMsTX8o5T23HReOZx2bxfs61KWopJftrJWkRzO5nwxGRxjjc7c7lrOUfLt5KC6KGthXtO0m3IeDzjxxWPnsdt/pusbKmoZik1vgqWNK5Nr0LJ9oHT+Bq6drZOvTr1LosNjb4LQzxGEEncDvt06/NZPAC3ch0Bk5fAfZir2ZHV42dXvIjaSwfXbbp3JVU03ZnWWpKmMyeXlksSv8KOSy8kM69QB5FdG4LHYnRGkW1jO2KnTjdJPYkGxcT1c47dyT0A6nsOq9xJK++V0VqKWhU++bmuEVPe4v6pyMrhgsNFHEHb/AJp0sgHofL9iy9G8YMk7Kx0dS1IPCllEZnjaWOhJIHvDzH3DdZE3GChDK6lpXS8kkYdzD3Qzm37nkYD5+e6rPXWVsZnVMmSu4sY2xKI+aENI6g/Ed+u59VBZkyr/AHRt7uf44I7LJQ01LZPuPeo8rNesaXNKEY5jopRPyO5y7lB23327n0UV0JrDMaeoS4yniKuQqWJmmXx4nPDTv26Hb8fRWZxmdvwipuPm6t/1Xl7N5B01kNv81/FdyqnPMWpa2t/4dOLd3ktCvDDXhbDXijhib8LGNDWj7gF6Ii3C8EREAREQGk13qCPS2k7+dkhM/wBliLmxg7c58hv5LjTVGp72ptQyZfOWDM57geRr9gxm/wADfQbLt7J0amToS0b9dlitM3lkieN2uHoVH/ye6J/0zje235pavTc6nETcobk/Uxeq9OvzWlCeor0+5SGmeO+N07iK+KxWj4YakIHutt7F583E8vUn1UP1C6zks9ldYYOrHLlr84t0rdew1jqj+UAsO57hwPrzfJdPjh5ogf3Yxv8AxL8HDrQwO40vjd/1S5yMjDtW4waf5OsbFzqtRnYnH8FC1eOHE6PStl9mhgRkK7vAd4sT22C8nlBEYdyk7kbADYrw0toHiDqfO4/Jan09Zhyb7sdqxlrrxzRxN2HKGE9wOgYuinaJ0m7N1c0cBROQqBogn8Pq3l+E+hcPJx3I9VIFmGuQDj7/AFc2f18X71oPZnIdjc2WncePF5/olWrk8fSydR1TIVYrMDiCWSN3G47FfGLxeNxcTosbQrU2O25hDEGc23YnbufmVUljN5Cu34RE6n8XvKJ46aWfgs6zPY2LwaNx4c9zBsIZx+7fbf8AFbvO5yzrngtK+mHT5ChJGb7GdSWt33f8wR1+h9Fb+RoUslVdVv1YbUDu8crA4ff18/msXDYHDYZ8j8Xja9R0oAeY2bFwCi/QtTn2vUZeUc/A1J68MofhHrnC6Rr3YsjSmkmnILJomgu6f2TvtsP4KPcQM5PqLVBzM1Q0o5wxsLHdyxp2B+a6KdojSTrn2t2AomUu5j7nuk/7e37Fm5HTuCyL6772Jp2DWaGw88QIY0dm7eny7KB9PulWq5SWl44I3jyce1vgh/FHG2slwhjbUYZH14YJyxo3LmtaN9vuB3+4FVxwq4hVtJVLGOtUJLIsTNcx0bwOUnpsdx810UxrWMaxjQ1rRs1oGwA9FoZdF6Ukv/bn4Gj4/MHbiPZu48+UdP2KxbiTdsba5aaWiSdLclKL5N+iIr5YCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiID/2Q==';
+document.getElementById('logo').src=LOGO;
+
+const MEASURES=[
+{id:"markierung",label:"Markierung",icon:"━",items:[
+{id:"schutzstreifen",label:"Schutzstreifen",desc:"Markierung mit Z 340 (unterbrochene Linie) + Fahrradsymbol",legal:"§ 45 Abs. 1 StVO, VwV-StVO zu § 2 Abs. 4",type:"anordnung"},
+{id:"radfahrstreifen",label:"Radfahrstreifen",desc:"Markierung mit Z 237 + Z 295 (durchgezogene Linie)",legal:"§ 45 Abs. 1 StVO, VwV-StVO zu § 2 Abs. 4",type:"anordnung"},
+{id:"radfahrstreifen_schutz",label:"Geschützter Radfahrstreifen",desc:"Radfahrstreifen mit baulicher Trennung (Doppelbord, Sperrpfosten)",legal:"§ 45 Abs. 1 StVO, VwV-StVO zu § 2 Abs. 4; bauliche Anlage nach SaarlStrG",type:"anordnung_bau"},
+{id:"rotmarkierung",label:"Rotmarkierung / Radwegfurt",desc:"Farbliche Hervorhebung von Radverkehrsfurten",legal:"§ 45 Abs. 1 StVO, VwV-StVO zu § 2",type:"anordnung"}]},
+{id:"beschilderung",label:"Beschilderung & Anordnung",icon:"◆",items:[
+{id:"fahrradstrasse",label:"Fahrradstraße",desc:"Anordnung Z 244.1/244.2, ggf. mit Zusatzzeichen Kfz frei",legal:"§ 45 Abs. 1 StVO i. V. m. VwV-StVO zu Z 244.1; alternativ § 45 Abs. 1 S. 2 Nr. 7",type:"anordnung"},
+{id:"fahrradzone",label:"Fahrradzone",desc:"Zusammenhängender Bereich mehrerer Fahrradstraßen (Z 244.3)",legal:"§ 45 Abs. 1i StVO",type:"anordnung"},
+{id:"tempo30_zone",label:"Tempo-30-Zone",desc:"Zonale Geschwindigkeitsbeschränkung (Z 274.1/274.2)",legal:"§ 45 Abs. 1c StVO",type:"anordnung"},
+{id:"tempo30_strecke",label:"Tempo 30 (streckenbezogen)",desc:"Geschwindigkeitsbeschränkung auf einzelner Strecke (Z 274)",legal:"§ 45 Abs. 1 / Abs. 9 StVO",type:"anordnung"},
+{id:"einbahn_oeffnung",label:"Einbahnstraßenöffnung für Radverkehr",desc:"Z 220 + Zz 1000-32 »Radverkehr in Gegenrichtung«, Z 267 + Zz 1022-10 »Radfahrer frei«",legal:"§ 45 Abs. 1 StVO, VwV-StVO zu Z 220",type:"anordnung"},
+{id:"gehweg_frei",label:"Gehweg – Radfahrer frei",desc:"Z 239 + Zusatzzeichen 1022-10 »Radfahrer frei«",legal:"§ 45 Abs. 1 StVO, VwV-StVO zu Z 239",type:"anordnung"},
+{id:"gemeinsam_ohne_bp",label:"Gemeinsamer Geh-/Radweg ohne Benutzungspflicht",desc:"Sinnbilder »Fußgänger«/»Radverkehr« (Rn. 38a) oder Z 239 + Zz 1022-10 – Letzteres mit Schrittgeschwindigkeit",legal:"§ 45 Abs. 1 StVO, VwV-StVO zu § 2 Abs. 4 S. 2 Rn. 38a; zu Z 239",type:"anordnung"},
+{id:"benutzungspflicht_aufheben",label:"Benutzungspflicht aufheben",desc:"Entfernung Z 237/240/241 (benutzungspflichtiger Radweg)",legal:"§ 45 Abs. 1 StVO, VwV-StVO zu § 2 Abs. 4",type:"anordnung"},
+{id:"radweg_beschilderung",label:"Radweg beschildern (Z 237/240/241)",desc:"Anordnung benutzungspflichtiger Radweg",legal:"§ 45 Abs. 9 StVO, VwV-StVO zu § 2 Abs. 4",type:"anordnung"},
+{id:"modale_filter",label:"Modale Filter / Durchfahrtssperre",desc:"Durchfahrtsbeschränkung für Kfz, Radverkehr frei (Z 250 + 1022-10)",legal:"§ 45 Abs. 1 StVO",type:"anordnung"},
+{id:"wegweisung",label:"Radverkehrswegweisung",desc:"Wegweisende Beschilderung nach FGSV-Richtlinien",legal:"§ 45 Abs. 1 StVO, HBR",type:"anordnung"}]},
+{id:"baulich",label:"Bauliche Maßnahmen",icon:"▮",items:[
+{id:"radweg_bau",label:"Radweg (baulich getrennt)",desc:"Selbständig geführter oder straßenbegleitender Radweg",legal:"SaarlStrG, ggf. Planfeststellung",type:"bau"},
+{id:"gemeinsamer_geh_radweg",label:"Gemeinsamer Geh-/Radweg (baulich)",desc:"Bauliche Anlage eines gemeinsamen Weges",legal:"SaarlStrG, § 45 StVO für Beschilderung",type:"bau"},
+{id:"querungshilfe",label:"Querungshilfe / Mittelinsel",desc:"Bauliche Querungshilfe für Rad- und Fußverkehr",legal:"SaarlStrG, ggf. § 45 StVO",type:"bau"},
+{id:"fahrbahnanhebung",label:"Fahrbahnanhebung / Plateau",desc:"Aufpflasterung zur Geschwindigkeitsreduzierung",legal:"SaarlStrG + § 45 Abs. 1 StVO",type:"anordnung_bau"},
+{id:"abstellanlage",label:"Fahrradabstellanlage",desc:"Fahrradständer, Fahrradboxen, Radstationen",legal:"SaarlStrG / BauGB",type:"bau"},
+{id:"radschnellweg",label:"Radschnellverbindung",desc:"Qualitativ hochwertige Radwegeverbindung über größere Distanz",legal:"SaarlStrG (Planfeststellung); Barrierefreiheit nach § 4 i. V. m. § 8 SBGG",type:"bau"}]}
+];
+
+const STREETS=[
+{id:"bundeslandstrasse",label:"Bundes- oder Landstraße",icon:"B/L",color:"#dc2626"},
+{id:"gemeindestrasse",label:"Gemeindestraße",icon:"G",color:"#659444"},
+{id:"sonstige",label:"Sonstige öffentliche Straße",icon:"S",color:"#8a8a8a"}
+];
+/* Unterauswahl, wenn Bundes-/Landstraße gewählt wird – hält die Rechtslogik exakt */
+const BL_SUB=[
+{id:"bundesstrasse",label:"Bundesstraße (B)",desc:"Baulast Bund · FStrG"},
+{id:"landesstrasse1",label:"Landstraße I. Ordnung (L)",desc:"Baulast Land · SaarlStrG"},
+{id:"landesstrasse2",label:"Landstraße II. Ordnung (L)",desc:"Baulast Land · SaarlStrG"}
+];
+
+const LOCATIONS=[
+{id:"innerorts",label:"Innerorts (geschlossene Ortschaft)"},
+{id:"ortsdurchfahrt",label:"Ortsdurchfahrt (OD) einer übergeordneten Straße"},
+{id:"ausserorts",label:"Außerorts (freie Strecke)"}
+];
+
+/* ====== Saarländische Kommunen nach Kreis (52 Gemeinden) ====== */
+const KREISE=[
+ {id:"rv",name:"Regionalverband Saarbrücken",kommunen:["Saarbrücken","Völklingen","Püttlingen","Riegelsberg","Heusweiler","Quierschied","Sulzbach/Saar","Friedrichsthal","Großrosseln","Kleinblittersdorf"]},
+ {id:"sls",name:"Landkreis Saarlouis",kommunen:["Saarlouis","Dillingen/Saar","Lebach","Schmelz","Schwalbach","Bous","Ensdorf","Saarwellingen","Wadgassen","Wallerfangen","Überherrn","Nalbach","Rehlingen-Siersburg"]},
+ {id:"mzg",name:"Landkreis Merzig-Wadern",kommunen:["Merzig","Wadern","Losheim am See","Mettlach","Beckingen","Perl","Weiskirchen"]},
+ {id:"nk",name:"Landkreis Neunkirchen",kommunen:["Neunkirchen","Ottweiler","Illingen","Eppelborn","Merchweiler","Schiffweiler","Spiesen-Elversberg"]},
+ {id:"wnd",name:"Landkreis St. Wendel",kommunen:["St. Wendel","Tholey","Marpingen","Nohfelden","Nonnweiler","Oberthal","Namborn","Freisen"]},
+ {id:"spk",name:"Saarpfalz-Kreis",kommunen:["Homburg","St. Ingbert","Blieskastel","Bexbach","Kirkel","Mandelbachtal","Gersheim"]}
+];
+const EIGENE_STVB=["Saarbrücken","Völklingen","St. Ingbert"];
+const OD_BAULAST=["Saarbrücken"];
+function findKommune(name){
+  for(const kr of KREISE){ if(kr.kommunen.includes(name)) return {name:name,kreis:kr.name,kreisId:kr.id,eigeneStVB:EIGENE_STVB.includes(name),odBaulast:OD_BAULAST.includes(name)}; }
+  return null;
+}
+/* Straßenverkehrsbehörden-Kontakte (recherchiert 06-07/2026, offizielle Behördenseiten). */
+const KONTAKTE={
+ "rv":{name:"Regionalverband Saarbrücken – Straßenverkehrsbehörde (Ordnungsamt)",tel:"0681 506-3350",mail:"strassenverkehr@rvsbr.de",web:"regionalverband-saarbruecken.de",url:"https://www.regionalverband-saarbruecken.de/ordnungsamt/strassenverkehrsbehoerde/"},
+ "sls":{name:"Landkreis Saarlouis – Straßenverkehrsbehörde (Amt für öffentliche Sicherheit und Ordnung)",tel:"06831 444-0",mail:"amt32@kreis-saarlouis.de",web:"kreis-saarlouis.de",url:"https://www.kreis-saarlouis.de/Sicherheit-Ordnung/Strassenverkehr.htm",note:"Auf der Kontaktseite stehen die Sachbearbeitung mit Durchwahl sowie das Antragsformular für Anordnungen nach § 45 StVO."},
+ "mzg":{name:"Landkreis Merzig-Wadern – Straßenverkehrsbehörde",tel:"06861 80-2440",mail:"strassenverkehr@merzig-wadern.de",web:"merzig-wadern.de",url:"https://www.merzig-wadern.de/Zulassung-Verkehr/Stra%C3%9Fenverkehr/"},
+ "nk":{name:"Landkreis Neunkirchen – Straßenverkehrsbehörde",tel:"06824 906-7011",mail:"",web:"landkreis-neunkirchen.de",url:"https://www.landkreis-neunkirchen.de/kfz-fuehrerschein/strassenverkehrsbehoerde/verkehr",note:"Kein eigenes Funktionspostfach veröffentlicht – die allgemeine Kfz-Adresse führt zur Zulassungsstelle, nicht zur Straßenverkehrsbehörde. Ansprechperson und Durchwahl stehen auf der Kontaktseite."},
+ "wnd":{name:"Landkreis St. Wendel – Straßenverkehrsbehörde (Kreisordnungsamt)",tel:"06851 801-2804",mail:"strassenverkehrsbehoerde@lkwnd.de",web:"landkreis-st-wendel.de",url:"https://www.landkreis-st-wendel.de/kontakt"},
+ "spk":{name:"Saarpfalz-Kreis – Straßenverkehrsbehörde (Verkehrswesen)",tel:"06841 104-7162",mail:"verkehr@saarpfalz-kreis.de",web:"saarpfalz-kreis.de",url:"https://www.saarpfalz-kreis.de/verkehrswesen/verkehrsbeschraenkungen"},
+ "Saarbrücken":{name:"Landeshauptstadt Saarbrücken – Straßenverkehrsbehörde (Ordnungsamt)",tel:"0681 905-0",mail:"ordnungsamt@saarbruecken.de",web:"saarbruecken.de",url:""},
+ "Völklingen":{name:"Stadt Völklingen – Straßenverkehrsbehörde",tel:"06898 13-0",mail:"",web:"voelklingen.de",url:""},
+ "St. Ingbert":{name:"Stadt St. Ingbert – Straßenverkehrsbehörde",tel:"06894 13-0",mail:"",web:"st-ingbert.de",url:""}
+};
+
+function kontaktFor(k){if(!k)return null;return k.eigeneStVB?(KONTAKTE[k.name]||null):(KONTAKTE[k.kreisId]||null);}
+
+/* ===== Karten-Modus (optional): Klick belegt Kommune / Straße / Lage vor ===== */
+function normK(s){return (s||'').replace(/^Sankt\s+/i,'St. ').replace(/\s*\(\s*Saar\s*\)/ig,'').replace(/\/Saar\b/ig,'').replace(/\s+/g,' ').trim().toLowerCase();}
+const NORM_LOOKUP={};
+KREISE.forEach(function(kr){kr.kommunen.forEach(function(n){NORM_LOOKUP[normK(n)]=n;});});
+function matchKommuneName(name){return NORM_LOOKUP[normK(name)]||null;}
+const OVERPASS=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter','https://overpass.openstreetmap.fr/api/interpreter'];
+function queryOverpass(q){let i=0;function tryNext(){if(i>=OVERPASS.length)return Promise.reject(new Error('Overpass'));return fetch(OVERPASS[i++]+'?data='+encodeURIComponent(q)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).catch(function(){return tryNext();});}return tryNext();}
+function segDist(plat,plon,alat,alon,blat,blon){const kx=111320*Math.cos(plat*Math.PI/180),ky=110540;const px=plon*kx,py=plat*ky,ax=alon*kx,ay=alat*ky,bx=blon*kx,by=blat*ky;const dx=bx-ax,dy=by-ay,l2=dx*dx+dy*dy;let t=l2?((px-ax)*dx+(py-ay)*dy)/l2:0;t=Math.max(0,Math.min(1,t));const x=ax+t*dx,y=ay+t*dy;return Math.hypot(px-x,py-y);}
+function nearestWay(ways,lat,lon){let best=null,bestD=Infinity;ways.forEach(function(w){const g=w.geometry||[];for(let i=0;i+1<g.length;i++){const dd=segDist(lat,lon,g[i].lat,g[i].lon,g[i+1].lat,g[i+1].lon);if(dd<bestD){bestD=dd;best=w;}}});return best?{way:best,dist:bestD}:null;}
+var ROAD_RE=/^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|road|service|track)(_link)?$/;
+function wayMinDist(w,lat,lon){var g=w.geometry||[];var md=Infinity;for(var i=0;i+1<g.length;i++){var dd=segDist(lat,lon,g[i].lat,g[i].lon,g[i+1].lat,g[i+1].lon);if(dd<md)md=dd;}return md;}
+function pickMainWay(ways,lat,lon){var rRoad=null,dRoad=Infinity,rOther=null,dOther=Infinity;ways.forEach(function(w){var md=wayMinDist(w,lat,lon);var isRoad=ROAD_RE.test((w.tags&&w.tags.highway)||'');if(isRoad){if(md<dRoad){dRoad=md;rRoad=w;}}else{if(md<dOther){dOther=md;rOther=w;}}});if(rRoad&&(!rOther||dRoad<=dOther+25))return {way:rRoad,dist:dRoad};if(rOther)return {way:rOther,dist:dOther};if(rRoad)return {way:rRoad,dist:dRoad};return null;}
+function strKlasseMap(tags){const ref=(tags.ref||'').replace(/\s+/g,' ').trim();const hw=tags.highway||'';if(hw==='motorway'||hw==='motorway_link')return {street:null,blsub:null,autobahn:true,klasse:'Bundesautobahn'+(ref?(' '+ref):'')};if(/^B\s?\d/i.test(ref))return {street:'bundeslandstrasse',blsub:'bundesstrasse',klasse:'Bundesstraße'+(ref?(' '+ref):'')};if(hw==='trunk')return {street:'bundeslandstrasse',blsub:'bundesstrasse',kraftfahrstrasse:true,klasse:'Kraftfahrstraße'+(ref?(' '+ref):'')};if(/^L\s?\d/i.test(ref))return {street:'bundeslandstrasse',blsub:'landesstrasse1',klasse:'Landstraße I. Ordnung'+(ref?(' '+ref):'')};if(/^K\s?\d/i.test(ref))return {street:'bundeslandstrasse',blsub:'landesstrasse2',kreisRef:true,klasse:'Landstraße II. Ordnung ('+ref+')'};if(hw==='track')return {street:'sonstige',blsub:null,klasse:'Wirtschafts-/Feldweg'};if(hw==='service')return {street:'sonstige',blsub:null,klasse:'Erschließungs-/Wirtschaftsweg'};if(hw==='cycleway')return {street:'sonstige',blsub:null,klasse:'Eigenständiger Radweg'};if(hw==='path'||hw==='footway')return {street:'sonstige',blsub:null,klasse:'Weg (Rad-/Fußweg)'};return {street:'gemeindestrasse',blsub:null,klasse:'Gemeindestraße'};}
+function lageGuessMap(tags,inRes){const ms=parseInt(String(tags.maxspeed||'').replace(/[^0-9]/g,''),10);if(tags['zone:traffic']==='DE:urban'||inRes||(ms&&ms<=50))return 'innerorts';if(tags['zone:traffic']==='DE:rural'||(ms&&ms>50))return 'ausserorts';return null;}
+function radwegTyp(t){const hw=t.highway;const foot=(t.foot||''),bic=(t.bicycle||''),seg=(t.segregated||'');const ts=(t.traffic_sign||'')+'|'+(t['traffic_sign:forward']||'')+'|'+(t['traffic_sign:backward']||'');if(hw==='cycleway'){return (foot==='designated'||foot==='yes')?(seg==='yes'?'getrennter Geh- und Radweg':'gemeinsamer Geh- und Radweg'):'Radweg';}if(hw==='path'){if(/240/.test(ts))return 'gemeinsamer Geh- und Radweg';if(/241/.test(ts)||seg==='yes')return 'getrennter Geh- und Radweg';return null;}if(hw==='footway'){return (bic==='yes'||bic==='designated')?'Gehweg (Rad frei)':null;}return null;}
+function roadCycleway(t){var vals=[t.cycleway,t['cycleway:both'],t['cycleway:right'],t['cycleway:left']].filter(Boolean);var found=null;vals.forEach(function(v){if(v==='track'||v==='sidepath')found=found||'begleitender Radweg (baulich getrennt)';else if(v==='lane')found=found||'Radfahrstreifen';else if(v==='shared_lane')found=found||'Schutzstreifen / Shared Lane';});return found;}
+function begleitTyp(t){var hw=t.highway;var bic=(t.bicycle||''),foot=(t.foot||'');if(hw==='cycleway')return radwegTyp(t)||'Radweg';if(hw==='path'&&(bic==='designated'||bic==='yes'))return 'Rad-/Fußweg';if(hw==='footway'&&(bic==='yes'||bic==='designated'))return 'Gehweg (Rad frei)';return null;}
+let zmap=null,zmarker=null;
+function escH(s){return String(s).replace(/[&<>]/g,function(c){return c==='&'?'&amp;':c==='<'?'&lt;':'&gt;';});}
+function setMapStatus(html){const el=document.getElementById('mapStatus');if(el){el.innerHTML=html;el.classList.add('show');}}
+function toggleMap(){const w=document.getElementById('mapwrap');const open=w.classList.toggle('open');const b=document.getElementById('mapToggle');if(b)b.setAttribute('aria-expanded',String(open));if(open){initZmap();setTimeout(function(){if(zmap)zmap.invalidateSize();},150);}}
+function initZmap(){if(zmap)return;zmap=L.map('zmap').setView([49.38,6.95],9);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap-Mitwirkende'}).addTo(zmap);zmap.on('click',zmapClick);}
+function zmapClick(ev){const lat=ev.latlng.lat.toFixed(6),lon=ev.latlng.lng.toFixed(6);if(zmarker)zmarker.setLatLng(ev.latlng);else zmarker=L.marker(ev.latlng).addTo(zmap);setMapStatus('<div class="ok">⏳ Stelle wird ausgewertet …</div>');const q='[out:json][timeout:25];is_in('+lat+','+lon+');out tags;way(around:60,'+lat+','+lon+')["highway"~"^(motorway|motorway_link|trunk|trunk_link|primary|primary_link|secondary|secondary_link|tertiary|tertiary_link|unclassified|residential|living_street|road|track|service|cycleway|path|footway)$"];out geom;way(around:100,'+lat+','+lon+')["highway"];rel(bw)["route"~"^(bicycle|mtb)$"];out geom;';queryOverpass(q).then(function(d){applyMap(d,parseFloat(lat),parseFloat(lon));}).catch(function(){setMapStatus('<div class="ok" style="background:#fef3cd;border-color:#e0c067;color:#7a5b00">Abfrage nicht erreichbar – die Karte braucht Internet und läuft nur über einen Webserver / GitHub Pages (nicht per Doppelklick als lokale Datei). Bitte unten manuell wählen.</div>');});}
+function applyMap(d,lat,lon){const els=(d&&d.elements)||[];const areas=els.filter(function(e){return e.type==='area'&&e.tags;});const ways=els.filter(function(e){return e.type==='way'&&e.tags&&e.geometry;});const inRes=areas.some(function(e){return e.tags.landuse==='residential';});const gem=areas.find(function(e){return e.tags.boundary==='administrative'&&e.tags.admin_level==='8';});const gemName=gem?(gem.tags['name:de']||gem.tags.name||''):'';const km=gemName?matchKommuneName(gemName):null;const nw=pickMainWay(ways,lat,lon);if(km)state.kommune=km;let cls=null,lg=null;if(nw){cls=strKlasseMap(nw.way.tags);lg=lageGuessMap(nw.way.tags,inRes);if(!cls.autobahn){state.street=cls.street;state.blsub=cls.blsub;state.location=lg;}}const ROUTE_LABELS={bicycle:'Radroute',mtb:'MTB-Route'};function routeMinDist(r){let md=Infinity;(r.members||[]).forEach(function(m){const g=m.geometry||[];for(let i=0;i+1<g.length;i++){const dd=segDist(lat,lon,g[i].lat,g[i].lon,g[i+1].lat,g[i+1].lon);if(dd<md)md=dd;}});return md;}const rels=els.filter(function(e){return e.type==='relation'&&e.tags&&ROUTE_LABELS[e.tags.route];}).map(function(r){return {r:r,d:routeMinDist(r)};}).filter(function(o){return o.d<=60;}).sort(function(a,b){return a.d-b.d;});let routeHtml='';if(rels.length){routeHtml='<br><b>Route(n):</b><br>'+rels.map(function(o){var r=o.r;var lbl=(r.tags.name||r.tags.ref||'Route')+' ('+ROUTE_LABELS[r.tags.route]+')'+(r.tags.network?(' ['+r.tags.network+']'):'');var prox=o.d<=20?'an dieser Stelle':('in der Nähe (~'+Math.round(o.d)+' m)');return '🚴 '+escH(lbl)+' – <span style="color:var(--gray-light)">'+prox+'</span>';}).join('<br>');}var rtc=nw?radwegTyp(nw.way.tags||{}):null;var wegLine;if(cls){if(rtc){var showRi=/Radweg/.test(rtc);wegLine='Straße/Weg: '+rtc+(showRi?((nw.way.tags.oneway==='yes')?' · Einrichtungsverkehr':' · Zweirichtungsverkehr'):'')+' <span style="color:var(--gray-light);font-size:11.5px">(lt. OSM)</span>';}else{wegLine='Straße/Weg: '+cls.klasse;if(cls.autobahn)wegLine+='<br><span style="color:#b5722a;font-weight:600">⚠️ Autobahnen dürfen mit dem Rad nicht befahren werden (§ 18 Abs. 1 StVO) – für Radverkehrsmaßnahmen bitte die parallele Straße oder den Weg anklicken.</span>';if(cls.kraftfahrstrasse)wegLine+='<br><span style="color:#b5722a">Kraftfahrstraße – Radverkehr unzulässig (§ 18 Abs. 1 StVO). Klassifikation und Baulast bitte prüfen.</span>';if(cls.kreisRef)wegLine+='<br><span style="color:var(--gray-light);font-size:11.5px">K-Nummer aus OSM – im Saarland gibt es keine Kreisstraßen (§ 3 Abs. 1 SaarlStrG). Bitte Einstufung prüfen.</span>';}}else{wegLine='Straße: — (keine in der Nähe gefunden)';}var radHint='';var clickedIsPath=nw?/^(cycleway|path|footway)$/.test(nw.way.tags.highway||''):false;if(!rtc&&!clickedIsPath){var chosenId=nw?nw.way.id:null;var bestRad=null,bestRadD=Infinity,bestRadTyp=null;ways.forEach(function(w){if(chosenId&&w.id===chosenId)return;var typ=begleitTyp(w.tags||{});if(!typ)return;var g=w.geometry||[];var md=Infinity;for(var i=0;i+1<g.length;i++){var dd=segDist(lat,lon,g[i].lat,g[i].lon,g[i+1].lat,g[i+1].lon);if(dd<md)md=dd;}if(md<bestRadD){bestRadD=md;bestRad=w;bestRadTyp=typ;}});if(bestRad&&bestRadD<=50){var showRi2=/Radweg/.test(bestRadTyp);var ri=showRi2?((bestRad.tags.oneway==='yes')?' · Einrichtungsverkehr':' · Zweirichtungsverkehr'):'';radHint='<br><b>Begleitende Radinfrastruktur:</b><br>🚲 '+escH(bestRadTyp)+' – '+(bestRadD<=20?'an dieser Stelle':('in der Nähe (~'+Math.round(bestRadD)+' m)'))+ri+' <span style="color:var(--gray-light)">(lt. OSM)</span>';}if(!radHint&&nw){var rc=roadCycleway(nw.way.tags||{});if(rc){radHint='<br><b>Begleitende Radinfrastruktur:</b><br>🚲 '+escH(rc)+' – an dieser Straße <span style="color:var(--gray-light)">(lt. OSM)</span>';}}}state.mapPrefill=true;state.step=0;state.category=null;state.measure=null;renderKommuneBar();setMapStatus('<div class="ok"><b>Aus Karte übernommen</b><br>Kommune: '+(km||'— (nicht erkannt – bitte unten wählen)')+'<br>'+wegLine+'<br>Lage: '+(lg?(lg==='innerorts'?'innerorts':'außerorts'):'unbekannt (wird abgefragt)')+routeHtml+radHint+'<br><span style="color:var(--gray-light);font-size:11.5px">Kommune, Straße und Lage sind schon eingetragen – Sie wählen nur noch die Maßnahme (alles änderbar).</span></div>');render();}
+
+/* Praxishinweise: primär ERA 2010; ergänzend Qualitätsstandards und Musterlösungen BW (Stand Okt. 2025, Ausgabe 02/2026; im Saarland nicht verbindlich – Vorgriff auf die ERA-Neufassung) */
+const PRAXIS={
+  schutzstreifen:[
+    "G|Ein Schutzstreifen ist in der Regel 1,50 m breit, mindestens 1,25 m (ERA 2010, Kap. 3.2). Anders als beim Radfahrstreifen sagt die ERA hier nicht, dass die Markierung mitzählt","G|Diese Maße sind zu vergrößern, wenn die nutzbare Breite eingeschränkt ist – etwa durch eine Rinne, die sich schlecht befahren lässt. Die Rinne zählt also faktisch nicht zum Schutzstreifen",
+    "G|Schutzstreifen sind Fahrbahnmarkierungen – sie erhöhen nicht die Gesamtfahrbahnbreite","G|Der Schutzstreifen ist Teil der Fahrbahn. Lkw dürfen ihn im Bedarfsfall überfahren, parken darf dort niemand. Genau deshalb soll er bei hohem Schwerverkehr vermieden werden – die ERA nennt als Grenze mehr als 1.000 Schwerverkehrsfahrzeuge am Tag (ERA 2010, Kap. 3.2)","G|An Mittelinseln endet der Schutzstreifen etwa 20 m vorher, wenn neben der Insel weniger als 2,25 m Restfahrbahn bleiben (ERA 2010, Kap. 3.2)",
+    "G|Kein Einsatz bei zulässiger Höchstgeschwindigkeit über 50 km/h oder mehr als 15.000 Kfz in 24 h (DTV)",
+    "SL|Breite 1,50 m; Schmalstrich-Lücke-Markierung 1,00 m / 1,00 m, Strichbreite 0,12 m",
+    "SL|Fahrradpiktogramm ca. alle 300 m markieren",
+    "G|Zwischen den Schutzstreifen müssen mindestens 4,50 m bleiben, bei hohen Verkehrsstärken besser 5,00 m. Damit können sich zwei Pkw begegnen. Für Lkw reicht es nicht – bei 4,50 m ist der Begegnungsfall Lkw/Lkw nicht möglich (ERA 2010, Kap. 3.2)","G|Ist die verbleibende Fahrgasse schmaler als 5,50 m, darf in der Fahrbahnmitte keine Leitlinie markiert werden. Das wird in der Praxis häufig übersehen und macht die Markierung angreifbar","SL|Kernfahrbahn ≥ 4,50 m; bis ≤ 5,50 m keine mittlere Leitlinie – deckungsgleich mit der ERA",
+    "G|VwV-StVO 2025 (Rn. 14e): Flächen für den Rad- und Fußverkehr sind grundsätzlich angemessen, wenn sie mindestens den einschlägigen technischen Regelwerken entsprechen – die VwV selbst enthält keine Maßangaben. Maßgeblich ist damit der jeweils aktuelle Stand der Technik, nicht der jeweils niedrigste dokumentierte Wert","G|Sicherheitstrennstreifen zu parkenden Autos: Bei Längsparkstreifen mit häufigem Parkwechsel soll er 0,50 m erkennbar sein, bei Schrägparken 0,75 m (ERA 2010, Kap. 3.2). Das ist der Wert von 2010 – neuere Regelwerke fordern durchgängig 0,75 m","SL|Die Landesvorgabe (MUKMAV 05/2023) übernimmt die ERA-Werte 0,50 m und 0,75 m unverändert. Wer heute plant, sollte 0,75 m ansetzen und eine Unterschreitung begründen – die Türöffnungsbreite eines Pkw hat sich seit 2010 nicht verkleinert",
+    "SL|Nur innerörtlich anzulegen; in Kreisverkehrsplätzen nicht zulässig",
+    "SL|Auch auf vierstreifigen Straßen möglich",
+    "BW|Verbleibende Kernfahrbahn ≥ 4,50 m bei Gegenverkehr (ohne Parken)"
+  ],
+  radfahrstreifen:[
+    "G|Radfahrstreifen sollen 1,85 m breit sein – einschließlich der Breitstrichmarkierung, die also mitzählt (ERA 2010, Kap. 3.3). Bestätigt am Originaltext",
+    "G|Bei hohen Kfz- oder Radverkehrsstärken, Vzul über 50 km/h oder häufigem Anhängerverkehr mindestens 2,00 m (ERA 2010, Kap. 3.3)",
+    "G|Ein Maß unterhalb von 1,85 m sieht die ERA 2010 nicht vor – es gibt kein Klammer-Mindestmaß für Radfahrstreifen",
+    "SL|Breite 1,85 m einschl. Markierung; bei hohen Kfz-/Radverkehrsstärken mind. 2,00 m",
+    "SL|Durchgezogener Breitstrich 0,25 m (Z 295); Kernfahrbahn ≥ 5,50 m mit mittlerer Leitlinie zur Fahrstreifentrennung",
+    "SL|Anwendungsbereich innerorts bei ca. 500 bis 2.000 Kfz/h, abhängig von der zulässigen Höchstgeschwindigkeit",
+    "SL|Sicherheitsraum zu parkenden Fahrzeugen: 0,50–0,75 m bei Längsparkstreifen, 0,75 m bei Schrägparkständen",
+    "SL|Fortsetzung an Knotenpunkten als Furt mit enger Breitstrich-Lücke-Markierung 0,50 m / 0,20 m, ggf. Roteinfärbung",
+    "SL|In Kreisverkehrsplätzen nicht zulässig; Führung ausschließlich auf Fahrbahnniveau",
+    "BW|Sicherheitstrennstreifen zum Parken ≥ 0,75 m",
+    "BW|Anti-Musterlösung: Ein fehlender Sicherheitstrennstreifen zum ruhenden Verkehr lässt Radfahrende in den Türöffnungsbereich geraten (Dooring). Vorrangig Entfall der Kfz-Parkstände prüfen; auf Kurzzeitparken verzichten, um Parkwechselvorgänge zu reduzieren",
+    "BW|Regelmaß Radfahrstreifen ≥ 2,00 m zzgl. Sicherheitstrennstreifen (Basisstandard); Radvorrangroute ≥ 2,50 m, Radschnellverbindung ≥ 3,00 m"
+  ],
+  radfahrstreifen_schutz:[
+    "G|Der Radfahrstreifen selbst folgt der ERA 2010: 1,85 m inkl. Breitstrich, bei hohen Stärken oder Vzul über 50 km/h mindestens 2,00 m",
+    "G|Kombiniert bauliche Trennung mit verkehrsrechtlicher Anordnung",
+    "BW|Radfahrstreifen auf Fahrbahnniveau ≥ 2,00 m (Musterblatt Basis 1c-1, innerorts, als Variante eingestuft)",
+    "BW|Trennelement Doppelbord: Mindestbreite 0,50 m einschließlich Borde, Bordhöhe 0,08 m; an Engstellen ausnahmsweise 0,30 m",
+    "BW|Das Musterblatt zeigt zwei Querschnitte – der breitere Sicherheitsraum liegt bei ≥ 1,00 m",
+    "BW|Sicherheitstrennstreifen zum ruhenden Verkehr zusätzlich ≥ 0,75 m",
+    "BW|Bei Gefahr missbräuchlicher Nutzung durch fließenden oder ruhenden Kfz-Verkehr Sperrpfosten vorsehen",
+    "BW|Grundlage des Musterblatts ist der RMS-Entwurf (Stand 2023), Regelplan S24 – noch nicht veröffentlichtes Regelwerk","SL|Im Saarland bislang keine Landesvorgabe zum geschützten Radfahrstreifen. Maße daher aus BW herleiten und die Abweichung von der ERA 2010 kurz begründen; Abstimmung mit Straßenbaulastträger und Straßenverkehrsbehörde früh suchen"
+  ],
+  fahrradstrasse:[
+    "G|Eine Fahrradstraße setzt nicht voraus, dass dort heute schon viele Rad fahren. Es genügt, dass mit der Anordnung eine hohe Radverkehrsdichte zu erwarten ist – die Straße darf also angeordnet werden, damit die Nutzung kommt, nicht erst danach (VwV-StVO zu Z 244.1 Rn. 1). Das ist das wichtigste Gegenargument, wenn im Ortsrat gefragt wird, ob sich das überhaupt lohnt",
+    "G|In der Fahrradstraße gilt Tempo 30 – und zwar für alle, auch für Radfahrende selbst. Nebeneinanderfahren ist ausdrücklich erlaubt, mit Fahrrädern und E-Scootern. Wer Kraftfahrzeuge zulässt, muss also hinnehmen, dass sie hinter nebeneinander fahrenden Radfahrenden bleiben",
+    "G|Auf Senkrecht- und Schrägparkstände soll grundsätzlich verzichtet werden (VwV-StVO zu Z 244.1 Rn. 3)",
+    "G|Z 244.2 ist entbehrlich beim Übergang in Fußgängerzone, Fahrradzone, Tempo-30-Zone oder verkehrsberuhigten Bereich (VwV-StVO zu Z 244.1 Rn. 4)",
+    "G|Mindestens 4,00 m nutzbare Fahrgasse, damit sich zwei Radfahrende begegnen und überholt werden kann (ERA 2010). Gemessen wird, was tatsächlich frei ist – parkende Autos und ihre Türöffnungsbreite zählen nicht mit",
+    "SL|Einrichtung bis zu einer Belastung von etwa 400 Kfz/h",
+    "SL|Eine Bevorrechtigung über mehrere Knotenpunkte hinweg ist mit Verkehrszeichen nicht zulässig – Alternative: bauliche Veränderungen",
+    "SL|Bauliche Einengungen an Einmündungen oder Anhebung der Kreuzungsbereiche, damit 30 km/h nicht überschritten werden",
+    "SL|Werden Kraftfahrzeuge nicht zugelassen, sind für diesen Verkehr Alternativen aufzuzeigen",
+    "BW|Bei zugelassenem Kfz-Verkehr in der Praxis ≥ 4,60 m (Begegnung Kfz/Rad)",
+    "BW|Mit Kfz ≥ 3,50 m zzgl. Sicherheitstrennstreifen bei < 1.500 Kfz/24 h; Fahrbahn nicht breiter als 5,50 m (Geschwindigkeitsdämpfung)",
+    "BW|Sicherheitstrennstreifen zum Parken ≥ 0,75 m",
+    "BW|Bei Kfz-Freigabe Diagonalsperren zur Unterbindung von Durchgangsverkehr prüfen (RVR 3a-4)"
+  ],
+  fahrradzone:[
+    "G|Die Fahrradzone ist im Kern eine Fahrradstraße, die nicht für eine einzelne Straße, sondern für ein ganzes Gebiet angeordnet wird. Alles was für die Fahrradstraße gilt, gilt in der Zone für jede Straße darin – nur wird nicht jede einzeln beschildert, sondern an den Zonengrenzen","G|Vorteil gegenüber Einzelanordnungen: weniger Schilderwald, klare Gebietsgrenzen und keine Lücken zwischen den Abschnitten. Nachteil: Alle Straßen im Gebiet müssen die Voraussetzungen erfüllen – eine einzige ungeeignete Straße kippt den Zuschnitt",
+    "G|VwV-StVO zu Z 274.1/274.2 gilt entsprechend (insb. Vorfahrtregelung)",
+    "SL|Fahrradzone und Tempo-30-Zone dürfen sich nicht überschneiden. Da in der Fahrradzone ohnehin 30 km/h gilt, ist die Tempo-30-Zone dort entbehrlich – bei einer Umwandlung also die alte Zonenbeschilderung mit zurückbauen",
+    "SL|Nur auf Straßen ohne lichtzeichengeregelte Kreuzungen/Einmündungen und ohne Fahrstreifenbegrenzung (Z 295), Leitlinien (Z 340) oder benutzungspflichtige Radwege (Z 237/240/241)",
+    "SL|An allen Kreuzungen und Einmündungen gilt rechts vor links",
+    "SL|Zeichen 244.3 als Sinnbild in regelmäßigen Abständen auf der Fahrbahn aufbringen"
+  ],
+  gehweg_frei:[
+    "G|Auf dem freigegebenen Gehweg gilt Schrittgeschwindigkeit (StVO Anlage 2, Erläuterung zu Z 239 Nr. 2)",
+    "G|Unter 2,50 m nutzbarer Wegbreite ist die gemeinsame Führung generell ausgeschlossen (ERA 2010, Abschnitt 3.6, Bild 15)",
+    "G|Einsatzgrenze Fußgänger + Radfahrer je Spitzenstunde (ERA 2010, Bild 15, Näherungswerte): rund 70 bei 2,50 m, rund 100 bei 3,00 m, rund 130 bei 3,50 m, rund 155 bei 4,00 m",
+    "G|Maßgeblich ist die nutzbare, nicht die bauliche Breite: abzüglich 0,20–0,25 m zu Wand/Zaun, 0,50–0,75 m zu Längsparkständen sowie Möblierung, Schaltschränke, Auslagen",
+    "G|Acht Ausschlusskriterien nach ERA 2010, Kap. 3.6 – liegt eines davon vor, scheidet die gemeinsame Führung aus, unabhängig davon wie breit der Weg ist: intensive Geschäftsnutzung; überdurchschnittliche Nutzung des Seitenraums durch besonders schutzbedürftige Personen (Menschen mit Behinderungen oder Mobilitätseinschränkungen, Kinder); Hauptverbindungen des Radverkehrs; starkes Gefälle über 3 %; dichte Folge von Hauseingängen, die unmittelbar an einen nur mindestbreiten Gehweg grenzen; zahlreiche untergeordnete Zufahrten bei beengten Verhältnissen; stark frequentierte Bus- oder Bahnhaltestellen in Seitenlage ohne eigene Wartefläche; Überschreitung der Einsatzgrenzen nach Bild 15","G|Hauptverbindungen des Radverkehrs sind ausdrücklich ausgeschlossen. Wer eine Netzverbindung plant, kann sie also nicht als gemeinsamen Geh- und Radweg ausführen – dieses Kriterium wird in der Praxis am häufigsten übergangen","G|Die Einsatzgrenzen nach Bild 15 hängen von der nutzbaren Wegbreite und der Summe aus Fuß- und Radverkehr in der Spitzenstunde ab: je schmaler der Weg, desto weniger Verkehr ist verträglich. Faustregel der ERA: Bei hoher Gesamtbelastung soll der Anteil des Radverkehrs etwa ein Drittel der Gehwegnutzer nicht überschreiten",
+    "G|Bordsteinabsenkungen an Einmündungen und Kreuzungen erforderlich (VwV-StVO zu Z 239 Rn. 3)",
+    "G|§ 2 Abs. 5 StVO: Kinder bis zum vollendeten 8. Lebensjahr müssen den Gehweg benutzen, bis zum vollendeten 10. Lebensjahr dürfen sie. Eine geeignete Aufsichtsperson ab 16 Jahren darf sie dabei auf dem Gehweg begleiten. Die Freigabe ändert daran nichts – sie richtet sich an alle übrigen Radfahrenden"
+  ],
+  radweg_bau:[
+    "G|Ein Radweg für eine Fahrtrichtung ist im Regelfall 2,00 m breit. Nur bei geringem Radverkehr sind 1,60 m zulässig – das ist kein allgemeines Mindestmaß, sondern an diese Bedingung geknüpft. Die 2,00 m ermöglichen das Überholen (ERA 2010, Kap. 3.4)","G|Breiter als 2,00 m sollte der Radweg werden bei Hauptverbindungen des Radverkehrs, bei hoher Nutzung des Seitenraums, bei häufigen Belastungsspitzen (Fahrradpulks) und bei starkem Gefälle (ERA 2010, Kap. 3.4)","G|Zweirichtungsradweg: 2,50 m im Regelfall bei beidseitiger Führung, 3,00 m bei einseitiger. Das Mindestmaß von 2,00 m gilt nur bei geringem Radverkehr und nur dann, wenn im Begegnungsfall zweier Gespanne mit Anhänger der Sicherheitstrennstreifen mitbenutzt werden kann (ERA 2010, Kap. 3.5)","G|Am Radwegende gehört eine Verflechtungsstrecke von 10 bis 20 m dazu, ausgeführt als Radfahrstreifen oder Schutzstreifen. Ohne sie endet der Radweg an der Bordkante und die Einfädelung bleibt dem Zufall überlassen (ERA 2010, Kap. 3.4)",
+    "G|Innerorts nur Radverkehr einschließlich Elektrokleinstfahrzeuge; außerorts dürfen zusätzlich Mofas Radwege benutzen. Pedelecs bis 25 km/h gelten als Fahrrad und sind damit ohnehin erfasst; S-Pedelecs sind Kleinkrafträder und dürfen Radwege nicht benutzen. Der Begriff »E-Bike« ist in der StVO nicht definiert und sollte in Anordnungen vermieden werden",
+    "SL|Breite 2,00 m, gemeinsamer Geh- und Radweg 2,50 m",
+    "G|Sicherheitstrennstreifen nach ERA 2010, Tabelle 9: 0,75 m zum Fahrbahnrand bei festen Einbauten oder wenn dort schneller als 50 km/h gefahren werden darf, sonst 0,50 m. Zu längs parkenden Autos 0,75 m, zu schräg oder senkrecht parkenden 1,10 m – bei Letzteren darf ein Überhangstreifen angerechnet werden","G|Zu Gebäuden, Einfriedungen, Baumscheiben und sonstigen Einbauten mindestens 0,25 m Abstand (ERA 2010, Tab. 9)","SL|Landesvorgabe deckungsgleich: 0,75 m zur Fahrbahn oder zu Längsparkstreifen, 1,10 m zu Senkrecht- und Schrägparkständen, zusätzlich 0,30 m taktil oder optisch zum Gehbereich (MUKMAV 05/2023)",
+    "SL|Radverkehr an Radwegeenden baulich getrennt auf die Fahrbahn führen (Bordführung oder Schutzinsel)",
+    "BW|Sicherheitstrennstreifen zur Fahrbahn ≥ 0,75 m","BW|Einrichtungsradweg ≥ 2,00 m zzgl. Sicherheitstrennstreifen (Basisstandard) – die ERA-Regelbreite von 2,00 m wird damit zum Mindestmaß, der Klammerwert 1,60 m entfällt","BW|Bei beengten Verhältnissen und geringer Radverkehrsnachfrage ausnahmsweise geringere Breite, aber nicht unter 1,60 m","BW|Zweirichtungsradweg ≥ 2,50 m (beidseitig) bzw. ≥ 3,00 m (einseitig), jeweils zzgl. Sicherheitstrennstreifen; straßenbegleitend nur im Ausnahmefall","BW|Zweirichtungsradwege innerorts sind als Neuanlage nur ausnahmsweise und nach sorgfältiger Einzelfallprüfung möglich – erhöhtes Unfallrisiko an Knotenpunkten und Grundstückszufahrten","BW|Zweirichtungsradwege an Einmündungen ca. 4,00–5,00 m von der Hauptfahrbahn absetzen; Sichtfelder nach RASt einhalten","BW|In Steigungs- und Gefällestrecken sowie in Kurvenbereichen ist eine Aufweitung des Radweges anzustreben","BW|Seitentrennstreifen außerorts ≥ 1,75 m; Unterschreitung nur in begründeten Ausnahmefällen und auf kurze Abschnitte begrenzt, dann Hochbord und Sicherheitstrennstreifen ≥ 0,75 m"
+  ],
+  gemeinsamer_geh_radweg:["G|Vor jeder Breitendiskussion zuerst die acht Ausschlusskriterien der ERA 2010, Kap. 3.6 prüfen – sie stehen ausführlich bei »Gehweg – Radfahrer frei«. Greift eines davon, ist die gemeinsame Führung unabhängig von der Breite ausgeschlossen. Besonders häufig übersehen: Hauptverbindungen des Radverkehrs sind ausgenommen","BW|Die gemeinsame Führung mit dem Fußverkehr kommt nur in Ausnahmefällen in Betracht, wenn keine andere Führungsform in Frage kommt","BW|Außerorts bei 10 bis ca. 25 Fußgängern in der Spitzenstunde des Radverkehrs: ≥ 4,00 m im Einrichtungs-, ≥ 5,00 m im Zweirichtungsverkehr; unter 10 Fußgängern keine Verbreiterung nötig","BW|Nur auf Streckenabschnitten ohne starke Längsneigung; bei fahrbahnparalleler Führung zusätzlich der reguläre Sicherheitstrennstreifen","BW|Im Haltestellenbereich gemeinsamer Geh- und Radweg ≥ 3,00 m",
+    "G|Regelbreite 2,50 m (ERA 2010)",
+    "G|Mindestbreite 2,00 m (nur bei geringem Fußgänger- und Radverkehr)",
+    "G|Nur bei geringem Fußgängeraufkommen zulässig (VwV-StVO zu Z 240)",
+    "G|Kosten-Hinweis OD an Bundes-/Landstraßen: gemeinsamer Geh-/Radweg nur mit Vereinbarung zur hälftigen Kostenteilung (ODR 2008 / ARS 14/2008) – ein getrennt geführter Radweg liegt dagegen voll in der Baulast von Bund/Land",
+    "SL|Breite gemeinsamer Geh- und Radweg 2,50 m; 0,30 m taktile oder optische Trennung zu Gehbereichen"
+  ],
+  einbahn_oeffnung:[
+    "G|Soll-Bestimmung mit eingeschränktem Ermessen: Die Freigabe ist einzelfallbezogen zu prüfen, nur im Ausnahmefall ist davon abzusehen (VwV-StVO zu Z 220, Ziff. 4–7)",
+    "G|Zulässige Höchstgeschwindigkeit höchstens 30 km/h in der Einbahnstraße",
+    "SL|Ausreichende Begegnungsbreite erforderlich; bei Linienbusverkehr oder starkem Schwerlastverkehr mindestens 3,50 m – ansonsten sind keine Fahrbahn-Mindestbreiten vorgeschrieben",
+    "SL|Übersichtliche Verkehrsführung; wo erforderlich, sind Schutzräume anzulegen",
+    "SL|Zusatzzeichen 1000-32 an allen Zeichen 220; am Ende der Freigabe zusätzlich Z 267 mit Zusatzzeichen 1022-10",
+    "SL|In Kurvenbereichen kann die Markierung von Schutz- oder Radfahrstreifen oder eine bauliche Absicherung des gegengerichteten Radverkehrs sinnvoll sein",
+    "SL|Schutzstreifen in Gegenrichtung bei Breite ≥ 4,50 m prüfen","AL|Der Berliner Prüfleitfaden staffelt die nutzbare Fahrgassenbreite feiner – im Saarland nicht verbindlich, aber als Argumentationshilfe brauchbar. Gemessen wird zwischen den Borden bzw. der Flucht parkender Fahrzeuge. Ab 3,50 m: grundsätzlich geeignet","AL|3,25 bis unter 3,50 m: geeignet, bei Lkw- oder Busverkehr aber nur mit regelmäßigen Ausweichstellen zwischen den parkenden Autos – etwa durch Grundstückszufahrten oder gezielte Haltverbote. Bei Linienbusverkehr oder stärkerem Lkw-Verkehr sollen es immer mindestens 3,50 m sein","AL|3,00 bis unter 3,25 m: nur bei vorwiegend Pkw-Verkehr und mit Ausweichstellen. Unter 3,00 m: nur wenn sich Fahrzeuge selten begegnen, die Einbahnstraße kurz und übersichtlich ist und Ausweichmöglichkeiten bestehen","AL|Kurze Engstellen unterhalb dieser Werte sind im Regelfall hinnehmbar, solange sie überschaubar kurz sind, der Verlauf übersichtlich ist und kein stärkerer Lkw- oder Busverkehr auftritt","AL|Kein Ausschlussgrund, aber Prüfanlass: unübersichtliche Kurven, in denen der entgegenkommende Radverkehr innen fährt und geschnitten werden kann. Dort einseitiges oder beidseitiges Parkverbot prüfen – scharfe Kurven sind über § 12 Abs. 1 Nr. 2 StVO ohnehin haltverbotsfrei","AL|Parkordnung: Nach Möglichkeit einseitig auf der in Einbahnrichtung linken Seite parken lassen. Ausfahrschleusen am Ende der Einbahnstraße sind im Regelfall empfehlenswert"
+  ],
+  benutzungspflicht_aufheben:[
+    "G|Grundsatz: Radfahren auf der Fahrbahn ist der Normalfall. Ein blaues Schild, das den Radweg zur Pflicht macht, ist die Ausnahme und braucht eine besondere Gefahr, die deutlich über dem allgemeinen Verkehrsrisiko liegt (§ 45 Abs. 9 S. 3 StVO). Liegt sie nicht vor, muss das Schild weg – die Behörde kann nicht entscheiden, es trotzdem stehen zu lassen",
+    "G|Seit 2024 gibt es eine neue Rechtsgrundlage, mit der sich vieles für den Radverkehr leichter anordnen lässt (§ 45 Abs. 1 S. 2 Nr. 7 StVO). Für die Benutzungspflicht hilft sie aber nicht: Die VwV-StVO 2025 stellt in Rn. 14e ausdrücklich klar, dass die Anordnung einer Benutzungspflicht mit Z 237, 240 oder 241 gerade nicht zur Bereitstellung von Flächen zählt. Sie bleibt also an den strengen Gefahrennachweis gebunden – ein starkes Argument im Aufhebungsverfahren",
+    "G|Häufiger Einwand: »Dann wird der Radweg doch nutzlos.« Stimmt nicht. Nach der Aufhebung bleibt er als anderer Radweg bestehen, wer will, fährt weiter dort. Zusätzlich ist die Fahrbahn wieder erlaubt. Es geht also nicht weg, es kommt etwas dazu",
+    "G|Die Aufhebung ist selbst eine verkehrsrechtliche Anordnung und zu dokumentieren; Verkehrsschau als Anlass nutzen und das Ergebnis der Gefahrenprüfung aktenkundig machen",
+    "SL|Alte Beschilderung tatsächlich demontieren, nicht nur überkleben oder abdrehen. Anschlüsse an beiden Enden prüfen, damit keine benutzungspflichtigen Restabschnitte stehen bleiben"
+  ],
+  radweg_beschilderung:[
+    "G|Was nachzuweisen ist: eine Gefahr, die deutlich über dem liegt, was im Straßenverkehr ohnehin an Risiko besteht (§ 45 Abs. 9 S. 3 StVO). Die Begründung muss sich auf diesen konkreten Abschnitt beziehen. Der Satz »hier fahren viele Autos und es sind 50 erlaubt« reicht nicht – das trifft auf tausende Straßen zu und ist damit gerade kein besonderes Risiko",
+    "G|Die Gefahrenlage ist vor der Anordnung zu ermitteln und zu dokumentieren: Unfalllage, Streckencharakteristik, Sichtverhältnisse, Schwerverkehrsanteil. Eine Verkehrsschau ohne dokumentierte Abwägung genügt nicht",
+    "G|Z 237 Radweg, Z 240 gemeinsamer Geh- und Radweg, Z 241 getrennter Rad- und Gehweg – nur diese drei begründen eine Benutzungspflicht. Alle drei erfordern denselben Nachweis",
+    "G|Zweite Hürde, unabhängig von der ersten: Der Radweg muss die Anforderungen der VwV-StVO zu § 2 Abs. 4 an Breite, lichten Raum, Linienführung, Oberfläche und Verkehrssicherheit erfüllen. Reißt er auch nur eine davon, ist die Benutzungspflicht ausgeschlossen – selbst wenn die Gefahrenlage unstreitig ist. In der Praxis scheitert es meist hier, nicht an der Gefahr",
+    "G|Anordnung ohne Benutzungspflicht ist der Regelfall: Ein baulich angelegter Radweg kann ohne jede Beschilderung als anderer Radweg geführt werden",
+    "SL|Bestehende Beschilderung im Rahmen der Verkehrsschau turnusmäßig überprüfen. Wo die Voraussetzungen entfallen sind, ist aufzuheben – Untätigkeit ist angreifbar"
+  ],
+  gemeinsam_ohne_bp:[
+    "G|Ohne Benutzungspflicht ist zwischen zwei Varianten zu unterscheiden: Sinnbilder nach VwV-StVO zu § 2 Abs. 4 S. 2 Rn. 38a kennzeichnen einen anderen Radweg, den der Radverkehr regulär befahren darf. Z 239 mit Zusatzzeichen 1022-10 gibt dagegen einen Gehweg frei – dort gilt Schrittgeschwindigkeit",
+    "G|Diese Unterscheidung entscheidet über die zulässige Geschwindigkeit und wird in der Praxis regelmäßig verwechselt. In der Anordnung eindeutig benennen, welche Variante gewollt ist",
+    "G|Der Fußverkehr hat auf der gemeinsamen Fläche Vorrang; der Radverkehr muss seine Geschwindigkeit anpassen",
+    "SL|Bei Umstellung von Z 240 auf eine Führung ohne Benutzungspflicht die Markierung der Sinnbilder in ausreichender Dichte vorsehen, sonst ist die Führung für Ortsunkundige nicht erkennbar"
+  ],
+  tempo30_zone:[
+    "G|Eine Tempo-30-Zone gilt für ein ganzes Gebiet, nicht für eine einzelne Straße (§ 45 Abs. 1c StVO). Sie ist deshalb an Vorfahrtstraßen mit Z 306 und an Straßen des überörtlichen Verkehrs nicht möglich – diese müssen aus dem Zonenzuschnitt herausgenommen werden",
+    "G|Für die Zone braucht es keinen Gefahrennachweis. Das macht sie zum einfachsten Weg zu Tempo 30 – vorausgesetzt, das Gebiet lässt sich sauber abgrenzen",
+    "G|In der Zone gilt rechts vor links. Vorhandene abweichende Vorfahrtregelungen müssen grundsätzlich weg. Das klingt nach einer Formalie, kann aber Umbauten an Knotenpunkten auslösen – etwa wenn Sichtdreiecke erst durch Rückbau von Parkständen entstehen. Diese Kosten gehören von Anfang an in die Planung",
+    "G|Für den Radverkehr wirkt die Zone doppelt: Sie senkt die Geschwindigkeitsdifferenz und macht separate Radverkehrsanlagen auf diesen Straßen in der Regel entbehrlich",
+    "SL|Zonengrenzen so wählen, dass sie im Straßenraum ablesbar sind – Einfahrten an Knotenpunkten, nicht mitten im Streckenverlauf"
+  ],
+  tempo30_strecke:[
+    "G|Normalerweise darf Tempo 30 nur angeordnet werden, wenn eine besondere Gefahr nachgewiesen ist, die deutlich über dem allgemeinen Verkehrsrisiko liegt. Für bestimmte Orte hat der Gesetzgeber diesen strengen Nachweis gestrichen – dort genügt eine einfache Gefahr (§ 45 Abs. 9 S. 4 Nr. 6 StVO)",
+    "G|Seit der Novelle vom 11.10.2024 umfasst die Liste zehn Fälle: Fußgängerüberwege (Zebrastreifen), Kindergärten, Kindertagesstätten, Spielplätze, hochfrequentierte Schulwege, allgemeinbildende Schulen, Förderschulen, Alten- und Pflegeheime, Einrichtungen für Menschen mit Behinderungen und Krankenhäuser. Das gilt ausdrücklich auch auf Bundes- und Landstraßen",
+    "G|Neu und oft übersehen: Spielplätze, Zebrastreifen und hochfrequentierte Schulwege sind erst seit der Novelle dabei. Wer noch mit dem alten Katalog von 2016 arbeitet, verschenkt Möglichkeiten",
+    "G|Ein hochfrequentierter Schulweg ist ein Straßenabschnitt, auf dem sich innerhalb eines Stadt- oder Ortsteils die Wege zwischen Wohngebieten und Schulen bündeln. Welche Routen das sind, kann die Schulwegeplanung festlegen – auch in Ortsteilen ohne eigene Schule, etwa an Bushaltestellen",
+    "G|Wichtig für die Begründung: Die Ausnahme befreit nicht vollständig vom Nachweis. Sie senkt ihn von der qualifizierten auf die einfache Gefahr. Eine Anordnung ganz ohne Begründung ist auch hier angreifbar",
+    "G|Lückenschluss: Liegen zwei Tempo-30-Abschnitte nah beieinander, darf die Strecke dazwischen einbezogen werden, wenn sie nicht länger als 500 m ist. Vorher waren es 300 m. Gemessen wird der Abstand zwischen den Tempo-30-Strecken, nicht zwischen den geschützten Einrichtungen",
+    "G|Außerhalb dieser Fälle bleibt es beim vollen Gefahrennachweis nach § 45 Abs. 9 S. 3 StVO",
+    "SL|Wie weit reicht »unmittelbarer Bereich«? Im Regelfall etwa 100 bis 200 m beidseitig des Eingangs, abhängig von den örtlichen Verhältnissen. Den gewählten Zuschnitt im Bescheid begründen und mit der Verkehrsschau abstimmen – daran scheitern Anordnungen häufiger als an der Rechtsgrundlage"
+  ],
+  radschnellweg:[
+    "G|Planfeststellung nach SaarlStrG prüfen: Bei Neubau in eigener Trasse mit Grunderwerb ist sie in der Regel erforderlich, bei Ausbau vorhandener Wege häufig nicht. Frühzeitig mit der Straßenbaubehörde klären – die Verfahrenswahl bestimmt den Zeitplan",
+    "G|Barrierefreiheit entscheidet über die Förderung: Nach § 4 i. V. m. § 8 SBGG dürfen bauliche Anlagen nur gefördert werden, wenn sie barrierefrei sind. Betroffen sind Rampenneigungen, Bordabsenkungen, taktile Elemente und Beleuchtung. Wird das erst in der Ausführung bemerkt, ist der Zuwendungsbescheid in Gefahr",
+    "BW|Radschnellverbindung ≥ 3,00 m zzgl. Sicherheitstrennstreifen; Zweirichtungsführung ≥ 4,00 m",
+    "BW|Sicherheitsraum und Bewuchs freihalten, Steigungs- und Kurvenbereiche aufweiten",
+    "SL|Kommunengrenzen früh adressieren: Radschnellverbindungen verlaufen fast immer über mehrere Baulastträger. Trägerschaft, Unterhaltung und Winterdienst vor der Förderantragstellung schriftlich regeln – die FRL NMOB-Rad-Fuß verlangt die gesicherte Unterhaltung inklusive Winterdienst als Zuwendungsvoraussetzung"
+  ],
+  rotmarkierung:[
+    "G|Wichtig zu unterscheiden: Die weiße Furt aus unterbrochenen Querstrichen ist die eigentliche Markierung und muss angeordnet werden. Die rote Fläche darunter ist rechtlich keine Markierung – nach § 39 Abs. 5 StVO sind Markierungen grundsätzlich weiß. Sie zählt als Gestaltung der Fahrbahnoberfläche",
+    "G|Daraus folgt für die Zuständigkeit: Über die Roteinfärbung entscheidet der Baulastträger, nicht die Straßenverkehrsbehörde. Eine Anordnung braucht es dafür nicht. Das erklärt, warum sie mal gemacht wird und mal nicht – es gibt keinen Anspruch darauf, sondern eine Ermessens- und Kostenentscheidung",
+    "G|Trotzdem sollte die Straßenverkehrsbehörde eingebunden werden, üblicherweise zusammen mit der Polizei. Die Einfärbung verändert, wie die Vorfahrtsituation wahrgenommen wird – das gehört abgestimmt, auch wenn es formal nicht vorgeschrieben ist",
+    "G|Die weiße Furt ist Pflicht, wo ein Radweg entlang einer Vorfahrtstraße über einen Knotenpunkt geführt wird. Das gilt auch für Radwege ohne Benutzungspflicht und für Gehwege, die für den Radverkehr freigegeben sind",
+    "G|Was die rote Fläche bewirkt: Sie macht sichtbar, dass hier mit Radverkehr zu rechnen ist und dass Abbiegende warten müssen. Empfohlen wird sie vor allem dort, wo Kraftfahrende nicht mit Radverkehr rechnen – an Furten von Zweirichtungsradwegen und an Knotenpunkten, an denen der Radweg abgesetzt verläuft",
+    "SL|Im Saarland uneinheitlich gehandhabt: häufig an Landstraßen mit Z 240, gelegentlich auch an innerörtlichen Knotenpunkten mit Schutzstreifen. Eine landesweite Vorgabe gibt es nicht – deshalb lohnt es sich, die Frage im Rahmen der Verkehrsschau grundsätzlich zu klären statt Fall für Fall",
+    "SL|Kostenfrage vorab klären: Epoxidharz hält rund 10 Jahre, durchgefärbter Asphalt rund 20. Wer nur die günstigere Variante einplant, hat den Erneuerungsbedarf früher wieder auf dem Tisch",
+    "BW|In Baden-Württemberg werden Fahrradstraßen standardmäßig mit roter Furt über Kreuzungen und Einmündungen geführt (Musterblatt 6.3-1)",
+    "BW|Piktogrammketten: Zwei Erlasse des Verkehrsministeriums (2024) ermächtigen die Straßenverkehrsbehörden ausdrücklich, sie anzuordnen. Weiße Fahrradpiktogramme mit Richtungspfeilen, Wiederholung in Abständen bis 50 m, Piktogramm 1,00 m breit und 1,30 m hoch nach RMS. Bayern lässt sie nur zu, wenn eine regelkonforme Radverkehrsanlage nicht möglich ist. Im Saarland fehlt eine entsprechende Regelung – die ERA-Neufassung wird das Thema aufgreifen"
+  ],
+  fahrbahnanhebung:[
+    "G|Zwei Dinge sind nötig und werden oft verwechselt: Der Umbau selbst ist Sache des Baulastträgers. Die Beschilderung, die dazugehört, muss die Straßenverkehrsbehörde anordnen. Beide Wege parallel starten, sonst steht die Anhebung fertig da und darf nicht beschildert werden",
+    "G|Was eine Anhebung leistet: Sie zwingt zum Langsamfahren, ohne dass jemand kontrollieren muss. Anders als ein Tempo-30-Schild wirkt sie rund um die Uhr und von selbst",
+    "G|An Querungsstellen bringt sie einen zweiten Vorteil: Die Fläche liegt auf Gehwegniveau, es gibt keine Bordkante zu überwinden. Das hilft dem Fußverkehr und ist zugleich der Punkt, an dem Barrierefreiheit und Radverkehrsführung zusammenkommen",
+    "G|Grenzen beachten: Auf Strecken mit Linienbusverkehr oder hohem Schwerverkehrsanteil ist die Ausführung mit dem Verkehrsunternehmen abzustimmen. Rampenneigung und Ausrundung entscheiden darüber, ob die Anlage angenommen oder umfahren wird",
+    "SL|In der Praxis scheitert die Anhebung selten am Recht, sondern am Geld. Sie kostet ein Vielfaches einer Markierungslösung. Wo Fördermittel in Frage kommen, gehört sie in die Kostenschätzung des Gesamtvorhabens – nachträglich als Einzelmaßnahme ist sie schwer zu finanzieren",
+    "SL|Entwässerung früh mitdenken: Eine Anhebung verändert den Wasserablauf. Wird das erst in der Ausführung bemerkt, wird es teuer"
+  ],
+  modale_filter:[
+    "G|Der Grundgedanke: Eine Straße bleibt für den Radverkehr durchlässig, für Kraftfahrzeuge aber nicht. Damit lässt sich Durchgangsverkehr aus Wohnstraßen herausnehmen, ohne die Anlieger abzuhängen",
+    "G|Beschilderung je nach Wirkung: Z 250 mit Zusatzzeichen 1022-10 sperrt für alle Fahrzeuge und lässt den Radverkehr zu. Z 357 mit Sinnbild Radverkehr weist eine Sackgasse aus, die für Radfahrende durchlässig ist – gut geeignet, wenn die Straße ohnehin als Sackgasse endet",
+    "G|Alternative ohne Sperrung: eine Einbahnstraßenregelung, die für den Radverkehr in Gegenrichtung geöffnet wird. Sie unterbindet den Durchgangsverkehr in einer Richtung und lässt das Radnetz vollständig",
+    "G|Meist geht es um Gemeindestraßen. Dann ist die Gemeinde Baulastträger, die Anordnung trifft aber die zuständige Straßenverkehrsbehörde – und die getroffene Maßnahme ist ihr nach § 12 Abs. 3 StVZustG mitzuteilen",
+    "SL|Vor der Anordnung mit Feuerwehr und Rettungsdienst sprechen. Wenn die Durchfahrt für Einsatzfahrzeuge erhalten bleiben muss, entscheidet das über die Bauform – versenkbarer Poller, Schlüsselschloss oder nur Beschilderung",
+    "SL|Auch Müllabfuhr und Winterdienst einbeziehen. Eine Sperrung, die den Räumdienst zum Rückwärtsfahren zwingt, wird nicht lange halten",
+    "SL|Erfahrungsgemäß entsteht Widerstand weniger gegen das Ziel als gegen die Umwege. Ein befristeter Verkehrsversuch nach § 45 Abs. 1 S. 2 Nr. 6 StVO nimmt der Diskussion die Schärfe und liefert belastbare Zahlen für die endgültige Entscheidung",
+    "SL|Ohne bauliche Sperre wird die Beschilderung erfahrungsgemäß missachtet. Wenn eine Wirkung gewollt ist, gehört ein physisches Element dazu"
+  ],
+  wegweisung:[
+    "G|Fahrradwegweiser sind keine Verkehrszeichen der StVO, sondern wegweisende Beschilderung nach dem FGSV-Regelwerk (Merkblatt 1998, heute HBR). Trotzdem läuft die Aufstellung über eine Anordnungsbehörde – vor der Beauftragung der Montagefirma klären, wer im konkreten Fall anordnet und wer die Standorte festlegt",
+    "G|Grundlage ist immer eine Netzplanung, nicht die einzelne Schilderstelle. Sie legt fest, welche Ziele aufgenommen werden und über welche Wege der Radverkehr geführt wird. Ohne dieses Grundgerüst entstehen Insellösungen, die an der Gemeindegrenze enden",
+    "G|Zwei Systeme, die zusammengehören: Die zielorientierte Wegweisung mit Ziel- und Kilometerangaben ist das Grundgerüst und für Alltag wie Freizeit erforderlich. Die routenorientierte Wegweisung mit Logos für Themenrouten wird als Zusatzplakette daran gehängt – sie ist kein eigenes System und darf keines werden",
+    "G|Zwei Wegweisertypen sparen Kosten: Vollwegweiser mit Ziel, Richtung und Entfernung nur dort, wo eine Entscheidung ansteht – also an Verzweigungen und Kreuzungen wichtiger Straßen. Dazwischen genügen Zwischenwegweiser mit Piktogramm und Pfeil, auch als Bestätigung auf langen Abschnitten",
+    "G|Höchstens zwei Ziele pro Wegweiser und Richtung, Fernziel oben, Nahziel unten. Entfernungen unter 10 km mit einer Nachkommastelle, darüber auf volle Kilometer. Das Fahrradpiktogramm entspricht dem amtlichen Verkehrszeichen – keine Eigenkreationen",
+    "G|Regelgröße Zielwegweiser 1000 × 250 mm, Mindestgröße 800 × 200 mm; im städtischen Netz soll die Regelgröße nicht unterschritten werden. Zwischenwegweiser mindestens 250 × 250 mm. Routenplaketten 150 × 150 mm als Einschub",
+    "G|Montagehöhe: Vollwegweiser 2,50 m über dem Geh- und Radweg, damit der lichte Raum frei bleibt. Zwischenwegweiser dagegen in Augenhöhe – oben angebracht werden sie übersehen",
+    "G|Verkehrssicherungspflicht hängt an der Widmung, nicht an der Wegweisung: Auf öffentlichen Straßen und auf Radwegen mit Z 237, 240 oder 241 gilt sie uneingeschränkt. Auf land- und forstwirtschaftlichen Wegen nicht – dort ist die Haftung für typische Gefahren wie Ernterückstände ausgeschlossen, für nicht einsehbare Gefahren wie Unterspülungen aber sehr wohl. Wer eine Route über Wirtschaftswege legt, sollte das wissen",
+    "G|Standorte nur vor Ort und vom Fahrrad aus festlegen. Vom Schreibtisch aus lässt sich nicht beurteilen, ob ein Schild während der Fahrt lesbar ist und rechtzeitiges Einordnen zum Abbiegen erlaubt",
+    "G|Wegweisungskataster von Anfang an anlegen, mit Standortkoordinaten, Schildinhalt und Befestigung. Ohne Kataster ist eine Erweiterung oder Reparatur später kaum möglich – und die Wegweisung ist nur so gut wie ihre Unterhaltung",
+    "G|Realisierung in Stufen, die in sich schlüssig sind: Kein Ziel ausschildern, für das die durchgehende Wegweisung noch fehlt. Ein Wegweiser, der ins Leere führt, ist schlechter als keiner",
+    "SL|Mindestens jährlich kontrollieren – fehlende oder zerstörte Schilder kurzfristig ersetzen, Bewuchs zurückschneiden. Ein Wartungsvertrag ist empfehlenswert; ohne ihn verfällt das System binnen weniger Jahre",
+    "SL|Farbe innerhalb einer Region einheitlich halten. Ein kleinräumiger Wechsel auf kommunaler Ebene erzeugt einen Flickenteppich und entwertet die Wegweisung. Alltags- und Freizeitrouten bekommen dieselbe Farbe",
+    "AL|Niedersachsen legt landesweit fest: Beschriftung grün auf weißem Grund, Zielwegweiser 1000 × 250 mm, Zwischenwegweiser 300 × 300 mm, ISO-Pfeil, Aluminium-Hohlraumprofil mit Einschiebeschiene für Routenplaketten. Als Muster für eine landesweite Festlegung im Saarland brauchbar",
+    "AL|Ortshinweisschilder (800 × 200 mm, schwarz auf weiß) dort aufstellen, wo eine Route einen Ort ohne Ortstafel nach Z 310/385 erreicht – sonst fehlt Radfahrenden die Bestätigung, wo sie angekommen sind",
+    "AL|Service-Aufkleber am Mast mit Standortnummer und Telefonnummer: So melden Nutzende Schäden selbst. Kostet fast nichts und ersetzt einen Teil der Kontrollfahrten"
+  ],
+  abstellanlage:[
+    "G|Zuständigkeit hängt am Standort: Auf öffentlicher Straßenfläche ist der Baulastträger zuständig, auf Grundstücken der jeweilige Eigentümer. Bei Anlagen im Straßenraum, die Flächen dem ruhenden Kfz-Verkehr entziehen, kommt eine verkehrsrechtliche Anordnung dazu",
+    "SL|Zwei Fördertöpfe, die oft verwechselt werden: An öffentlichen Einrichtungen wie Schulen, Kitas, Rathäusern, Schwimmbädern, Sportstätten, Museen und Bibliotheken sowie an Verknüpfungspunkten zum öffentlichen Personenverkehr läuft die Förderung über Ziffer 2.2.1 der FRL NMOB-Rad-Fuß aus Bundesmitteln des Programms »Stadt und Land«",
+    "SL|Im öffentlichen Verkehrsraum an bedeutenden Quell- und Zielorten sowie an gemeinnützigen oder religionsgemeinschaftlichen Bildungseinrichtungen läuft sie über Ziffer 2.2.2 aus Landesmitteln. Der Antrag geht in beiden Fällen ans MUKMAV – direkt beim Bund kann nicht beantragt werden",
+    "SL|Nicht förderfähig: Anlagen auf Flächen der Deutschen Bahn oder solche, die über die Bike+Ride-Offensive der Kommunalrichtlinie förderberechtigt sind. Auch eine Aufstockung ist dort nicht möglich",
+    "SL|Mindestens sechs zusätzliche Stellplätze, Mindestzuwendung 5.000 €, Zweckbindung fünf Jahre. Bei Anbindung an Schule oder Kita steigt die Quote auf 95 %",
+    "SL|Anlehnbügel statt Vorderradhalter – ein Rahmen muss anschließbar sein, sonst wird die Anlage nicht angenommen. Überdachung und Beleuchtung erhöhen die Nutzung deutlich und sind mitförderfähig",
+    "SL|Unterhaltung und Winterdienst müssen dauerhaft gesichert sein; das ist Zuwendungsvoraussetzung nach Nr. 5 der FRL. Eine zugeschneite oder zugewachsene Abstellanlage erfüllt den Zuwendungszweck nicht"
+  ],
+  querungshilfe:[
+    "G|Platzbedarf zum Aufstellen (ERA 2010, Kap. 2.2.5): Ein einzelnes Fahrrad braucht rund 2,00 m Länge und 1,00 m Breite. Ein Fahrrad mit Anhänger braucht 3,00 bis 3,50 m Länge – dieses Maß passt dann auch für Liegeräder",
+    "G|Aufstellflächen auf Mittelinseln sollen 3,00 m lang und 4,00 m breit sein. Bei Zweirichtungsverkehr oder starkem Radverkehr kommt ein Breitenzuschlag dazu (ERA 2010, Kap. 2.2.5)",
+    "G|Absolute Untergrenze: 2,50 m Länge. Wird sie angesetzt, muss die Fläche mindestens 4,00 m breit sein, damit sich Fahrräder mit Anhänger schräg aufstellen können. Wer nur die 2,50 m plant und die Breite vergisst, baut eine Insel, auf der ein Lastenrad nicht sicher steht",
+    "G|Die Dimensionierung richtet sich nach der Radverkehrsstärke in der Spitzenstunde und, an einer Ampel, nach der Zahl der während der Sperrzeit wartenden Radfahrenden (ERA 2010, Kap. 2.2.5)",
+    "SL|Bordabsenkungen, taktile Elemente und Auffindestreifen mitplanen – Barrierefreiheit nach § 4 i. V. m. § 8 SBGG ist Fördervoraussetzung nach der FRL NMOB-Rad-Fuß, nicht Kür",
+    "BW|Mittelinsel-Aufstellfläche ≥ 2,50 m – deckungsgleich mit der ERA-Untergrenze, nicht mit deren Regelmaß",
+    "BW|Ab 5.000 Kfz/24 h Mittelinsel erforderlich",
+    "BW|Ab 15.000 Kfz/24 h LSA oder Über-/Unterführung prüfen"
+  ]
+};
+
+/* Quellenebenen: GESETZ (StVO/VwV-StVO 2025 einschl. der dort in Bezug genommenen
+   FGSV-Regelwerke) – SAARLAND (MUKMAV-Broschüre 05/2023) – BW (MuLöS 10/2025,
+   fachlicher Vorgriff auf die ERA-Fortschreibung) */
+const QGRP={G:{txt:"GESETZ",cls:"q-g"},SL:{txt:"SAARLAND",cls:"q-sl"},BW:{txt:"BW · ERA-VORGRIFF",cls:"q-bw"},AL:{txt:"ANDERES BUNDESLAND",cls:"q-al"}};
+const QORDER=["G","SL","BW","AL"];
+function splitQ(p){const i=p.indexOf("|");if(i<1)return{q:null,t:p};const k=p.slice(0,i);return QGRP[k]?{q:k,t:p.slice(i+1)}:{q:null,t:p};}
+function sortPraxis(a){return a.map(splitQ).map((o,i)=>({o,i})).sort((x,y)=>{const rx=x.o.q?QORDER.indexOf(x.o.q):99,ry=y.o.q?QORDER.indexOf(y.o.q):99;return rx-ry||x.i-y.i;}).map(x=>x.o);}
+const LERNBOX_MASSE=`<details class="lernbox inresult"><summary><span class="lernbox-t">Was die Zahlen bedeuten: Regelmaß, Mindestmaß, Klammerwert</span><span class="lernbox-sub">Warum die Regelbreite kein Idealwert ist und wann ein Mindestmaß überhaupt zulässig ist</span></summary><div class="lernbox-body">    <p><b>Regelmaß</b> ist der Wert, der zu planen ist – nicht der Idealwert, sondern der Normalfall.</p>    <p><b>Mindestmaß</b> gilt nur bei nachweislich beengten Verhältnissen und ist zu begründen. Mehrere Mindestmaße im selben Querschnitt zu kombinieren, ist nach ERA ausdrücklich zu vermeiden.</p>    <p><b>Klammerwerte</b> in ERA und RASt sind reduzierte Ausnahmewerte. Nach den E Klima 2022 sind sie nicht mehr anzuwenden; die Regelmaße gelten dort als Mindestwerte.</p>    <p>Nicht jede Anlage hat ein Mindestmaß: Für Radfahrstreifen nennt die ERA 2010 nur 1,85 m und eine Vergrößerung nach oben – kein Maß darunter.</p>  </div></details>`;
+const QLEGENDE="GESETZ = StVO und VwV-StVO i. d. F. vom 03.04.2025 (in Kraft seit 10.04.2025) einschließlich der dort in Bezug genommenen Regelwerke (ERA 2010, RASt 06, RiLSA, RMS) · SAARLAND = Maßgaben und Richtlinien beim Ausbau von Radverkehrsanlagen, MUKMAV, Stand 05/2023 – Landesvorgabe der Bewilligungsbehörde; in der FRL NMOB-Rad-Fuß nicht ausdrücklich benannt, im Förderverfahren aber regelmäßig herangezogen. Bei Widerspruch gilt die GESETZ-Ebene · BW · ERA-VORGRIFF = Musterlösungen für Radverkehrsanlagen Baden-Württemberg, Stand 10/2025 – im Saarland nicht eingeführt und damit nicht verbindlich, fachlich aber der aktuellste verfügbare Stand: Systematik (Basisstandard) und Maße nehmen die laufende Fortschreibung der ERA (Veröffentlichung ab 2026 erwartet) weitgehend vorweg. Empfehlung 2Rat: bei Neu- und Umbauten als Zielwert ansetzen und ein Abweichen von der ERA 2010 in der Planung kurz begründen. · ANDERES BUNDESLAND = Leitfäden anderer Länder, im Saarland nicht verbindlich, als fachliche Argumentationshilfe zitiert";
+
+let state={step:0,category:null,measure:null,street:null,blsub:null,location:null,kommune:null,mapPrefill:false};
+
+function cardKey(e){if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){e.preventDefault();e.currentTarget.click();}}
+
+function getResult(){
+  const m=MEASURES.flatMap(c=>c.items).find(i=>i.id===state.measure);
+  if(!m)return null;
+  const s=(state.street==="bundeslandstrasse")?state.blsub:state.street;
+  let loc=state.location||(s==="gemeindestrasse"||s==="sonstige"?"innerorts":"ausserorts");
+  // Bundes-/Landesstraße innerorts ist rechtlich immer Ortsdurchfahrt
+  if((s==="bundesstrasse"||s==="landesstrasse1"||s==="landesstrasse2")&&loc==="innerorts")loc="ortsdurchfahrt";
+  let authority="",authorityDetail="",baulast="",baulastDetail="",notes=[],praxis=[],warnings=[],legal=m.legal;
+  const k = state.kommune ? findKommune(state.kommune) : null;
+
+  /* Zulässigkeit der Maßnahme nach Lage / Straßenklasse */
+  const isBL=(s==="bundesstrasse"||s.startsWith("landesstrasse"));
+  if(loc==="ausserorts"){
+    if(m.id==="schutzstreifen")warnings.push("Schutzstreifen (Z 340) sind eine innerörtliche Markierungslösung (VwV-StVO; ERA 2010). Außerorts sind sie nicht vorgesehen – die Regellösung außerorts ist ein baulich getrennter (ggf. gemeinsamer) Geh-/Radweg.");
+    if(m.id==="radfahrstreifen")warnings.push("Radfahrstreifen (Z 237 + Z 295) sind eine innerörtliche Führungsform. Außerorts ist die Regellösung ein baulich getrennter Radweg, kein Radfahrstreifen.");
+    if(m.id==="tempo30_zone")warnings.push("Tempo-30-Zonen (Z 274.1) sind eine zonale, innerörtliche Anordnung in Erschließungsstraßen. Außerorts nicht zulässig – dort kommt nur eine streckenbezogene Beschränkung (Z 274) bei besonderer Gefahrenlage in Betracht.");
+    if(m.id==="einbahn_oeffnung")warnings.push("Die Öffnung von Einbahnstraßen für den Radverkehr in Gegenrichtung (Z 220 + Z 1000-32) ist eine innerörtliche Maßnahme (VwV-StVO zu Z 220: beengte Erschließungsstraße, Tempo ≤ 30 km/h). Außerorts nicht einschlägig.");
+  }
+  if(m.id==="fahrradzone"){
+    if(isBL)warnings.push("Fahrradzonen (Z 244.3) sind auf Bundes-/Landstraßen und weiteren Vorfahrtstraßen (Z 306) unzulässig (§ 45 Abs. 1i S. 2 StVO).");
+    else if(loc==="ausserorts")warnings.push("Fahrradzonen (Z 244.3) sind eine innerörtliche Maßnahme und außerorts nicht zulässig (§ 45 Abs. 1i StVO).");
+  }
+  if(m.id==="fahrradstrasse"&&isBL)warnings.push("Fahrradstraßen (Z 244) setzen eine untergeordnete oder hohe Rad-Netzbedeutung voraus und sind für Straßen des überörtlichen Verkehrs (Bundes-/Landstraßen) in der Regel nicht einschlägig.");
+
+  /* Baulastträger */
+  if(s==="bundesstrasse"){
+    if(loc==="ortsdurchfahrt"||loc==="innerorts"){
+      if(k&&k.odBaulast){
+        baulast="Stadt "+k.name+" (volle Straßenbaulast in der Ortsdurchfahrt)";
+        baulastDetail="§ 5 Abs. 2 FStrG – Gemeinde > 80.000 EW trägt die OD-Baulast vollständig (Fahrbahn sowie Geh- und Radwege)";
+        notes.push("Die Landeshauptstadt Saarbrücken trägt als einzige saarländische Gemeinde (> 80.000 EW) die volle Straßenbaulast für Ortsdurchfahrten im Zuge von Bundesstraßen (§ 5 Abs. 2 FStrG).");
+      }else{
+        baulast="Bund (Fahrbahn und Radwege) / "+(k?("Stadt/Gemeinde "+k.name):"Gemeinde")+" (Gehwege, Parkplätze)";
+        baulastDetail="§ 5 Abs. 2 und 3 FStrG – die Gemeinde trägt in der OD nur Gehwege und Parkplätze; Fahrbahn und straßenbegleitende Radwege bleiben beim Bund";
+        notes.push("Wichtig: Radwege in der Ortsdurchfahrt gehören zur Baulast des Bundes – nicht der Gemeinde (§ 5 Abs. 3 FStrG; ODR Nr. 12a: Baulastträger für Radwege ist der Baulastträger der Fahrbahn). Bau und Unterhaltung straßenbegleitender Radwege an der B-Straße in der OD sind Sache des Bundes (Auftragsverwaltung: Landesbetrieb für Straßenbau).");
+        notes.push("Kosten-Falle gemeinsamer Geh-/Radweg (ODR 2008): Ein gemeinsamer Geh- und Radweg kommt nur in Betracht, wenn die Gemeinde per Vereinbarung die HÄLFTE der Bau- und Unterhaltungskosten übernimmt (ARS 14/2008). Ein getrennt geführter Radweg liegt dagegen voll in der Baulast des Bundes – getrennte Führung ist für die Gemeinde finanziell deutlich günstiger.");
+        notes.push("Gehweg-Mehrbreite: Wünscht die Gemeinde einen Gehweg breiter als 1,50 m, trägt sie die Mehrkosten anteilig (Nr. 16 Abs. 2 ODR).");
+        if(!k)notes.push("Hinweis zur Baulast: Nur die Landeshauptstadt Saarbrücken (> 80.000 EW) trägt die volle OD-Baulast; alle übrigen Gemeinden tragen in der OD nur Gehwege und Parkplätze. Tipp: Kommune oben auswählen für ein konkretes Ergebnis.");
+      }
+    }else{baulast="Bund (Landesbetrieb für Straßenbau)";baulastDetail="§ 5 Abs. 1 FStrG";}
+  }else if(s==="landesstrasse1"||s==="landesstrasse2"){
+    if(loc==="ausserorts"){baulast="Land Saarland (Landesbetrieb für Straßenbau)";baulastDetail="§ 46 SaarlStrG";}
+    else{
+      if(k&&k.odBaulast){
+        baulast="Stadt "+k.name+" (volle Straßenbaulast in der Ortsdurchfahrt)";
+        baulastDetail="§ 47 Abs. 1 SaarlStrG – Gemeinde > 80.000 EW trägt die OD-Baulast vollständig";
+      }else{
+        baulast="Land Saarland (LfS, Fahrbahn und Radwege) / "+(k?("Stadt/Gemeinde "+k.name):"Gemeinde")+" (Gehwege, Parkplätze)";
+        baulastDetail="§ 46, § 47 Abs. 2 SaarlStrG – die Gemeinde trägt in der OD nur Gehwege und Parkplätze";
+        notes.push("Wichtig: Radwege in der Ortsdurchfahrt einer Landstraße gehören zur Baulast des Landes – nicht der Gemeinde (§ 47 Abs. 2 SaarlStrG nennt nur Gehwege und Parkplätze).");
+        notes.push("Bei gemeinsamen Geh-/Radwegen in der OD werden die Grundsätze der Ortsdurchfahrtenrichtlinien (hälftige Kostenteilung per Vereinbarung) in der Praxis entsprechend angewendet – Kostenteilung vorab mit dem LfS klären. Ein getrennt geführter Radweg liegt voll in der Baulast des Landes.");
+      }
+      notes.push("Im Saarland gibt es keine Kreisstraßen – Landstraßen beider Ordnungen liegen in der Baulast des Landes.");
+    }
+  }else{baulast="Gemeinde";baulastDetail="§ 50 SaarlStrG";}
+
+  /* Zuständige Behörde (verkehrsrechtliche Anordnung) */
+  if(m.type==="anordnung"||m.type==="anordnung_bau"){
+    if(s==="gemeindestrasse"||s==="sonstige"){authority="Gemeinde (eigene Zuständigkeit nach § 12 StVZustG)";authorityDetail="§ 12 Abs. 1 StVZustG Saarland";notes.push("Auf Gemeindestraßen und sonstigen öffentlichen Straßen sind die Gemeinden selbst zuständig für: Verkehrsbeschränkungen aller Art (§ 45 Abs. 1 bis 1d StVO – damit auch Fahrradstraßen, Tempo-30-Zonen und Maßnahmen der Flächenbereitstellung nach § 45 Abs. 1 S. 2 Nr. 7), Fußgängerüberwege, Vorfahrtsregelungen und Spielstraßen (§ 12 Abs. 1 Nr. 1–4 StVZustG). Nicht übertragen sind Maßnahmen nach § 45 Abs. 1e ff. StVO – insbesondere Fahrradzonen (Abs. 1i).");}
+    else{
+      if(k&&k.eigeneStVB){authority="Stadt "+k.name+" – eigene Straßenverkehrsbehörde";authorityDetail="§ 1 Abs. 1 Nr. 8 Mittelstadtverordnung bzw. § 7 Abs. 1 StVZustG – "+k.name+" ordnet auch auf Bundes- und Landstraßen im Stadtgebiet selbst an";}
+      else if(k){authority="Untere Straßenverkehrsbehörde: "+k.kreis;authorityDetail="§ 7 Abs. 1 StVZustG Saarland";}
+      else{authority="Straßenverkehrsbehörde (Landkreis / Regionalverband Saarbrücken)";authorityDetail="§ 7 Abs. 1 StVZustG Saarland";notes.push("Eigene Straßenverkehrsbehörden haben: die Landeshauptstadt Saarbrücken (§ 7 Abs. 1 StVZustG) sowie die Mittelstädte Völklingen und St. Ingbert. Den Mittelstädten sind die Befugnisse nach der StVO vollumfänglich als Auftragsangelegenheit übertragen (§ 1 Abs. 1 Nr. 8 Mittelstadtverordnung i. V. m. § 7 KSVG) – sie ordnen in ihrem Stadtgebiet daher auch auf Bundes- und Landstraßen selbst an. Tipp: Kommune oben auswählen für ein konkretes Ergebnis.");}
+      if(loc==="innerorts"||loc==="ortsdurchfahrt")notes.push("Bei Maßnahmen in Ortsdurchfahrten ist Einvernehmen mit der Gemeinde und dem Baulastträger herzustellen (§ 45 Abs. 1b StVO).");}
+
+    /* VwV-StVO 2025: Tempo 30 */
+    if(m.id==="tempo30_strecke"&&(s==="bundesstrasse"||s.startsWith("landesstrasse")))
+      notes.push("Tempo 30 auf Bundes-/Landstraßen: erleichterte Anordnung vor sozialen Einrichtungen (§ 45 Abs. 9 S. 4 Nr. 6 StVO – Schulen, Kitas, Pflegeheime, Krankenhäuser). Im Übrigen besondere Gefahrenlage erforderlich (§ 45 Abs. 9 S. 4 StVO).");
+    if(m.id==="tempo30_zone"&&(s==="bundesstrasse"||s.startsWith("landesstrasse"))){notes.push("Tempo-30-Zonen auf Straßen des überörtlichen Verkehrs nur mit Zurückhaltung.");notes.push("Auf Vorfahrtstraßen (Z 306) ausgeschlossen (VwV-StVO zu Z 274.1).");}
+
+    /* VwV-StVO 2025: Fahrradstraße – zwei Anordnungswege */
+    if(m.id==="fahrradstrasse"){
+      notes.push("Anordnungsweg 1 (§ 45 Abs. 1 S. 1 StVO i. V. m. VwV-StVO 2025 zu Z 244.1): Hohe oder zu erwartende hohe Radverkehrsdichte, hohe Netzbedeutung für den Radverkehr oder lediglich untergeordnete Kfz-Bedeutung. »Vorherrschend« ist nicht Voraussetzung; die hohe Dichte kann auch erst durch die Fahrradstraße bewirkt werden.");
+      notes.push("Anordnungsweg 2 (§ 45 Abs. 1 S. 2 Nr. 7, Rn. 14a–14e): Auf Basis eines Gesamtkonzepts (z. B. Radverkehrsplan) zur Förderung von Klimaschutz, Gesundheitsschutz oder städtebaulicher Entwicklung. Es genügt, wenn sich der Beitrag aus der perspektivischen Umsetzung des Gesamtkonzepts ergibt (Rn. 14b). Auch ohne Konzept im Einzelfall möglich (Rn. 14d).");
+    }
+
+    /* Fahrradzone: eigene Rechtsgrundlage § 45 Abs. 1i – von § 12 StVZustG NICHT umfasst */
+    if(m.id==="fahrradzone"){
+      if(s==="gemeindestrasse"||s==="sonstige"){
+        if(k&&k.eigeneStVB){authority="Stadt "+k.name+" (als eigene Straßenverkehrsbehörde – ordnet selbst an)";}
+        else if(k){authority="Untere Straßenverkehrsbehörde: "+k.kreis+" – im Einvernehmen mit der Gemeinde";}
+        else{authority="Straßenverkehrsbehörde (Landkreis / Regionalverband Saarbrücken) – im Einvernehmen mit der Gemeinde";}
+        authorityDetail="§ 45 Abs. 1i StVO i. V. m. § 7 Abs. 1 StVZustG – die Übertragung auf die Gemeinden (§ 12 Abs. 1 Nr. 4 StVZustG) umfasst nur § 45 Abs. 1 bis 1d, nicht Abs. 1i";
+        notes.push("Achtung Sonderfall Fahrradzone: Anders als die Fahrradstraße wird die Fahrradzone nach § 45 Abs. 1i StVO angeordnet – dieser Absatz ist von der Aufgabenübertragung auf die Gemeinden (§ 12 Abs. 1 Nr. 4 StVZustG: nur § 45 Abs. 1 bis 1d) nicht umfasst. Zuständig ist daher auch auf Gemeindestraßen die Straßenverkehrsbehörde (Landkreis/Regionalverband bzw. Saarbrücken, Völklingen, St. Ingbert); die Gemeinde wirkt über das Einvernehmen mit (§ 45 Abs. 1i S. 1 StVO).");
+      }
+      /* B/L-Unzulässigkeit erscheint jetzt als rotes Warnfeld (siehe Zulässigkeits-Logik oben) */
+      notes.push("Weitere Anforderungen an Fahrradzonen (§ 45 Abs. 1i StVO): grundsätzlich rechts-vor-links an allen Knoten, keine Überschneidung mit einer Tempo-30-Zone, Sinnbild Z 244.3 in regelmäßigen Abständen auf der Fahrbahn.");
+    }
+
+    if(m.id==="einbahn_oeffnung")notes.push("VwV-StVO zu Z 220: Öffnung nur bei ausreichender Breite und Sichtbeziehungen, Tempo ≤ 30 km/h empfohlen.");
+    if(m.id==="benutzungspflicht_aufheben")notes.push("Benutzungspflicht (Z 237/240/241) nur bei qualifizierter Gefahrenlage zulässig. Ohne diese ist die Benutzungspflicht aufzuheben (BVerwG, 18.11.2010 – 3 C 42.09).");
+    if(m.id==="radweg_beschilderung")notes.push("Radwegebenutzungspflicht setzt qualifizierte Gefahrenlage voraus (§ 45 Abs. 9 Satz 4 Nr. 1 StVO). Radweg muss ERA-Anforderungen erfüllen.");
+    if(m.id==="rotmarkierung")notes.push("Eine Roteinfärbung mit Piktogrammkette hat unterstützenden Charakter und ist Sache des Baulastträgers – sie ersetzt nicht die Anordnung der zugrunde liegenden Radverkehrsführung. Empfehlung: mit Straßenverkehrsbehörde und Polizei abstimmen. Radwegefurten an Vorfahrtstraßen (Z 306) sind stets zu markieren (VwV-StVO zu § 9).");
+    if(m.id==="gemeinsam_ohne_bp")notes.push("Für den gemeinsamen Geh-/Radweg ohne Benutzungspflicht gibt es zwei Wege: Kennzeichnung durch Aufbringung der Sinnbilder »Fußgänger« und »Radverkehr« (VwV-StVO zu § 2 Abs. 4 S. 2, Rn. 38a) – dann gilt keine Schrittgeschwindigkeit; oder Z 239 mit Zusatzzeichen 1022-10 – dann gilt Schrittgeschwindigkeit (StVO Anlage 2, Erläuterung zu Z 239 Nr. 2). Beide lassen dem Radverkehr die Wahl zwischen Weg und Fahrbahn und setzen keine qualifizierte Gefahrenlage voraus – im Gegensatz zum benutzungspflichtigen Z 240. Die Wahl des Weges vor der Anordnung bewusst treffen.");
+    if(m.id==="gehweg_frei")notes.push("Auf dem freigegebenen Gehweg gilt Schrittgeschwindigkeit; der Fußverkehr darf weder gefährdet noch behindert werden, notfalls muss der Radverkehr warten (StVO Anlage 2, Erläuterung zu Z 239 Nr. 2). Die Freigabe steht am Ende der Prüfreihenfolge: zuerst Radfahrstreifen, dann Schutzstreifen, erst dann Gehwegfreigabe (VwV-StVO zu § 2 Abs. 4 S. 2, Rn. 11). Beschaffenheit und Zustand des Gehwegs sollen den Verkehrsbedürfnissen des Radverkehrs entsprechen, insbesondere Bordsteinabsenkungen an Einmündungen und Kreuzungen (VwV-StVO zu Z 239 Rn. 3). Für E-Scooter gilt die Freigabe »Radverkehr frei« bis zum 28.02.2027 nicht – ab dem 01.03.2027 gilt sie automatisch mit (eKFV-Novelle, BGBl. 2026 I Nr. 32).");
+  }
+
+  /* Bauliche Maßnahmen */
+  if(m.type==="bau"||m.type==="anordnung_bau"){
+    let ba=baulast;
+    if(m.id==="abstellanlage"){ba="Gemeinde (oder privater Grundstückseigentümer)";if(isBL)notes.push("Sondernutzung an Bundes-/Landstraßen: Die Erlaubnis erteilt der Träger der Straßenbaulast (Bund bzw. Land – Landesbetrieb für Straßenbau), nicht die Gemeinde (§ 8 FStrG bzw. § 18 SaarlStrG).");else{notes.push("Außerhalb des öffentlichen Verkehrsraums (Schulhof, Rathausvorplatz, Bauhofgelände, privates Grundstück): keine Beteiligung der Straßenverkehrsbehörde – es gilt Bauordnungsrecht, ggf. die kommunale Stellplatzsatzung.");notes.push("Im öffentlichen Straßenraum, errichtet durch die Gemeinde selbst: keine Sondernutzungserlaubnis erforderlich – die Gemeinde ist selbst Trägerin der Straßenbaulast.");notes.push("Aber: Entfallen dafür Kfz-Stellplätze oder ändert sich Beschilderung bzw. Markierung, ist zusätzlich eine verkehrsrechtliche Anordnung nötig (§ 45 StVO) – dann ist die Straßenverkehrsbehörde einzubinden.");notes.push("Errichtet ein Dritter (Gewerbe, Verein) die Anlage auf öffentlichem Straßengrund, braucht er eine Sondernutzungserlaubnis der Gemeinde (§ 18 SaarlStrG).");}}
+    else if(m.id==="radschnellweg"){ba="Land Saarland / ggf. interkommunale Zusammenarbeit";notes.push("Fördermöglichkeiten über Bundes- und Landesprogramme prüfen (u. a. FRL-NMOB-Rad-Fuß).");}
+    if(m.type==="bau"){authority=ba+(/\)\s*$/.test(ba)?"":" (als Baulastträger)");authorityDetail=baulastDetail;}
+    if(m.type==="anordnung_bau")notes.push("Erfordert sowohl bauliche Umsetzung (Baulastträger) als auch verkehrsrechtliche Anordnung (Straßenverkehrsbehörde).");
+    if(m.id!=="abstellanlage"&&m.id!=="radschnellweg")notes.push("Abstimmung zwischen Baulastträger und Straßenverkehrsbehörde erforderlich.");
+  }
+
+  if((s==="gemeindestrasse"||s==="sonstige")&&(m.type==="anordnung"||m.type==="anordnung_bau"))notes.push("Mitteilungspflicht: Gemeinden müssen u. a. Verkehrsbeschränkungen, Fußgängerüberwege und Vorfahrtsregelungen der nach § 7 Abs. 3 StVZustG zuständigen Behörde (Landkreis bzw. Regionalverband Saarbrücken) mitteilen (§ 12 Abs. 3 StVZustG).");
+
+  /* Förderrechtlicher Hinweis: getrennte Führung als Zielstellung der FRL */
+  if(m.id==="gemeinsam_ohne_bp"||m.id==="gemeinsamer_geh_radweg")notes.push("Förderrechtlich: Zielstellung der FRL NMOB-Rad-Fuß (Nr. 5, Zuwendungsvoraussetzungen) ist eine getrennte Verkehrsführung. Ist die Herstellung eines getrennten Radweges nicht anders lösbar als über einen gemeinsamen Geh- und Radweg – etwa wegen zusätzlicher Flächeninanspruchnahme oder Eingriffen in Natur und Umwelt –, ist dies im Einzelfall zu begründen. Die Begründung frühzeitig dokumentieren; sie wird im Zuwendungsverfahren verlangt.");
+
+  /* Praxishinweise aus ERA/MuLöS */
+  if(PRAXIS[m.id])praxis=PRAXIS[m.id];
+
+  return{measure:m,authority,authorityDetail,baulast,baulastDetail,
+    aufsicht:"Ministerium für Umwelt, Klima, Mobilität, Agrar und Verbraucherschutz (MUKMAV)",
+    aufsichtDetail:"§ 6 StVZustG Saarland – oberste Landesstraßenverkehrsbehörde (Ressort Mobilität seit 2022 beim MUKMAV)",
+    legal,notes:[...new Set(notes)],praxis,warnings:[...new Set(warnings)]};
+}
+
+const LAGE_SENSITIVE=["schutzstreifen","radfahrstreifen","radfahrstreifen_schutz","tempo30_zone","fahrradzone","einbahn_oeffnung"];
+function needsLocation(){
+  if(state.street==="bundeslandstrasse")return true;
+  if((state.street==="gemeindestrasse"||state.street==="sonstige")&&LAGE_SENSITIVE.includes(state.measure))return true;
+  return false;
+}
+function totalSteps(){return needsLocation()?4:3;}
+
+function renderSteps(){
+  const el=document.getElementById('steps');
+  const t=state.step>=3&&getResult()?totalSteps():Math.max(state.step,0);
+  const total=state.street?totalSteps():3;
+  let h='';
+  for(let i=0;i<total;i++){
+    const cls=i<t?'done':i===t?'active':'pending';
+    h+=`<div class="step-dot ${cls}">${i<t?'✓':i+1}</div>`;
+    if(i<total-1)h+=`<div class="step-line ${i<t?'done':'pending'}"></div>`;
+  }
+  el.innerHTML=h;
+}
+
+function renderCards(items,activeId,onClick,sub){
+  return `<div class="cards${sub?' sub':''}">${items.map(item=>{
+    const active=item.id===activeId?'active':'';
+    return `<div class="card ${active}" role="button" tabindex="0" aria-pressed="${active?'true':'false'}" onkeydown="cardKey(event)" onclick="${onClick}('${item.id}')">${item.html}</div>`;
+  }).join('')}</div>`;
+}
+
+function render(){
+  renderSteps();
+  const el=document.getElementById('content');
+
+  if(state.step===0){
+    let h='';
+    if(state.mapPrefill){
+      const stLabel=state.street==='bundeslandstrasse'?((BL_SUB.find(b=>b.id===state.blsub)||{label:'Bundes-/Landesstraße'}).label):(state.street?((STREETS.find(x=>x.id===state.street)||{label:state.street}).label):'—');
+      h+=`<div class="info-box" style="background:var(--blue-light);border-color:rgba(22,120,169,.3);margin-top:0"><div class="info-title" style="color:var(--blue-dark)">Automatisch aus der Karte erkannt</div><div class="info-body">Kommune: <b>${state.kommune||'—'}</b> · Straße/Weg: <b>${stLabel}</b> · Lage: <b>${state.location?(state.location==='innerorts'?'innerorts':'außerorts'):'wird abgefragt'}</b><br>Kommune, Straße und Lage sind schon eingetragen – Sie wählen nur noch die Maßnahme (alles änderbar).</div></div>`;
+    }
+    h+=`<h2>Welche Art von Maßnahme planen Sie?</h2>
+    <p class="subtitle">Wählen Sie zunächst die Kategorie, dann die konkrete Maßnahme.</p>`;
+    h+=renderCards(MEASURES.map(c=>({id:c.id,html:`<div class="card-row"><span class="card-icon">${c.icon}</span><div><div class="card-label">${c.label}</div><div class="card-count">${c.items.length} Maßnahmen</div></div></div>`})),state.category,'selectCategory');
+    if(state.category){
+      const cat=MEASURES.find(c=>c.id===state.category);
+      h+=`<div class="section"><h3>Maßnahme auswählen:</h3>`;
+      h+=renderCards(cat.items.map(i=>({id:i.id,html:`<div class="card-label sm">${i.label}</div><div class="card-desc">${i.desc}</div>`})),state.measure,'selectMeasure',true);
+      h+=`</div>`;
+    }
+    if(state.measure){
+      if(state.mapPrefill && state.street && (state.street!=='bundeslandstrasse'||state.blsub)){
+        if(needsLocation() && !state.location){ h+=`<button class="btn btn-primary" onclick="goStep(2)">Weiter → Lage (innerorts/außerorts)</button>`; }
+        else { h+=`<button class="btn btn-primary" onclick="goStep(3)">Ergebnis anzeigen →</button>`; }
+      } else {
+        h+=`<button class="btn btn-primary" onclick="goStep(1)">Weiter → Straßenkategorie</button>`;
+      }
+    }
+    el.innerHTML=h;
+  }
+  else if(state.step===1){
+    const m=MEASURES.flatMap(c=>c.items).find(i=>i.id===state.measure);
+    let h=`<button class="btn-back" onclick="goStep(0)">← Zurück</button>
+    <h2>Auf welcher Straße?</h2>
+    <p class="subtitle">Maßnahme: <strong>${m.label}</strong></p>
+    <p class="hint">Hinweis: Im Saarland gibt es keine Kreisstraßen. Das Saarländische Straßengesetz kennt Landstraßen I. und II. Ordnung (§ 3 Abs. 1 SaarlStrG) – die Landstraßen II. Ordnung übernehmen hier die Funktion, die in anderen Ländern die Kreisstraßen haben.</p>`;
+    h+=renderCards(STREETS.map(s=>({id:s.id,html:`<div class="card-row"><span class="street-badge" style="background:${s.color}">${s.icon}</span><span class="card-label">${s.label}</span></div>`})),state.street,'selectStreet');
+    if(state.street==="bundeslandstrasse"){
+      h+=`<div class="section"><h3>Welche Einstufung?</h3><p class="subtitle">Die Baulast unterscheidet sich – Bund (FStrG) oder Land (SaarlStrG). Landstraßen beider Ordnungen liegen in der Baulast des Landes; die Einstufung ist im Straßenverzeichnis nach § 3 Abs. 2 SaarlStrG festgelegt.</p>`;
+      h+=renderCards(BL_SUB.map(b=>({id:b.id,html:`<div class="card-label sm">${b.label}</div><div class="card-desc">${b.desc}</div>`})),state.blsub,'selectBlsub',true);
+      h+=`</div>`;
+    }
+    const ready = state.street && (state.street!=="bundeslandstrasse" || state.blsub);
+    if(ready){
+      const label=needsLocation()?'Weiter → Lage':'Weiter → Ergebnis';
+      const next=needsLocation()?2:3;
+      h+=`<button class="btn btn-primary" onclick="goStep(${next})">${label}</button>`;
+    }
+    el.innerHTML=h;
+  }
+  else if(state.step===2){
+    const m=MEASURES.flatMap(c=>c.items).find(i=>i.id===state.measure);
+    const s=STREETS.find(x=>x.id===state.street);
+    let h=`<button class="btn-back" onclick="goStep(1)">← Zurück</button>
+    <h2>Wo liegt die Maßnahme?</h2>
+    <p class="subtitle">${m.label} auf ${s.label}</p>`;
+    const locOpts=[{id:"innerorts",label:"Innerorts (geschlossene Ortschaft)"},{id:"ausserorts",label:"Außerorts (freie Strecke)"}];
+    h+=`<p class="hint">Innerorts an einer Bundes-/Landesstraße = Ortsdurchfahrt (wird automatisch berücksichtigt).</p>`;
+    h+=renderCards(locOpts.map(l=>({id:l.id,html:`<span class="card-label">${l.label}</span>`})),state.location,'selectLocation');
+    if(state.location)h+=`<button class="btn btn-primary" onclick="goStep(3)">Ergebnis anzeigen</button>`;
+    el.innerHTML=h;
+  }
+  else if(state.step===3){
+    const r=getResult();if(!r){el.innerHTML='';return;}
+    let s=STREETS.find(x=>x.id===state.street);
+    if(state.street==="bundeslandstrasse"&&state.blsub){const sub=BL_SUB.find(b=>b.id===state.blsub);s={label:sub.label.replace(/ \(.*\)/,""),color:"#dc2626"};}
+    let locId=state.location;
+    const sEff=(state.street==="bundeslandstrasse")?state.blsub:state.street;
+    if((sEff==="bundesstrasse"||sEff==="landesstrasse1"||sEff==="landesstrasse2")&&locId==="innerorts")locId="ortsdurchfahrt";
+    const loc=LOCATIONS.find(l=>l.id===locId);
+    const back=needsLocation()?2:1;
+
+    let h=`<button class="btn-back" onclick="goStep(${back})">← Zurück</button>
+    <div class="badges">
+      <span class="badge" style="background:rgba(22,120,169,.09);color:#1678A9">${r.measure.label}</span>
+      <span class="badge" style="background:${s.color}15;color:${s.color}">${s.label}</span>
+      ${loc?`<span class="badge" style="background:rgba(101,148,68,.09);color:#659444">${loc.label}</span>`:''}
+      ${state.kommune?`<span class="badge" style="background:rgba(62,64,63,.08);color:#3E403F">${state.kommune}</span>`:''}
+    </div>
+    <div class="result-card">
+      <div class="result-header">
+        <div class="label">${r.measure.type==='bau'?'Zuständiger Baulastträger':'Zuständige Behörde (verkehrsrechtl. Anordnung)'}</div>
+        <div class="value">${r.authority}</div>
+        <div class="detail">${r.authorityDetail}</div>
+      </div>
+      <div class="result-body">`;
+    if(r.warnings&&r.warnings.length){h+=`<div class="zwarn"><div class="zwarn-title">⛔ Achtung – in dieser Lage nicht vorgesehen</div>${r.warnings.map(w=>`<div class="zwarn-item">• ${w}</div>`).join('')}</div>`;}
+    if(r.measure.type!=='bau'){
+      h+=`<div class="field"><div class="field-label">Straßenbaulastträger</div><div class="field-value">${r.baulast}</div><div class="field-detail">${r.baulastDetail}</div></div>`;
+    }
+    const lastMb=(r.notes.length||r.praxis.length)?'14px':'0';
+    h+=`<div class="field"${r.measure.type==='bau'?' style="margin-bottom:'+lastMb+'"':''}><div class="field-label">Rechtsgrundlage</div><div class="field-value">${r.legal}</div></div>`;
+    if(r.measure.type!=='bau'){
+      h+=`<div class="field" style="margin-bottom:${lastMb}"><div class="field-label">Aufsichtsbehörde</div><div class="field-value">${r.aufsicht}</div><div class="field-detail">${r.aufsichtDetail}</div></div>`;
+    }
+    if(r.notes.length){
+      h+=`<div class="notes"><div class="notes-title">⚖ Rechtliche Hinweise & Praxistipps</div>${r.notes.map(n=>`<div class="notes-item">• ${n}</div>`).join('')}</div>`;
+    }
+    if(r.praxis.length){
+      h+=`<div class="praxis-box"><div class="praxis-title">📐 Maße &amp; Planungshinweise</div>${sortPraxis(r.praxis).map(p=>`<div class="praxis-item">${p.q?`<span class="qbadge ${QGRP[p.q].cls}">${QGRP[p.q].txt}</span>`:'• '}${p.t}</div>`).join('')}<div class="praxis-legend">${QLEGENDE}</div></div>`;
+      h+=LERNBOX_MASSE;
+    }
+    h+=`</div></div>`;
+    h+='<div class="copy-box"><div class="copy-head"><span class="copy-head-title">Ergebnis-Vermerk (für E-Mail / Akte)</span><button class="copy-btn" id="copyBtn" onclick="copyZVermerk()">Kopieren</button></div><div class="copy-body">'+escH(buildZVermerk())+'</div><div class="copy-actions" style="display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--gray-border)"><button class="btn btn-outline" style="margin:0;padding:8px 14px;font-size:13px;width:auto" onclick="sendZMail()">✉️ Als E-Mail</button><button class="btn btn-outline" style="margin:0;padding:8px 14px;font-size:13px;width:auto" onclick="downloadZTxt()">⬇️ Als Text speichern</button></div></div>';
+    if(state.kommune){
+      const kk=findKommune(state.kommune);const kt=kontaktFor(kk);
+      if(kk&&kt){
+        let kontaktHtml='<b>'+kt.name+'</b>'+(kt.tel?('<br>\ud83d\udcde '+kt.tel):'');
+        if(kt.mail)kontaktHtml+=' \u00b7 \u2709\ufe0f <a href="mailto:'+kt.mail+'">'+kt.mail+'</a>';
+        if(kt.url)kontaktHtml+='<br>\ud83d\udc64 <a href="'+kt.url+'" target="_blank" rel="noopener">Kontaktseite der Stra\u00dfenverkehrsbeh\u00f6rde \u2013 Ansprechperson, Durchwahlen, Formulare</a>';
+        if(kt.note)kontaktHtml+='<br><span style="font-size:11.5px">'+kt.note+'</span>';
+        kontaktHtml+='<br>\ud83c\udf10 <a href="https://www.'+kt.web+'" target="_blank" rel="noopener">www.'+kt.web+'</a> <span style="color:var(--gray-light);font-size:11px">(Kontakt recherchiert 07/2026 \u2013 im Zweifel auf der Beh\u00f6rdenseite pr\u00fcfen)</span>';
+        let boxTitle='Vor Ort \u2013 '+kk.name;
+        let vorspann='Landkreis / Regionalverband: '+kk.kreis+'<br>';
+        if(r.measure.type==='bau'){
+          boxTitle='Falls eine verkehrsrechtliche Anordnung dazukommt \u2013 '+kk.name;
+          vorspann='F\u00fcr den Bau selbst brauchen Sie diese Beh\u00f6rde nicht. Sie wird erst zust\u00e4ndig, wenn daf\u00fcr Kfz-Stellpl\u00e4tze entfallen oder Beschilderung bzw. Markierung ge\u00e4ndert wird.<br>Landkreis / Regionalverband: '+kk.kreis+'<br>';
+        }
+        h+='<div class="info-box" style="background:var(--green-light);border-color:rgba(101,148,68,.3)"><div class="info-title" style="color:var(--green-dark)">'+boxTitle+'</div><div class="info-body">'+vorspann+kontaktHtml+'</div></div>';
+      }
+    }
+    if(sEff==="bundesstrasse"||sEff==="landesstrasse1"||sEff==="landesstrasse2"){
+      h+='<div class="info-box"><div class="info-title">Erste Anlaufstelle Bundes-/Landesstra\u00dfe \u2013 Landesbetrieb f\u00fcr Stra\u00dfenbau (LfS)</div><div class="info-body">'+
+         'Der LfS ist Tr\u00e4ger der Stra\u00dfenbaulast und f\u00fcr Radverkehrsanlagen an Bundes- und Landesstra\u00dfen zust\u00e4ndig \u2013 fr\u00fchzeitig einbinden.<br>'+
+         '<b>LfS \u2013 Fachbereich 42 Stra\u00dfenplanung</b><br>Peter-Neuber-Allee 1, 66538 Neunkirchen<br>'+
+         '\u2709\ufe0f <a href="mailto:radwege@lfs.saarland.de">radwege@lfs.saarland.de</a> \u00b7 \ud83d\udcde 06821 100-0 (Zentrale)<br>'+
+         '\ud83c\udf10 <a href="https://www.saarland.de/lfs/DE/home" target="_blank" rel="noopener">www.saarland.de/lfs</a> '+
+         '<span style="color:var(--gray-light);font-size:11px">(Kontakt recherchiert 07/2026)</span>'+
+         '</div></div>';
+    }
+    h+=`<div class="info-box"><div class="info-title">Straßenverkehrsbehörden im Saarland</div><div class="info-body">
+      <strong>Landkreise:</strong> Merzig-Wadern, Neunkirchen, Saarlouis, Saarpfalz-Kreis (ohne St. Ingbert), St. Wendel<br>
+      <strong>Regionalverband:</strong> Regionalverband Saarbrücken (ohne LH Saarbrücken & Völklingen)<br>
+      <strong>Eigene Behörden:</strong> Landeshauptstadt Saarbrücken sowie die Mittelstädte Völklingen und St. Ingbert (StVO-Befugnisse übertragen, § 1 Abs. 1 Nr. 8 Mittelstadtverordnung)<br>
+      <strong>Oberste Behörde:</strong> Ministerium für Umwelt, Klima, Mobilität, Agrar und Verbraucherschutz (MUKMAV)
+    </div></div>`;
+    h+=`<div class="agfk-contact" style="margin-top:16px;background:#eef5e6;border:1px solid rgba(101,148,68,.3);border-radius:8px;padding:13px 16px;font-size:12.5px;line-height:1.6">Fragen offen geblieben? Die <strong style="color:#4a7332">Geschäftsstelle der AGFK-SL</strong> hilft weiter.<br>Europaallee 27, 66113 Saarbrücken<br>Tel.: +49 (0)681 4109 6482 · E-Mail: geschaeftstelle@agfk-sl.de</div>`;
+    h+=`<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-outline" style="width:auto;flex:1;min-width:160px" onclick="window.print()">🖨️ Drucken</button><button class="btn btn-outline" style="width:auto;flex:1;min-width:160px" onclick="resetAll()">Neue Abfrage starten</button></div>`;
+    el.innerHTML=h;
+  }
+}
+
+function selectCategory(id){state.category=id;state.measure=null;render();}
+function selectMeasure(id){state.measure=id;render();}
+function selectStreet(id){state.street=id;state.blsub=null;state.location=null;render();}
+function selectBlsub(id){state.blsub=id;render();}
+function selectLocation(id){state.location=id;render();}
+function goStep(n){state.step=n;render();}
+function resetAll(){const km=state.kommune;state={step:0,category:null,measure:null,street:null,blsub:null,location:null,kommune:km,mapPrefill:false};render();}
+
+/* ===== Ergebnis-Vermerk (für E-Mail / Akte) ===== */
+function buildZVermerk(){
+  const r=getResult();if(!r)return '';
+  let sL=STREETS.find(x=>x.id===state.street);let sLabel=sL?sL.label:'';
+  if(state.street==="bundeslandstrasse"&&state.blsub){const sub=BL_SUB.find(b=>b.id===state.blsub);if(sub)sLabel=sub.label;}
+  let locId=state.location;
+  const sEff=(state.street==="bundeslandstrasse")?state.blsub:state.street;
+  if((sEff==="bundesstrasse"||sEff==="landesstrasse1"||sEff==="landesstrasse2")&&locId==="innerorts")locId="ortsdurchfahrt";
+  const loc=LOCATIONS.find(l=>l.id===locId);
+  let t='ZUSTÄNDIGKEITEN RADVERKEHR SAARLAND\n';
+  t+='Erstellt am: '+new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'})+'\n';
+  t+='Maßnahme: '+r.measure.label+'\n';
+  t+='Straße: '+sLabel+(loc?(' · '+loc.label):'')+'\n';
+  if((sEff==='bundesstrasse'||sEff==='landesstrasse1'||sEff==='landesstrasse2'))t+='Baulastträger: LfS – Fachbereich 42 Straßenplanung, Peter-Neuber-Allee 1, 66538 Neunkirchen · radwege@lfs.saarland.de · Tel. 06821 100-0\n';
+  if(state.kommune){t+='Kommune: '+state.kommune+'\n';const kk=findKommune(state.kommune);const kt=kontaktFor(kk);if(kt){t+='Kontakt StVB: '+kt.name+(kt.tel?(' · Tel. '+kt.tel):'')+(kt.mail?(' · '+kt.mail):'')+' · www.'+kt.web+'\n';}}
+  t+='\n'+(r.measure.type==='bau'?'Zuständiger Baulastträger':'Zuständige Behörde (verkehrsrechtliche Anordnung)')+':\n'+r.authority+'\n('+r.authorityDetail+')\n';
+  if(r.measure.type!=='bau')t+='\nStraßenbaulastträger:\n'+r.baulast+'\n('+r.baulastDetail+')\n';
+  t+='\nRechtsgrundlage: '+r.legal+'\n';
+  if(r.measure.type!=='bau')t+='Aufsichtsbehörde: '+r.aufsicht+'\n';
+  if(r.warnings.length){t+='\nACHTUNG – in dieser Lage nicht vorgesehen:\n';r.warnings.forEach(w=>{t+='- '+w+'\n';});}
+  if(r.notes.length){t+='\nRechtliche Hinweise & Praxistipps:\n';r.notes.forEach(n=>{t+='- '+n+'\n';});}
+  if(r.praxis.length){t+='\nMaße & Planungshinweise:\n';sortPraxis(r.praxis).forEach(p=>{t+='- '+(p.q?'['+QGRP[p.q].txt+'] ':'')+p.t+'\n';});t+='('+QLEGENDE+')\n';}
+  t+='\nOrientierungshilfe, keine Rechts- oder Fachberatung – Zuständigkeit im Einzelfall mit der Behörde klären.\nQuelle: Zuständigkeiten Radverkehr Saarland\n'+lizenzVermerkZeile();
+  return t;
+}
+function copyZVermerk(){const text=buildZVermerk();const done=()=>{const b=document.getElementById('copyBtn');if(!b)return;b.textContent='Kopiert ✓';b.classList.add('copied');setTimeout(()=>{b.textContent='Kopieren';b.classList.remove('copied');},2000);};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done).catch(()=>zfb(text,done));}else{zfb(text,done);}}
+function zfb(text,done){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}
+function sendZMail(){
+  const t=buildZVermerk();const body=encodeURIComponent(t);
+  if(body.length>1800){
+    /* mailto wird von manchen Mailprogrammen bei ~2000 Zeichen gekappt:
+       Volltext in die Zwischenablage, Kurzfassung + Hinweis in den Body. */
+    zfb(t,function(){});
+    const kurz=t.split('\n').slice(0,6).join('\n')+'\n[…]\n\nDer vollständige Vermerk wurde in die Zwischenablage kopiert – bitte hier mit Strg+V einfügen.';
+    window.location.href='mailto:?subject='+encodeURIComponent('Zuständigkeiten Radverkehr Saarland')+'&body='+encodeURIComponent(kurz);
+  }else{
+    window.location.href='mailto:?subject='+encodeURIComponent('Zuständigkeiten Radverkehr Saarland')+'&body='+body;
+  }
+}
+function downloadZTxt(){const t=buildZVermerk();const blob=new Blob([t],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='zustaendigkeiten-radverkehr.txt';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);}
+
+function renderKommuneBar(){
+  let h='<label for="kommuneSelect" class="kommune-label">Kommune (optional – macht das Ergebnis konkret):</label>';
+  h+='<select id="kommuneSelect" class="kommune-select" onchange="setKommune(this.value)"><option value="">— alle / nicht festgelegt —</option>';
+  KREISE.forEach(kr=>{h+='<optgroup label="'+kr.name+'">';kr.kommunen.forEach(name=>{h+='<option value="'+name+'"'+(state.kommune===name?' selected':'')+'>'+name+(EIGENE_STVB.includes(name)?' (eigene StVB)':'')+'</option>';});h+='</optgroup>';});
+  h+='</select>';
+  const el=document.getElementById('kommuneBar');if(el)el.innerHTML=h;
+}
+function setKommune(v){state.kommune=v||null;if(state.step===3)render();}
+
+/* URL-Parameter ?m=<measure-id> auswerten (Sprung aus dem VwV-StVO-Tool) */
+(function applyUrlParam(){
+  const params = new URLSearchParams(window.location.search);
+  const target = params.get('m');
+  if(!target) return;
+  // passende Kategorie finden, in der diese Maßnahme liegt
+  const cat = MEASURES.find(c => c.items.some(i => i.id === target));
+  if(!cat) return;
+  state.category = cat.id;
+  state.measure = target;
+})();
+
+renderKommuneBar();
+render();
+</script>
+</body>
+</html>
