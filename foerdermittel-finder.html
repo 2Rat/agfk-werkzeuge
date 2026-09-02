@@ -71,6 +71,18 @@ h3{font-size:14px;font-weight:700;margin:0 0 8px}
 .notes-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--warn);margin-bottom:5px}
 .notes-item{font-size:12px;color:#6b5900;line-height:1.5;margin-bottom:5px}
 .notes-item:last-child{margin-bottom:0}
+.lernbox{margin:0 0 16px;border:1px solid rgba(17,75,125,.30);border-radius:8px;background:var(--blue-light);overflow:hidden}
+.lernbox>summary{cursor:pointer;list-style:none;padding:12px 15px;color:var(--blue-dark)}
+.lernbox>summary::-webkit-details-marker{display:none}
+.lernbox-t{display:block;font-size:13.5px;font-weight:700}
+.lernbox-t::before{content:"\25b8  "}
+.lernbox[open] .lernbox-t::before{content:"\25be  "}
+.lernbox-sub{display:block;margin-top:3px;font-size:11.5px;font-weight:400;opacity:.9;line-height:1.45}
+.lernbox-body{padding:13px 15px 15px;background:#fff;border-top:1px solid rgba(17,75,125,.22);font-size:12.5px;line-height:1.62;color:var(--gray)}
+.lernbox-body p{margin-bottom:8px}
+.lernbox-body p:last-child{margin-bottom:0}
+.lernbox-merk{margin-top:10px;padding:9px 11px;background:var(--blue-light);border-radius:6px;font-size:12px;color:var(--blue-dark)}
+@media print{.lernbox{display:none!important}}
 .info-box{margin-top:16px;background:var(--blue-light);border-radius:8px;border:1px solid rgba(22,120,169,.19);padding:14px 16px}
 .info-title{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
 .info-body{font-size:12px;color:var(--gray);line-height:1.7}
@@ -162,11 +174,17 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <div class="header-title">Fördermittel-Finder <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br>FRL-NMOB-Rad-Fuß<br>Stand 08/2026 · v5</div>
+    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br>FRL-NMOB-Rad-Fuß<br><span data-stand>Stand 09/2026 · v6</span></div>
   </div>
 </div>
 
 <main class="main">
+  <details class="lernbox"><summary><span class="lernbox-t">Wie die Förderung funktioniert – in drei Sätzen</span><span class="lernbox-sub">FRL-NMOB-Rad-Fuß · Fördersätze 25–90 % · Stichtag 30.09. · Antrag vor Auftragsvergabe</span></summary><div class="lernbox-body">
+    <p><b>Was gefördert wird:</b> Die Förderrichtlinie Rad- und Fußverkehr des Saarlandes (FRL-NMOB-Rad-Fuß, gültig 17.11.2025 bis 17.11.2030) fördert kommunale Investitionen und Konzepte für den Rad- und Fußverkehr – von Radwegen und Abstellanlagen bis zu Schulwegplänen und Öffentlichkeitsarbeit. Das Werkzeug ordnet Ihr Vorhaben dem passenden Fördergegenstand zu.</p>
+    <p><b>Wie viel:</b> Der Fördersatz hängt vom Fördergegenstand ab – bei baulichen Maßnahmen meist 75 % der zuwendungsfähigen Kosten, bei Konzepten, Fahrzeugen und Kommunikation zwischen 25 und 90 %. Zuschläge gibt es bei Anbindung an Schulen oder Kitas und für finanzschwache Kommunen (Nachweis über das Landesverwaltungsamt) – nicht pauschal für alle. Mindest- und Höchstbeträge zeigt das Ergebnis.</p>
+    <p><b>Wann und wie:</b> Anträge sind jedes Jahr vom 01.01. bis zum <b>30.09.</b> möglich, im Jahr 2030 bis 31.05. Als Vorhabenbeginn gilt die Auftragsvergabe – wer vor der Bewilligung beauftragt, verliert im Regelfall die Förderung. Ausnahme nur mit vorher schriftlich erteilter Zustimmung zum vorzeitigen Vorhabenbeginn; Planungsleistungen der Leistungsphasen 1–5 zählen nicht als Beginn. Technisch muss die Anlage den anerkannten Regeln (ERA 2010) und den Maßgaben des MUKMAV entsprechen; Barrierefreiheit ist Fördervoraussetzung.</p>
+    <div class="lernbox-merk">Merksatz: Erst Antrag, dann Bewilligung, dann Auftragsvergabe – nie umgekehrt.</div>
+  </div></details>
   <div class="steps" id="steps"></div>
   <div id="content"></div>
   <footer class="footer">
@@ -183,6 +201,8 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
 
 <script>
 (function(){var l=document.getElementById('logo');l.alt='AGFK-SL';l.onerror=function(){l.style.display='none';};l.src='agfk-logo.png';})();
+const STAND='Stand 09/2026 · v6';
+document.querySelectorAll('[data-stand]').forEach(function(n){n.textContent=STAND;});
 
 /* ── Fördergegenstände nach FRL-NMOB-Rad-Fuß (17.11.2025) ── */
 const CATEGORIES=[
