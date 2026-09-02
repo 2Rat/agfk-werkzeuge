@@ -81,7 +81,7 @@ function getVerfahren(wert, art) {
   if (wert <= 0) return null;
   if (wert <= 100000) {
     return {
-      level: "direkt", name: "Direktauftrag", color: "#659444",
+      level: "direkt", name: "Direktauftrag", color: "#0C7A6C",
       bgColor: "#ecfdf5", borderColor: "#a7f3d0", tagLabel: "Einfachstes Verfahren",
       kurz: "Kein förmliches Verfahren nötig. Auftrag direkt vergeben.",
       pflicht: [
@@ -176,7 +176,7 @@ function getVerfahren(wert, art) {
 
 function StepRow({ text, done, onToggle, type }) {
   const colors = {
-    pflicht: { check: "#659444" },
+    pflicht: { check: "#0C7A6C" },
     empfohlen: { check: "#f59e0b" },
     bedarf: { check: "#114B7D" },
   };
@@ -257,7 +257,7 @@ function VermerkGenerator({ wert, art, verfahren }) {
     ),
     show ? e("div", null,
       e("div", { style: { padding: "0 16px 8px", display: "flex", justifyContent: "flex-end" }},
-        e("button", { onClick: handleCopy, style: { padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer", background: copied ? "#659444" : "#114B7D", color: "#fff", transition: "all 0.2s" }},
+        e("button", { onClick: handleCopy, style: { padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer", background: copied ? "#0C7A6C" : "#114B7D", color: "#fff", transition: "all 0.2s" }},
           copied ? "✓ Kopiert!" : "In Zwischenablage kopieren")
       ),
       e("pre", { style: { padding: "14px 16px", margin: 0, fontSize: 12, lineHeight: 1.7, color: "#374151", background: "#f8fafc", whiteSpace: "pre-wrap", fontFamily: "ui-monospace, Consolas, monospace", maxHeight: 280, overflowY: "auto", borderTop: "1px solid #f1f5f9" }}, text)
@@ -302,7 +302,7 @@ function App() {
             e("h1", { style: { fontSize: 17, fontWeight: 700, color: "#3E403F", margin: 0, lineHeight: 1.3 }}, "Vergabe-Assistent ", e("span", { style: { color: "#114B7D" }}, "Saarland"))
           )
         ),
-        e("div", { className: "header-meta", style: { textAlign: "right", fontSize: 11, color: "#8a8a8a", lineHeight: 1.5 }}, e("a", { href: "index.html", style: { color: "#114B7D", textDecoration: "none", fontWeight: 600 }}, "← Übersicht"), e("br"), "Saarland", e("br"), "Vergabeerlass 2025 · EU-SW 2026", e("br"), "Stand 07/2026 · v3")
+        e("div", { className: "header-meta", style: { textAlign: "right", fontSize: 11, color: "#8a8a8a", lineHeight: 1.5 }}, e("a", { href: "index.html", style: { color: "#114B7D", textDecoration: "none", fontWeight: 600 }}, "← Übersicht"), e("br"), "Saarland", e("br"), "Vergabeerlass 2025 · EU-SW 2026", e("br"), "Stand 09/2026 · v4")
       )
     ),
     e("div", { style: { maxWidth: 640, margin: "0 auto", padding: "20px 16px 60px" }},
@@ -379,10 +379,10 @@ function App() {
         e("div", { style: { background: "#fff", borderRadius: 14, border: "1px solid #e2e8f0", overflow: "hidden", marginBottom: 12, boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }},
           e("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid #f1f5f9" }},
             e("div", { style: { display: "flex", alignItems: "center", gap: 8 }},
-              e("span", { style: { width: 8, height: 8, borderRadius: "50%", background: allDone ? "#659444" : "#ef4444", display: "inline-block" }}),
+              e("span", { style: { width: 8, height: 8, borderRadius: "50%", background: allDone ? "#0C7A6C" : "#ef4444", display: "inline-block" }}),
               e("span", { style: { fontSize: 14, fontWeight: 700, color: "#1e293b" }}, "Pflichtschritte")
             ),
-            e("span", { style: { fontSize: 13, fontWeight: 700, fontFamily: "ui-monospace, monospace", color: allDone ? "#659444" : "#6b7280" }}, pflichtDone + "/" + pflichtTotal)
+            e("span", { style: { fontSize: 13, fontWeight: 700, fontFamily: "ui-monospace, monospace", color: allDone ? "#0C7A6C" : "#6b7280" }}, pflichtDone + "/" + pflichtTotal)
           ),
           e("div", { style: { padding: "4px 4px" }},
             verfahren.pflicht.map(function(t, i) {

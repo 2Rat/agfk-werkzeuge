@@ -179,7 +179,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <div class="header-title">Zuständigkeiten <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br>Stand 08/2026 · v34</div>
+    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br>Stand 09/2026 · v35</div>
   </div>
 </div>
 
@@ -541,7 +541,7 @@ function getResult(){
   if(!m)return null;
   const s=(state.street==="bundeslandstrasse")?state.blsub:state.street;
   let loc=state.location||(s==="gemeindestrasse"||s==="sonstige"?"innerorts":"ausserorts");
-  // Bundes-/Landesstraße innerorts ist rechtlich immer Ortsdurchfahrt
+  // Bundes-/Landstraße innerorts ist rechtlich immer Ortsdurchfahrt
   if((s==="bundesstrasse"||s==="landesstrasse1"||s==="landesstrasse2")&&loc==="innerorts")loc="ortsdurchfahrt";
   let authority="",authorityDetail="",baulast="",baulastDetail="",notes=[],praxis=[],warnings=[],legal=m.legal;
   const k = state.kommune ? findKommune(state.kommune) : null;
@@ -692,7 +692,7 @@ function render(){
   if(state.step===0){
     let h='';
     if(state.mapPrefill){
-      const stLabel=state.street==='bundeslandstrasse'?((BL_SUB.find(b=>b.id===state.blsub)||{label:'Bundes-/Landesstraße'}).label):(state.street?((STREETS.find(x=>x.id===state.street)||{label:state.street}).label):'—');
+      const stLabel=state.street==='bundeslandstrasse'?((BL_SUB.find(b=>b.id===state.blsub)||{label:'Bundes-/Landstraße'}).label):(state.street?((STREETS.find(x=>x.id===state.street)||{label:state.street}).label):'—');
       h+=`<div class="info-box" style="background:var(--blue-light);border-color:rgba(22,120,169,.3);margin-top:0"><div class="info-title" style="color:var(--blue-dark)">Automatisch aus der Karte erkannt</div><div class="info-body">Kommune: <b>${state.kommune||'—'}</b> · Straße/Weg: <b>${stLabel}</b> · Lage: <b>${state.location?(state.location==='innerorts'?'innerorts':'außerorts'):'wird abgefragt'}</b><br>Kommune, Straße und Lage sind schon eingetragen – Sie wählen nur noch die Maßnahme (alles änderbar).</div></div>`;
     }
     h+=`<h2>Welche Art von Maßnahme planen Sie?</h2>
@@ -741,7 +741,7 @@ function render(){
     <h2>Wo liegt die Maßnahme?</h2>
     <p class="subtitle">${m.label} auf ${s.label}</p>`;
     const locOpts=[{id:"innerorts",label:"Innerorts (geschlossene Ortschaft)"},{id:"ausserorts",label:"Außerorts (freie Strecke)"}];
-    h+=`<p class="hint">Innerorts an einer Bundes-/Landesstraße = Ortsdurchfahrt (wird automatisch berücksichtigt).</p>`;
+    h+=`<p class="hint">Innerorts an einer Bundes-/Landstraße = Ortsdurchfahrt (wird automatisch berücksichtigt).</p>`;
     h+=renderCards(locOpts.map(l=>({id:l.id,html:`<span class="card-label">${l.label}</span>`})),state.location,'selectLocation');
     if(state.location)h+=`<button class="btn btn-primary" onclick="goStep(3)">Ergebnis anzeigen</button>`;
     el.innerHTML=h;
