@@ -889,11 +889,10 @@ window.PCGeo=(function(){
       const rb=e.rvp.find(x=>x.baulastLfS===true)||e.rvp.find(x=>x.baulastLfS===false);
       if(rb&&rb.baulastLfS===true)e.baulast={wert:rb.baulast+(e.lage&&e.lage.wert==='ortsdurchfahrt'?' – in der Ortsdurchfahrt teilweise Kommune':''),art:'rvp',quelle:'Radverkehrsplan Saarland 2025',sonder:rb.sonder||null};
       else if(rb&&rb.baulastLfS===false){
-        /* SaarRadland-Landesrouten: Code 9 ist im Radverkehrsplan nur „andere Zuständigkeit“; Instandsetzung liegt erfahrungsgemäß beim LfS
-           (z. B. Saar-Nahe-Höhenradweg). Keine Behauptung, sondern der richtige Ansprechpartner. Codes 4/5/9 sind fachlich noch ungeklärt. */
+        /* Codes 4/5/9 = Legende Plan 4 RVP 2025 „RVP, andere Zuständigkeit“ (am 16.09.2026 am Plan geprüft, u. a. Saar-Nahe-Höhenradweg
+           Kirkel–Limbach und Testpunkt Marpingen). Auch SaarRadland-Routen liegen dort nicht beim LfS – nur Wegweisung/Vermarktung ist Landessache. */
         const srl=e.rvp.some(x=>x.saarradland||(x.routen&&x.routen.length));
-        if(srl)e.baulast={wert:'SaarRadland-Landesroute – im Radverkehrsplan als „andere Zuständigkeit“ geführt; Unterhaltung und Instandsetzung liegen erfahrungsgemäß beim LfS. Bitte beim LfS klären.',art:'hinweis',quelle:'Radverkehrsplan Saarland 2025',sonder:rb.sonder||null};
-        else e.baulast={wert:rb.baulast,art:'hinweis',quelle:'Radverkehrsplan Saarland 2025',sonder:rb.sonder||null};}
+        e.baulast={wert:'laut Radverkehrsplan Saarland 2025 „andere Zuständigkeit“ – nicht beim LfS. Bitte vor Ort klären (Gemeinde, Kreis oder anderer Träger).'+(srl?' Touristische SaarRadland-Route: Wegweisung und Vermarktung beim Land, Baulast des Weges laut Plan bei anderer Stelle.':''),art:'hinweis',quelle:'Radverkehrsplan Saarland 2025, Plan 4',sonder:rb.sonder||null};}
       else if(e.amt)e.baulast={wert:(e.amt.klasseCode==='B'?'Bund':'Land')+' (LfS) – in der Ortsdurchfahrt teilweise abweichend',art:'abgeleitet',quelle:'aus der Straßenklasse abgeleitet'};}
     /* Netzbezug */
     if(e.rvp.length){const netze=[...new Set(e.rvp.map(x=>x.netz).filter(Boolean))];const routen=[...new Set(e.rvp.flatMap(x=>x.routen||[]))];const srl=e.rvp.some(x=>x.saarradland);
