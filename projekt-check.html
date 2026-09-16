@@ -834,7 +834,7 @@ window.PCGeo=(function(){
     const strasse=a.road||a.pedestrian||a.footway||a.path||null;
     const ort=a.village||a.suburb||a.hamlet||a.town||a.city||null;
     const kand=[a.municipality,a.town,a.city,a.village].filter(Boolean);
-    return {strasse,ort,plz:a.postcode||null,land:a.state||null,kandidaten:kand,text:[strasse,a.house_number].filter(Boolean).join(' ')+(ort?', '+ort:'')};
+    return {strasse,ort,hausnr:a.house_number||null,plz:a.postcode||null,land:a.state||null,kandidaten:kand,text:[strasse,a.house_number].filter(Boolean).join(' ')+(ort?', '+ort:'')};
   }
   /* Zweite Stufe: auf Adress-Zoom liefert Nominatim oft nur den Ortsteil (z. B. Uchtelfangen statt Illingen) –
      Gemeinde-Ebene (zoom 10) nachfragen, mit 1 s Abstand (Nominatim-Nutzungsbedingung: max. 1 Anfrage/s). */
@@ -885,13 +885,19 @@ window.PCGeo=(function(){
     if(e.dtv&&e.dtv.modus==='abschnitt'&&e.dtv.zst.f){e.lage={wert:e.dtv.zst.f==='FS'?'ausserorts':'ortsdurchfahrt',art:'amtlich',quelle:'SVZ 2021, Zählstelle '+e.dtv.zst.z+' (gleicher Abschnitt)'};}
     /* Baulast */
     if(e.dtv&&e.dtv.modus==='abschnitt'&&e.dtv.zst.b){e.baulast={wert:e.dtv.zst.b+(e.dtv.zst.b==='Gemeinde'?'':' (LfS)'),art:'amtlich',quelle:'SVZ 2021, Zählstelle '+e.dtv.zst.z};}
-    else{const rb=e.rvp.find(x=>x.baulast);if(rb)e.baulast={wert:rb.baulast+(rb.sonder?' / '+rb.sonder:''),art:'rvp',quelle:'Radverkehrsplan Saarland 2025'};
+    else{const rb=e.rvp.find(x=>x.baulast&&!/^Code /.test(x.baulast)); /* unbekannte Schlüssel (z. B. Code 1) nicht anzeigen */
+      if(rb)e.baulast={wert:rb.baulast+(rb.sonder?' / '+rb.sonder:''),art:'rvp',quelle:'Radverkehrsplan Saarland 2025'};
       else if(e.amt)e.baulast={wert:(e.amt.klasseCode==='B'?'Bund':'Land')+' (LfS) – in der Ortsdurchfahrt teilweise abweichend',art:'abgeleitet',quelle:'aus der Straßenklasse abgeleitet'};}
     /* Netzbezug */
     if(e.rvp.length){const netze=[...new Set(e.rvp.map(x=>x.netz).filter(Boolean))];const routen=[...new Set(e.rvp.flatMap(x=>x.routen||[]))];const srl=e.rvp.some(x=>x.saarradland);
       if(netze.length||routen.length||srl)e.netz={wert:[netze.join(', '),routen.length?'SaarRadland-Route: '+routen.join(', '):(srl?'SaarRadland: ja':'')].filter(Boolean).join(' · '),art:'rvp',quelle:'Radverkehrsplan Saarland 2025',fuehrung:e.rvp.map(x=>x.fuehrung).find(Boolean)||null,prio:e.rvp.map(x=>x.prio).find(Boolean)||null};}
     /* DTV nur zur Information */
-    if(e.dtv&&e.dtv.zst){const z=e.dtv.zst;e.dtvText=(e.dtv.modus==='abschnitt'?'DTV '+ganz(z.dtv)+' Kfz/Tag, Schwerverkehr '+ganz(z.sv)+' – Zählstelle '+z.z+', gleicher Abschnitt':'Nächste Zählstelle '+z.z+' liegt auf einem anderen Abschnitt der '+z.s+' (DTV '+ganz(z.dtv)+', nur Anhalt)');}
+    if(e.dtv&&e.dtv.modus==='abschnitt'&&e.dtv.zst&&e.dtv.zst.dtv>0){const z=e.dtv.zst;e.dtvText='DTV '+ganz(z.dtv)+' Kfz/Tag, Schwerverkehr '+ganz(z.sv)+' – Zählstelle '+z.z+', gleicher Abschnitt';}
+    /* Lage-Vermutung aus der Adresse (nur wenn keine Zählstelle des Abschnitts): benannte Straße mit Hausnummern → Ortsdurchfahrt,
+       nur Straßennummer ohne Namen → freie Strecke. Ausdrücklich „vermutet", wird nicht vorausgewählt. */
+    if(!e.lage&&e.amt&&e.adr&&e.adr.strasse){const istRef=/^[ABLK]\s?\d+/i.test(e.adr.strasse.trim());
+      if(!istRef&&e.adr.ort)e.lage={wert:'ortsdurchfahrt',art:'vermutet',quelle:'Adresse: benannte Straße im Ort – nur vermutet'};
+      else if(istRef&&!e.adr.hausnr)e.lage={wert:'ausserorts',art:'vermutet',quelle:'Adresse: nur Straßennummer, kein Straßenname – nur vermutet'};}
     /* Kommune */
     if(e.adr){e.kommune=kommuneAusKandidaten(e.adr.kandidaten);e.ausserhalb=e.adr.land&&e.adr.land!=='Saarland';
       if(!e.kommune&&!e.ausserhalb){try{e.kommune=kommuneAusKandidaten(await reverseGemeinde(lat,lng));}catch(x){}}}
@@ -939,7 +945,7 @@ window.PCGeo=(function(){
   }
 
   /* ---------- Schnittstellen zum Kern ---------- */
-  function lageVorschlag(){return erg&&erg.lage?erg.lage.wert:null;}
+  function lageVorschlag(){return erg&&erg.lage&&erg.lage.art==='amtlich'?erg.lage.wert:null;}
   function lageVorschlagHtml(){
     if(!erg||!erg.lage)return '';
     return '<div class="geo-vorschlag">'+badge(erg.lage.art)+'Vorschlag aus den Geodaten: <b>'+LAGE_TXT[erg.lage.wert]+'</b> <span class="geo-sub">('+esc(erg.lage.quelle)+')</span>'+(erg.lage.art==='amtlich'?' – die passende Karte ist vorausgewählt, bitte prüfen und anklicken.':' – nur eine Vermutung, bitte selbst prüfen.')+'</div>';
