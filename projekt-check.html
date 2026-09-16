@@ -885,8 +885,10 @@ window.PCGeo=(function(){
     if(e.dtv&&e.dtv.modus==='abschnitt'&&e.dtv.zst.f){e.lage={wert:e.dtv.zst.f==='FS'?'ausserorts':'ortsdurchfahrt',art:'amtlich',quelle:'SVZ 2021, Zählstelle '+e.dtv.zst.z+' (gleicher Abschnitt)'};}
     /* Baulast */
     if(e.dtv&&e.dtv.modus==='abschnitt'&&e.dtv.zst.b){e.baulast={wert:e.dtv.zst.b+(e.dtv.zst.b==='Gemeinde'?'':' (LfS)'),art:'amtlich',quelle:'SVZ 2021, Zählstelle '+e.dtv.zst.z};}
-    else{const rb=e.rvp.find(x=>x.baulast&&!/^Code /.test(x.baulast)); /* unbekannte Schlüssel (z. B. Code 1) nicht anzeigen */
-      if(rb)e.baulast={wert:rb.baulast+(rb.sonder?' / '+rb.sonder:''),art:'rvp',quelle:'Radverkehrsplan Saarland 2025'};
+    else{ /* Radverkehrsplan: baulastLfS true → Vorschlag LfS; false → nur Hinweis „vor Ort klären“ (Codes 4/5/9); Sonderregelung als Zusatz */
+      const rb=e.rvp.find(x=>x.baulastLfS===true)||e.rvp.find(x=>x.baulastLfS===false);
+      if(rb&&rb.baulastLfS===true)e.baulast={wert:rb.baulast+(e.lage&&e.lage.wert==='ortsdurchfahrt'?' – in der Ortsdurchfahrt teilweise Kommune':''),art:'rvp',quelle:'Radverkehrsplan Saarland 2025',sonder:rb.sonder||null};
+      else if(rb&&rb.baulastLfS===false)e.baulast={wert:rb.baulast,art:'hinweis',quelle:'Radverkehrsplan Saarland 2025',sonder:rb.sonder||null};
       else if(e.amt)e.baulast={wert:(e.amt.klasseCode==='B'?'Bund':'Land')+' (LfS) – in der Ortsdurchfahrt teilweise abweichend',art:'abgeleitet',quelle:'aus der Straßenklasse abgeleitet'};}
     /* Netzbezug */
     if(e.rvp.length){const netze=[...new Set(e.rvp.map(x=>x.netz).filter(Boolean))];const routen=[...new Set(e.rvp.flatMap(x=>x.routen||[]))];const srl=e.rvp.some(x=>x.saarradland);
@@ -906,7 +908,7 @@ window.PCGeo=(function(){
     if(CFG.osm){RPGeo.osmAbfrage(lat,lng,{endpoints:CFG.osmEndpoints,timeoutMs:CFG.osmTimeout,amtlicheRef:e.amt?e.amt.strasse:null}).then(r=>{if(erg===e&&r&&r.vorschlag){e.osm=r.vorschlag;if(!e.lage&&e.osm.ortslage)e.lage={wert:e.osm.ortslage,art:'vermutet',quelle:'OpenStreetMap (Tempo/Bebauung) – nur vermutet'};renderErgebnis();}}).catch(()=>{});}
     busy=false;b.disabled=false;b.textContent='Standort erneut auswerten';
   }
-  function badge(art){return {amtlich:'<span class="geo-badge amtlich">amtlich</span>',rvp:'<span class="geo-badge rvp">lt. RVP 2025</span>',vermutet:'<span class="geo-badge vermutet">vermutet</span>',abgeleitet:'<span class="geo-badge vermutet">abgeleitet</span>',vorschlag:'<span class="geo-badge vermutet">Vorschlag</span>'}[art]||'';}
+  function badge(art){return {hinweis:'<span class="geo-badge vermutet">Hinweis</span>',amtlich:'<span class="geo-badge amtlich">amtlich</span>',rvp:'<span class="geo-badge rvp">lt. RVP 2025</span>',vermutet:'<span class="geo-badge vermutet">vermutet</span>',abgeleitet:'<span class="geo-badge vermutet">abgeleitet</span>',vorschlag:'<span class="geo-badge vermutet">Vorschlag</span>'}[art]||'';}
   function zeile(label,html,art,aktion){return '<div class="geo-zeile"><div class="geo-zl">'+label+'</div><div class="geo-zw">'+(art?badge(art):'')+html+'</div><div class="geo-za">'+(aktion||'')+'</div></div>';}
   function btn(was,label){return uebern[was]?'<span class="geo-uebern">✓ übernommen</span>':'<button class="geo-btn sek klein" onclick="PCGeo.uebernehmen(\''+was+'\')">'+label+'</button>';}
   function renderErgebnis(){
@@ -920,7 +922,7 @@ window.PCGeo=(function(){
     else h+=zeile('Straße','Keine Bundes- oder Landesstraße im Umkreis von 40 m – vermutlich Gemeindestraße oder sonstiger Weg.','vorschlag','');
     if(e.lage)h+=zeile('Lage',LAGE_TXT[e.lage.wert]+' <span class="geo-sub">('+esc(e.lage.quelle)+')</span>',e.lage.art,state.lage===e.lage.wert?'<span class="geo-uebern">✓ gewählt</span>':btn('lage','Übernehmen'));
     else if(e.amt)h+=zeile('Lage','nicht eindeutig ermittelbar – bitte im Schritt „Wo genau liegt das?" selbst wählen',null,'');
-    if(e.baulast)h+=zeile('Baulast',esc(e.baulast.wert)+' <span class="geo-sub">('+esc(e.baulast.quelle)+')</span>',e.baulast.art,'');
+    if(e.baulast)h+=zeile('Baulast',esc(e.baulast.wert)+' <span class="geo-sub">('+esc(e.baulast.quelle)+')</span>'+(e.baulast.sonder?'<br><span class="geo-sub">Sonderregelung: '+esc(e.baulast.sonder)+'</span>':''),e.baulast.art,'');
     if(e.netz){h+=zeile('Netzbezug',esc(e.netz.wert)+(e.netz.fuehrung?'<br><span class="geo-sub">Führung im Bestand: '+esc(e.netz.fuehrung)+(e.netz.prio?' · '+esc(e.netz.prio):'')+'</span>':''),'rvp',hasExtra('netz')?'<span class="geo-uebern">✓ gewählt</span>':btn('netz','Als Zusatzfaktor übernehmen'));}
     else if(e.rvpFehler)h+=zeile('Netzbezug','Radverkehrsplan nicht erreichbar ('+esc(e.rvpFehler)+')',null,'');
     else h+=zeile('Netzbezug','Abschnitt ist nicht Teil des Alltagsradnetzes oder einer SaarRadland-Route','rvp','');
@@ -956,7 +958,7 @@ window.PCGeo=(function(){
     if(e.adr&&e.adr.text)z+='<div><b>Standort:</b> '+esc(e.adr.text)+'</div>';
     z+='<div><b>Straße:</b> '+(e.amt?esc(e.amt.strasse)+' – '+esc(e.amt.klasse):'keine Bundes-/Landesstraße im Umkreis (vermutlich Gemeindestraße)')+'</div>';
     if(e.lage)z+='<div><b>Lage:</b> '+LAGE_TXT[e.lage.wert]+' <span style="color:var(--gray-light)">('+esc(e.lage.quelle)+')</span></div>';
-    if(e.baulast)z+='<div><b>Baulast:</b> '+esc(e.baulast.wert)+' <span style="color:var(--gray-light)">('+esc(e.baulast.quelle)+')</span></div>';
+    if(e.baulast)z+='<div><b>Baulast:</b> '+esc(e.baulast.wert)+' <span style="color:var(--gray-light)">('+esc(e.baulast.quelle)+')</span>'+(e.baulast.sonder?' – Sonderregelung: '+esc(e.baulast.sonder):'')+'</div>';
     if(e.netz)z+='<div><b>Netzbezug:</b> '+esc(e.netz.wert)+'</div>';
     if(e.dtvText)z+='<div><b>Verkehr:</b> '+esc(e.dtvText)+'</div>';
     let hinweis='';
@@ -969,7 +971,7 @@ window.PCGeo=(function(){
     t+='Standort: '+(e.adr&&e.adr.text?e.adr.text+' ':'')+'('+nk(e.lat,5)+', '+nk(e.lng,5)+')\n';
     t+='Straße am Standort: '+(e.amt?e.amt.strasse+' – '+e.amt.klasse+' (amtlich, LfS-Straßennetz)':'keine Bundes-/Landesstraße im Umkreis von 40 m – vermutlich Gemeindestraße')+'\n';
     if(e.lage)t+='Lage lt. Geodaten: '+LAGE_TXT[e.lage.wert]+' ('+e.lage.quelle+')\n';
-    if(e.baulast)t+='Baulast lt. Geodaten: '+e.baulast.wert+' ('+e.baulast.quelle+')\n';
+    if(e.baulast)t+='Baulast lt. Geodaten: '+e.baulast.wert+' ('+e.baulast.quelle+')'+(e.baulast.sonder?' – Sonderregelung: '+e.baulast.sonder:'')+'\n';
     if(e.netz)t+='Netzbezug (Radverkehrsplan 2025): '+e.netz.wert+(e.netz.fuehrung?' · Führung im Bestand: '+e.netz.fuehrung:'')+'\n';
     if(e.dtvText)t+='Verkehrsbelastung: '+e.dtvText+'\n';
     return t;
