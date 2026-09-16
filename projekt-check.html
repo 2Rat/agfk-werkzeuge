@@ -1,18 +1,28 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-brand="agfk">
 <head>
 <meta charset="UTF-8">
+<!-- ══ MARKE ══════════════════════════════════════════════════════════════
+     Eine Quelldatei für beide Fassungen. Vor dem Kopieren nur data-brand oben
+     in <html> setzen: "agfk" (Repo 2Rat/agfk-werkzeuge) oder "2rat" (Werkzeuge/kunden/).
+     Alles Markenspezifische steht unten im Block BRAND – der Rest ist identisch.
+     ═══════════════════════════════════════════════════════════════════════ -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Projekt-Check Radverkehr Saarland – 2Rat</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
+  /* Marke agfk (Standard) */
   --blue:#114B7D;--blue-dark:#0C3557;--blue-light:#E8EEF4;
-  --green:#14AB9B;--green-dark:#0C7A6C;--green-light:#E3F5F2;
+  --green:#14AB9B;--green-dark:#0C7A6C;--green-light:#E3F5F2;--green-rgb:20,171,155;
   --gray:#3E403F;--gray-light:#8a8a8a;--gray-border:#d9d9d9;
   --bg:#f9fafb;--white:#ffffff;
   --warn:#d4930a;--warn-bg:#fef9ec;--warn-border:#f0dca0;
+}
+:root[data-brand="2rat"]{
+  --blue:#1678A9;--blue-dark:#115d85;--blue-light:#e8f4fa;
+  --green:#659444;--green-dark:#4a7332;--green-light:#eef5e6;--green-rgb:101,148,68;
 }
 body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--gray);background:var(--bg);min-height:100vh}
 .header{background:var(--white);border-bottom:3px solid var(--green);padding:18px 20px}
@@ -72,7 +82,7 @@ h3{font-size:14px;font-weight:700;margin:18px 0 8px}
 .lead-row .who{font-size:13.5px;line-height:1.5}
 .lead-row .who b{color:var(--blue-dark)}
 .tag-list{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:12px;font-weight:600;background:var(--green-light);color:var(--green-dark);border:1px solid rgba(20,171,155,.35);border-radius:6px;padding:4px 10px}
+.tag{font-size:12px;font-weight:600;background:var(--green-light);color:var(--green-dark);border:1px solid rgba(var(--green-rgb),.35);border-radius:6px;padding:4px 10px}
 .tag.added{background:var(--blue-light);color:var(--blue-dark);border-color:rgba(22,120,169,.3)}
 .pruef-list,.steps-list{font-size:13px;line-height:1.7;color:var(--gray)}
 .pruef-list div{padding-left:18px;position:relative}
@@ -93,14 +103,14 @@ h3{font-size:14px;font-weight:700;margin:18px 0 8px}
 .crosslink{display:block;padding:12px 15px;border-radius:8px;border:1.5px solid var(--gray-border);background:var(--white);text-decoration:none;color:var(--gray);font-size:13px;transition:all .15s}
 .crosslink:hover{border-color:var(--blue);background:var(--blue-light)}
 .crosslink b{color:var(--blue)}
-.agfk-contact{margin-top:16px;background:var(--green-light);border:1px solid rgba(20,171,155,.35);border-radius:8px;padding:13px 16px;font-size:12.5px;line-height:1.6}
+.agfk-contact{margin-top:16px;background:var(--green-light);border:1px solid rgba(var(--green-rgb),.35);border-radius:8px;padding:13px 16px;font-size:12.5px;line-height:1.6}
 .agfk-contact b{color:var(--green-dark)}
 .footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--gray-border);font-size:11px;color:var(--gray-light);line-height:1.6}
 .footer a{color:var(--blue);text-decoration:none}
 .tag-legend{display:flex;gap:16px;margin-top:9px;flex-wrap:wrap}
 .leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gray-light)}
 .dot{width:11px;height:11px;border-radius:3px;display:inline-block;border:1px solid}
-.dot.green{background:var(--green-light);border-color:rgba(20,171,155,.45)}
+.dot.green{background:var(--green-light);border-color:rgba(var(--green-rgb),.45)}
 .dot.blue{background:var(--blue-light);border-color:rgba(22,120,169,.4)}
 .kommune-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--white);border:1.5px solid var(--gray-border);border-radius:8px;padding:10px 14px;margin-bottom:18px}
 .kommune-label{font-size:12px;font-weight:600;color:var(--gray-light)}
@@ -162,7 +172,7 @@ h3{font-size:14px;font-weight:700;margin:18px 0 8px}
 .geo-warn{background:var(--warn-bg);border-top:1px solid var(--warn-border);color:var(--warn);font-size:12.5px;padding:8px 12px}
 .geo-alle{padding:10px 12px;border-top:1px solid var(--gray-border)}
 .geo-quelle{padding:8px 12px;border-top:1px solid var(--gray-border);font-size:10.5px;color:var(--gray-light);line-height:1.5}
-.geo-vorschlag{background:var(--green-light);border:1px solid rgba(20,171,155,.35);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;line-height:1.5}
+.geo-vorschlag{background:var(--green-light);border:1px solid rgba(var(--green-rgb),.35);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;line-height:1.5}
 @media (max-width:520px){.geo-zeile{grid-template-columns:1fr;gap:3px}}
 </style>
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
@@ -181,11 +191,12 @@ var LIZENZ_ORG = (function () {
   if (!o) { try { o = clean(JSON.parse(sessionStorage.getItem('2rat_s') || '{}').org); } catch (e) {} }
   if (o) { try { sessionStorage.setItem('2rat_org', o); } catch (e) {} }
   else { try { o = clean(sessionStorage.getItem('2rat_org')); } catch (e) {} }
-  return o || 'AGFK-SL';
+  return o || '';
 })();
-function lizenzKopfzeile() { return 'Lizenz: ' + LIZENZ_ORG; }
+function lizenzOrg() { return LIZENZ_ORG || (typeof BRAND !== 'undefined' ? BRAND.lizenzOrg : ''); }
+function lizenzKopfzeile() { return 'Lizenz: ' + lizenzOrg(); }
 function lizenzVermerkZeile() {
-  return 'Bereitgestellt f\u00fcr: ' + LIZENZ_ORG
+  return 'Bereitgestellt f\u00fcr: ' + lizenzOrg()
        + '\nEntwickelt und gepflegt von 2Rat \u2013 B\u00fcro f\u00fcr Radverkehrsplanung \u00b7 www.2rat.org';
 }
 function lizenzInit() {
@@ -201,11 +212,11 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
     <div class="header-left">
       <img class="header-logo" id="logo" alt="2Rat – Büro für Radverkehrsplanung" src="">
       <div>
-        <div class="header-sub">Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland</div>
+        <div class="header-sub" id="brandSub"></div>
         <div class="header-title">Projekt-Check <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a class="portal-link" href="index.html">← Übersicht</a><br>Saarland · Kommunale Vorhaben<br><span id="standTop">Stand 09/2026 · v8</span></div>
+    <div class="header-right"><a class="portal-link" href="index.html" id="brandPortal"></a><br>Saarland · Kommunale Vorhaben<br><span id="standTop">Stand 09/2026 · v8</span><br><span data-lizenz style="font-weight:600"></span></div>
   </div>
 </div>
 
@@ -235,7 +246,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
     <b>Orientierungshilfe, keine Rechts- oder Fachberatung im Einzelfall.</b> Sie ersetzt keine Einzelfallprüfung und keine formelle Beteiligung der zuständigen Behörden. <span id="standFoot">Stand 09/2026 · v8</span>.
     Datengrundlage: Zuständigkeitslandkarte Radverkehr Saarland (AGFK-SL) sowie StVO, VwV-StVO 2025, StVZustG Saarland, SaarlStrG, FStrG. Fachliche Maßgaben: ERA 2010, „Maßgaben und Richtlinien beim Ausbau von Radverkehrsanlagen“ (MUKMAV, 05/2023), FRL-NMOB-Rad-Fuß. Standortprüfung: LfS-Straßennetz, SVZ 2021, Radverkehrsplan Saarland 2025 – <a href="https://creativecommons.org/licenses/by/4.0/deed.de" target="_blank" rel="noopener">CC-BY 4.0</a> © GDI-SL · Karte: © GeoBasis-DE/BKG (dl-de/by-2-0) · Adresssuche: © OpenStreetMap-Mitwirkende (ODbL).<br>
     <strong style="color:var(--gray)">Entwickelt und gepflegt von 2Rat</strong> – Büro für Radverkehrsplanung · Armin Jung · Radverkehrsplaner EIPOS · <a href="https://www.2rat.org">www.2rat.org</a>
-    <br><span style="display:inline-block;margin-top:5px;opacity:.85">Lizenziert an die AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland e.V.</span>
+    <br><span style="display:inline-block;margin-top:5px;opacity:.85" id="brandFoot"></span>
   </footer>
 </main>
 
@@ -243,7 +254,26 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
 <script src="vendor/leaflet/leaflet.js"></script>
 <script src="rp-geo.js"></script>
 <script>
-(function(){var l=document.getElementById('logo');l.alt='AGFK-SL';l.onerror=function(){l.style.display='none';};l.src='agfk-logo.png';})();
+/* ══ BRAND – alles Markenspezifische an einer Stelle ══════════════════════ */
+const LOGO_2RAT='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACWAJYDASIAAhEBAxEB/8QAHAABAAIDAQEBAAAAAAAAAAAAAAYHBAUIAwIB/8QAPxAAAQQBAgQDBQMHDQEAAAAAAQACAwQFBhEHEiExE0FRCCIyYYEUcZEXM2JzobHRFRYjN0JGU1RWcpOywfD/xAAZAQEAAwEBAAAAAAAAAAAAAAAAAwQFAgH/xAApEQACAgIBAwIFBQAAAAAAAAAAAQIDBBEhBRIxQYETMkJhcRQiUdHh/9oADAMBAAIRAxEAPwDstERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAERUbxD48sx2UlxWlaEN18TjG+1MSWl36LR3/H6Kxj4tuRLtrWyrlZlOJHutetl5IuaMPx+1VSyIGexFWxW6czI2OikA9Rv3XQelM9j9S4GtmcZIX1p27jcbFp8wfmCpMnAuxknYuGRYfUsfLbVb5XoyouM/EfibobVUlinpWpa0uyNnJZJc5riR153Dqw7+XTt59zrdOcbeImqa3jaZ4afb42uDXzCZwjDvTdfPtOa6pZzTs2iNPzTSzTX4YL1pnSBg5vgLvP3uXfyGyk2Dy/EDTOEpYPH6Dry1acDGRyV5S9jxtvzAg7Hckn6rOttVS2/7LkpqPktjGyWpcdWluwNr2nwsdPE13MI3kDmaCO+x3G691UWV4ja8xNI3MnouOpXDg0ySFwG57ea035ccxvt/IdL6Pf/ABVaXUaIvTevZkbyILhl7IqYw/HFhmDMxhOSMkbyVpNy0eZ5T3/EK3MPkamWxlfI0ZRLWnZzMd/98+inpyar/kZJCyM/lZloiKc7CLXajzeN0/i35LK2BBXYQ3m2JJcewG3mVHcZxBo5PS2Sz9KhYdFSlEYjkIaZd3AA+e3dcOyCl2b5PO5b0TNFqtK5puexDb7a7q5Lix0ZdzbEeh8+48ltV2ehERAEREBg6hp2Mjgr1CpZFaexXfFHKRvyFwI3VWcLuC0eldSOy+XuVMqGRFsDPBOzHk/EQeh6bq4VFuJOtsXonBvvXXCSy8bVqzT70rv/AAepVrHuvSdNX1FLKpx21fd9JW/tUU8QcTho4q0Qy81rlhETQHuj6c2+3cdtlUlkW89qG3ozBzZJuYZ4cFCGrO+OGFvhtLy/lIb0dzFxd1W505DrfiZqDNZ6tC+W6yo5lebnDI67i4bMaT0Di3mC3Xs02MBW4t5bHDGyY3KNoeC6K0P6UzMeTL9QO58+vqrma5UVxxm9tcv39Cj01RvunlxWlLhe3qbSp7OV5ukpMTPriZssu73xMqtdCX77/Eff2J2JUFrP1Dww1fjNP5PM5ODLi2wRzm1I6nNUJ26NceUtJHYjcELr9c7e1nf05/ObStLIVft9pjLHiQQgGRof4Yj39QSHbD6rJ+5tNFl8fNvydWN/8eL96i3s6Y7H3cdmJLdKtZc2aMNMsTX8o5T23HReOZx2bxfs61KWopJftrJWkRzO5nwxGRxjjc7c7lrOUfLt5KC6KGthXtO0m3IeDzjxxWPnsdt/pusbKmoZik1vgqWNK5Nr0LJ9oHT+Bq6drZOvTr1LosNjb4LQzxGEEncDvt06/NZPAC3ch0Bk5fAfZir2ZHV42dXvIjaSwfXbbp3JVU03ZnWWpKmMyeXlksSv8KOSy8kM69QB5FdG4LHYnRGkW1jO2KnTjdJPYkGxcT1c47dyT0A6nsOq9xJK++V0VqKWhU++bmuEVPe4v6pyMrhgsNFHEHb/AJp0sgHofL9iy9G8YMk7Kx0dS1IPCllEZnjaWOhJIHvDzH3DdZE3GChDK6lpXS8kkYdzD3Qzm37nkYD5+e6rPXWVsZnVMmSu4sY2xKI+aENI6g/Ed+u59VBZkyr/AHRt7uf44I7LJQ01LZPuPeo8rNesaXNKEY5jopRPyO5y7lB23327n0UV0JrDMaeoS4yniKuQqWJmmXx4nPDTv26Hb8fRWZxmdvwipuPm6t/1Xl7N5B01kNv81/FdyqnPMWpa2t/4dOLd3ktCvDDXhbDXijhib8LGNDWj7gF6Ii3C8EREAREQGk13qCPS2k7+dkhM/wBliLmxg7c58hv5LjTVGp72ptQyZfOWDM57geRr9gxm/wADfQbLt7J0amToS0b9dlitM3lkieN2uHoVH/ye6J/0zje235pavTc6nETcobk/Uxeq9OvzWlCeor0+5SGmeO+N07iK+KxWj4YakIHutt7F583E8vUn1UP1C6zks9ldYYOrHLlr84t0rdew1jqj+UAsO57hwPrzfJdPjh5ogf3Yxv8AxL8HDrQwO40vjd/1S5yMjDtW4waf5OsbFzqtRnYnH8FC1eOHE6PStl9mhgRkK7vAd4sT22C8nlBEYdyk7kbADYrw0toHiDqfO4/Jan09Zhyb7sdqxlrrxzRxN2HKGE9wOgYuinaJ0m7N1c0cBROQqBogn8Pq3l+E+hcPJx3I9VIFmGuQDj7/AFc2f18X71oPZnIdjc2WncePF5/olWrk8fSydR1TIVYrMDiCWSN3G47FfGLxeNxcTosbQrU2O25hDEGc23YnbufmVUljN5Cu34RE6n8XvKJ46aWfgs6zPY2LwaNx4c9zBsIZx+7fbf8AFbvO5yzrngtK+mHT5ChJGb7GdSWt33f8wR1+h9Fb+RoUslVdVv1YbUDu8crA4ff18/msXDYHDYZ8j8Xja9R0oAeY2bFwCi/QtTn2vUZeUc/A1J68MofhHrnC6Rr3YsjSmkmnILJomgu6f2TvtsP4KPcQM5PqLVBzM1Q0o5wxsLHdyxp2B+a6KdojSTrn2t2AomUu5j7nuk/7e37Fm5HTuCyL6772Jp2DWaGw88QIY0dm7eny7KB9PulWq5SWl44I3jyce1vgh/FHG2slwhjbUYZH14YJyxo3LmtaN9vuB3+4FVxwq4hVtJVLGOtUJLIsTNcx0bwOUnpsdx810UxrWMaxjQ1rRs1oGwA9FoZdF6Ukv/bn4Gj4/MHbiPZu48+UdP2KxbiTdsba5aaWiSdLclKL5N+iIr5YCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiID/2Q==';
+const BRANDS={
+  agfk:{lizenzOrg:'AGFK-SL',sub:'Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland',portal:'← Übersicht',
+        logo:'agfk-logo.png',logoAlt:'AGFK-SL',
+        foot:'Lizenziert an die AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland e.V.',
+        geoOsm:false},
+  '2rat':{lizenzOrg:'2Rat',sub:'Büro für Radverkehrsplanung',portal:'← Zum Portal',
+        logo:LOGO_2RAT,logoAlt:'2Rat – Büro für Radverkehrsplanung',
+        foot:'<span data-lizenz></span> · Lizenziert zur Nutzung durch die oben genannte Organisation',
+        geoOsm:true}
+};
+const BRAND=BRANDS[document.documentElement.getAttribute('data-brand')]||BRANDS.agfk;
+(function(){
+  var l=document.getElementById('logo');l.alt=BRAND.logoAlt;l.onerror=function(){l.style.display='none';};l.src=BRAND.logo;
+  document.getElementById('brandSub').textContent=BRAND.sub;
+  document.getElementById('brandPortal').textContent=BRAND.portal;
+  document.getElementById('brandFoot').innerHTML=BRAND.foot;
+  lizenzInit();
+})();
 
 const TOOL_LINKS={
   zustaendigkeiten:{href:"zustaendigkeiten.html",label:"Zuständigkeiten Radverkehr",desc:"Genaue Behörde, Baulastträger und Rechtsgrundlage klären"},
@@ -595,7 +625,7 @@ function viewErgebnis(){
         if(kt.note)kontaktHtml+='<br><span style="font-size:11.5px">'+kt.note+'</span>';
         kontaktHtml+='<br>🌐 <a href="https://www.'+kt.web+'" target="_blank" rel="noopener">www.'+kt.web+'</a> <span style="color:var(--gray-light);font-size:11px">(Kontakt recherchiert 07/2026 – im Zweifel auf der Behördenseite prüfen)</span>';
       }
-      h+='<div class="info-box" style="background:var(--green-light);border-color:rgba(20,171,155,.35)"><div class="info-title" style="color:var(--green-dark)">Vor Ort – '+k.name+'</div><div class="info-body">Landkreis / Regionalverband: '+k.kreis+'<br>Zuständige Straßenverkehrsbehörde: '+stvb+kontaktHtml+'</div></div>';
+      h+='<div class="info-box" style="background:var(--green-light);border-color:rgba(var(--green-rgb),.35)"><div class="info-title" style="color:var(--green-dark)">Vor Ort – '+k.name+'</div><div class="info-body">Landkreis / Regionalverband: '+k.kreis+'<br>Zuständige Straßenverkehrsbehörde: '+stvb+kontaktHtml+'</div></div>';
     }
   }
 
@@ -721,7 +751,7 @@ render();
    ═══════════════════════════════════════════════════════════════════════════ */
 window.PCGeo=(function(){
   const CFG={
-    osm:false, /* Overpass-Nachlieferung (Tempo, Beleuchtung, vermutete Ortslage) – freie Spiegel sind oft langsam; in der AGFK-Fassung aus */
+    osm:(typeof BRAND!=='undefined'&&!!BRAND.geoOsm), /* Overpass-Nachlieferung (Tempo, Beleuchtung, vermutete Ortslage) – freie Spiegel sind oft langsam; Schalter in BRANDS */
     osmEndpoints:['https://overpass.private.coffee/api/interpreter'],osmTimeout:6000,
     basemap:'https://sgx.geodatenzentrum.de/wmts_basemapde/tile/1.0.0/de_basemapde_web_raster_farbe/default/GLOBAL_WEBMERCATOR/{z}/{y}/{x}.png',
     osmTiles:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
