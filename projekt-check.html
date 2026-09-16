@@ -459,14 +459,16 @@ function renderSteps(){
   document.getElementById('steps').innerHTML=h;
 }
 
-function render(){
+function render(scroll){
+  if(scroll===undefined)scroll=true;
   renderSteps();
   const c=document.getElementById('content');
   if(state.step===0)c.innerHTML=viewVorhaben();
   else if(state.step===0.5)c.innerHTML=viewLage();
   else if(state.step===1)c.innerHTML=viewExtras();
   else c.innerHTML=viewErgebnis();
-  window.scrollTo({top:0,behavior:'smooth'});
+  /* Nur bei Schrittwechsel zum Assistenten scrollen – nicht zum Seitenanfang (dort liegen Kommune und Karte) */
+  if(scroll){const st=document.getElementById('steps');if(st)st.scrollIntoView({behavior:'smooth',block:'start'});}
 }
 
 function viewVorhaben(){
@@ -509,7 +511,7 @@ function goStep(s){state.step=s;render();}
 function toggleExtra(id){
   const i=state.extras.indexOf(id);
   if(i>=0)state.extras.splice(i,1);else state.extras.push(id);
-  render();
+  render(false);
 }
 function hasExtra(id){return state.extras.includes(id);}
 
@@ -729,7 +731,7 @@ function renderKommuneBar(){
   h+='</select>';
   const el=document.getElementById('kommuneBar');if(el)el.innerHTML=h;
 }
-function setKommune(v){state.kommune=v||null;if(state.step>=2)render();}
+function setKommune(v){state.kommune=v||null;if(state.step>=2)render(false);}
 
 renderKommuneBar();
 render();
@@ -932,8 +934,8 @@ window.PCGeo=(function(){
     };
     if(was==='alle'){['kommune','lage','netz'].forEach(tue);}else tue(was);
     renderErgebnis();
-    if(state.step>=1||was==='lage')render();
-    if(was==='lage'||was==='alle'){const g=document.getElementById('geoBar');if(g)g.scrollIntoView({behavior:'smooth',block:'start'});}
+    /* Seite bleibt stehen – die Nutzerin ist gerade in der Standortprüfung */
+    if(state.step>=1||was==='lage'||was==='alle')render(false);
   }
 
   /* ---------- Schnittstellen zum Kern ---------- */
