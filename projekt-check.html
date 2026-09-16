@@ -112,7 +112,7 @@ h3{font-size:14px;font-weight:700;margin:18px 0 8px}
   .header-right{text-align:left}
 }
 @media print{
-  .steps,.btn,.btn-back,.copy-btn,.crosslinks,.header-right,.portal-link{display:none!important}
+  .steps,.btn,.btn-back,.copy-btn,.crosslinks,.header-right,.portal-link,.geo-bar,.kommune-bar{display:none!important}
   body{background:#fff}
   .main{padding-top:12px}
   .result-card,.info-box,.copy-box,.agfk-contact{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
@@ -130,7 +130,42 @@ h3{font-size:14px;font-weight:700;margin:18px 0 8px}
 .lernbox-body p{margin-bottom:8px}
 .lernbox-body b{color:#333}
 .lernbox-merk{margin-top:10px;padding:9px 11px;background:var(--blue-light);border-radius:6px;font-size:12px;color:var(--blue-dark)}
+/* ── Standortprüfung (Geo-Block) ── */
+.geo-bar{background:var(--white);border:1.5px solid var(--gray-border);border-radius:8px;padding:10px 14px;margin-bottom:18px}
+.geo-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.geo-title{display:block;font-size:12px;font-weight:600;color:var(--gray-light)}
+.geo-sub{font-size:11.5px;color:var(--gray-light);font-weight:400}
+.geo-toggle{background:transparent;color:var(--green);border:2px solid var(--green);border-radius:6px;padding:6px 12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.geo-toggle:hover{background:var(--green-light)}
+.geo-body{margin-top:12px}
+.geo-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.geo-row input{flex:1;min-width:200px;padding:8px 10px;border-radius:6px;border:1px solid var(--gray-border);font:inherit;font-size:13px;color:var(--gray)}
+.geo-btn{background:var(--green);color:#fff;border:none;border-radius:6px;padding:8px 12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.geo-btn.sek{background:var(--white);color:var(--green-dark);border:1.5px solid var(--green)}
+.geo-btn.klein{padding:4px 9px;font-size:11.5px}
+.geo-btn:hover{opacity:.9}
+.geo-map{height:300px;border-radius:8px;border:1px solid var(--gray-border);background:#eef1f3}
+.geo-map-aus{display:flex;align-items:center;justify-content:center;padding:20px;font-size:12.5px;color:var(--gray-light);text-align:center;height:auto;min-height:80px}
+.geo-hint{font-size:12px;color:var(--gray-light);margin:8px 0 0;line-height:1.5}
+.geo-auswerten{margin-top:10px}
+.geo-lauf{margin-top:12px;font-size:12.5px;color:var(--gray-light)}
+.geo-erg{margin-top:12px;border:1px solid var(--gray-border);border-radius:8px;overflow:hidden}
+.geo-erg-kopf{background:var(--green-light);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:9px 12px}
+.geo-zeile{display:grid;grid-template-columns:82px 1fr auto;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid var(--gray-border);font-size:12.5px;line-height:1.45}
+.geo-zl{font-weight:600;color:var(--gray-light);font-size:11.5px}
+.geo-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;padding:1px 6px;margin-right:6px;vertical-align:middle}
+.geo-badge.amtlich{background:var(--green-light);color:var(--green-dark)}
+.geo-badge.rvp{background:var(--blue-light);color:var(--blue-dark)}
+.geo-badge.vermutet{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-border)}
+.geo-uebern{font-size:11.5px;font-weight:600;color:var(--green-dark);white-space:nowrap}
+.geo-diff{color:var(--warn)}
+.geo-warn{background:var(--warn-bg);border-top:1px solid var(--warn-border);color:var(--warn);font-size:12.5px;padding:8px 12px}
+.geo-alle{padding:10px 12px;border-top:1px solid var(--gray-border)}
+.geo-quelle{padding:8px 12px;border-top:1px solid var(--gray-border);font-size:10.5px;color:var(--gray-light);line-height:1.5}
+.geo-vorschlag{background:var(--green-light);border:1px solid rgba(20,171,155,.35);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;line-height:1.5}
+@media (max-width:520px){.geo-zeile{grid-template-columns:1fr;gap:3px}}
 </style>
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 </head>
 <body>
 <!-- ══ 2Rat Lizenzkontext ══════════════════════════════════════════════
@@ -170,12 +205,13 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <div class="header-title">Projekt-Check <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a class="portal-link" href="index.html">← Übersicht</a><br>Saarland · Kommunale Vorhaben<br><span id="standTop">Stand 09/2026 · v7</span></div>
+    <div class="header-right"><a class="portal-link" href="index.html">← Übersicht</a><br>Saarland · Kommunale Vorhaben<br><span id="standTop">Stand 09/2026 · v8</span></div>
   </div>
 </div>
 
 <main class="main">
   <div class="kommune-bar" id="kommuneBar"></div>
+  <div class="geo-bar" id="geoBar"></div>
   <details class="lernbox"><summary><span class="lernbox-t">Gesetz oder Regelwerk? Was davon wirklich verbindlich ist</span><span class="lernbox-sub">StVO · VwV-StVO 2025 · ERA und die übrigen FGSV-Regelwerke · Landesvorgabe Saarland · Musterlösungen Baden-Württemberg</span></summary><div class="lernbox-body">
     <p><b>StVO</b> – Rechtsverordnung, gilt unmittelbar für alle. Sie regelt, <b>ob</b> etwas angeordnet werden darf.</p>
     <p><b>VwV-StVO</b> (Fassung vom 03.04.2025, BAnz AT 09.04.2025 B2, in Kraft seit 10.04.2025) – Verwaltungsvorschrift. Sie bindet die Behörde nach innen, nicht die Verkehrsteilnehmenden, und sagt der Straßenverkehrsbehörde, wie sie die StVO anzuwenden hat. Ein Abweichen ist möglich, aber begründungsbedürftig.</p>
@@ -196,13 +232,16 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
   <div class="steps" id="steps"></div>
   <div id="content"></div>
   <footer class="footer">
-    <b>Orientierungshilfe, keine Rechts- oder Fachberatung im Einzelfall.</b> Sie ersetzt keine Einzelfallprüfung und keine formelle Beteiligung der zuständigen Behörden. <span id="standFoot">Stand 09/2026 · v7</span>.
-    Datengrundlage: Zuständigkeitslandkarte Radverkehr Saarland (AGFK-SL) sowie StVO, VwV-StVO 2025, StVZustG Saarland, SaarlStrG, FStrG. Fachliche Maßgaben: ERA 2010, „Maßgaben und Richtlinien beim Ausbau von Radverkehrsanlagen“ (MUKMAV, 05/2023), FRL-NMOB-Rad-Fuß.<br>
+    <b>Orientierungshilfe, keine Rechts- oder Fachberatung im Einzelfall.</b> Sie ersetzt keine Einzelfallprüfung und keine formelle Beteiligung der zuständigen Behörden. <span id="standFoot">Stand 09/2026 · v8</span>.
+    Datengrundlage: Zuständigkeitslandkarte Radverkehr Saarland (AGFK-SL) sowie StVO, VwV-StVO 2025, StVZustG Saarland, SaarlStrG, FStrG. Fachliche Maßgaben: ERA 2010, „Maßgaben und Richtlinien beim Ausbau von Radverkehrsanlagen“ (MUKMAV, 05/2023), FRL-NMOB-Rad-Fuß. Standortprüfung: LfS-Straßennetz, SVZ 2021, Radverkehrsplan Saarland 2025 – <a href="https://creativecommons.org/licenses/by/4.0/deed.de" target="_blank" rel="noopener">CC-BY 4.0</a> © GDI-SL · Karte: © GeoBasis-DE/BKG (dl-de/by-2-0) · Adresssuche: © OpenStreetMap-Mitwirkende (ODbL).<br>
     <strong style="color:var(--gray)">Entwickelt und gepflegt von 2Rat</strong> – Büro für Radverkehrsplanung · Armin Jung · Radverkehrsplaner EIPOS · <a href="https://www.2rat.org">www.2rat.org</a>
     <br><span style="display:inline-block;margin-top:5px;opacity:.85">Lizenziert an die AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland e.V.</span>
   </footer>
 </main>
 
+<!-- Standortprüfung: Leaflet lokal (kein CDN) und Geodaten-Bündel; fehlen sie, läuft der Projekt-Check ohne Standort-Schritt weiter -->
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="rp-geo.js"></script>
 <script>
 (function(){var l=document.getElementById('logo');l.alt='AGFK-SL';l.onerror=function(){l.style.display='none';};l.src='agfk-logo.png';})();
 
@@ -328,6 +367,9 @@ const EXTRAS=[
 {id:"leitung",icon:"🔌",label:"Versorgungsleitungen im Boden (Strom, Wasser, Telekom)",desc:"Tiefbau oder Querungen mit Leitungsbezug",
  stellen:["Leitungsträger / Stadtwerke / Netzbetreiber"],
  pruef:["Leitungsauskunft einholen, Querungen abstimmen"]},
+{id:"netz",icon:"🗺️",label:"Liegt im Alltagsradnetz oder auf einer SaarRadland-Route",desc:"Abschnitt ist Teil des Radverkehrsplans Saarland 2025 (Standortprüfung schlägt das vor)",
+ stellen:["MUKMAV – Referat Radverkehr (Netzbezug, Radverkehrsplan)"],
+ pruef:["Netzbezug laut Radverkehrsplan Saarland 2025 in Antrag und Begründung nennen – stärkt die Förderfähigkeit und begründet ein Gesamtkonzept (z. B. bei Fahrradstraßen)"]},
 {id:"agfk",icon:"🤝",label:"Die AGFK-SL soll unterstützen",desc:"Erstberatung oder fachliche Begleitung gewünscht",
  stellen:["AGFK-SL (Geschäftsstelle) als Erstberatung"],
  pruef:[]}
@@ -348,7 +390,7 @@ const OD_BAULAST=["Saarbrücken"];
    Zuordnung: eigene StVB nur Saarbrücken/Völklingen/St. Ingbert, sonst Landkreis/RV. */
 // Zentrale Versionsangabe – wird an allen sichtbaren Stellen und im Vermerk verwendet.
 // Bei jeder Änderung am Werkzeug NUR hier hochzählen.
-const STAND='Stand 09/2026 · v7';
+const STAND='Stand 09/2026 · v8';
 
 const KONTAKTE={
  "rv":{name:"Regionalverband Saarbrücken – Straßenverkehrsbehörde (Ordnungsamt)",tel:"0681 506-3350",mail:"strassenverkehr@rvsbr.de",web:"regionalverband-saarbruecken.de",url:"https://www.regionalverband-saarbruecken.de/ordnungsamt/strassenverkehrsbehoerde/"},
@@ -422,9 +464,12 @@ function pickFalltyp(id){
 
 function viewLage(){
   let h='<button class="btn-back" onclick="goStep(0)">← Vorhaben ändern</button>';
-  h+='<h2>Wo genau liegt das?</h2><div class="subtitle">Bei einer Durchgangsstraße hängt es davon ab, ob sie durch den Ort führt.</div><div class="cards single">';
-  h+='<div class="card row" role="button" tabindex="0" onkeydown="cardKey(event)" onclick="pickLage(\'ortsdurchfahrt\')"><div class="card-icon">🏘️</div><div><div class="card-label">Die Straße führt durch den Ort</div><div class="card-desc">Innerorts / Ortsdurchfahrt – Ihre Kommune redet mit</div></div></div>';
-  h+='<div class="card row" role="button" tabindex="0" onkeydown="cardKey(event)" onclick="pickLage(\'ausserorts\')"><div class="card-icon">🌳</div><div><div class="card-label">Die Straße liegt außerhalb</div><div class="card-desc">Freie Strecke – das Land (LfS) führt</div></div></div>';
+  h+='<h2>Wo genau liegt das?</h2><div class="subtitle">Bei einer Durchgangsstraße hängt es davon ab, ob sie durch den Ort führt.</div>';
+  if(window.PCGeo)h+=PCGeo.lageVorschlagHtml();
+  const gv=window.PCGeo?PCGeo.lageVorschlag():null;
+  h+='<div class="cards single">';
+  h+='<div class="card row'+(gv==='ortsdurchfahrt'?' selected':'')+'" role="button" tabindex="0" onkeydown="cardKey(event)" onclick="pickLage(\'ortsdurchfahrt\')"><div class="card-icon">🏘️</div><div><div class="card-label">Die Straße führt durch den Ort</div><div class="card-desc">Innerorts / Ortsdurchfahrt – Ihre Kommune redet mit</div></div></div>';
+  h+='<div class="card row'+(gv==='ausserorts'?' selected':'')+'" role="button" tabindex="0" onkeydown="cardKey(event)" onclick="pickLage(\'ausserorts\')"><div class="card-icon">🌳</div><div><div class="card-label">Die Straße liegt außerhalb</div><div class="card-desc">Freie Strecke – das Land (LfS) führt</div></div></div>';
   h+='</div>';
   return h;
 }
@@ -533,6 +578,9 @@ function viewErgebnis(){
   }
   h+='</div></div>';
 
+  // Standortprüfung (Geo-Block) – nur wenn ausgewertet
+  if(window.PCGeo)h+=PCGeo.ergebnisHtml(f);
+
   // Vor Ort: konkrete Straßenverkehrsbehörde der gewählten Kommune
   if(state.kommune){
     const k=findKommune(state.kommune);
@@ -607,6 +655,7 @@ function buildVermerk(){
   if(f.askLage&&state.lage)t+=' ('+(state.lage==="ortsdurchfahrt"?"Ortsdurchfahrt":"außerorts")+')';
   t+='\n';
   if(state.kommune){const k=findKommune(state.kommune);t+='Kommune: '+state.kommune+(k?(' · Straßenverkehrsbehörde: '+(k.eigeneStVB?("Stadt "+k.name):k.kreis)):'')+'\n';const kt=kontaktFor(k);if(kt){t+='Kontakt StVB: '+kt.name+(kt.tel?(' · Tel. '+kt.tel):'')+(kt.mail?(' · '+kt.mail):'')+' · www.'+kt.web+'\n';}}
+  if(window.PCGeo)t+=PCGeo.vermerkText();
   if(state.extras.length)t+='Zusätzlich: '+state.extras.map(id=>{const e=EXTRAS.find(x=>x.id===id);return e?e.label:id;}).join('; ')+'\n';
   t+='\nWer hat den Hut auf?\n'+d.lead+'\n';
   t+='\nWer sollte mit an den Tisch?\n';
@@ -617,6 +666,7 @@ function buildVermerk(){
   if(d.hinweis)t+='\nGut zu wissen: '+d.hinweis+'\n';
   t+='\nFragen offen? Geschäftsstelle der AGFK-SL · Tel. '+AGFK_TEL+' · '+AGFK_MAIL+'\n';
   t+='Quelle: Zuständigkeitslandkarte Radverkehr Saarland (AGFK-SL) · Projekt-Check\n'+lizenzVermerkZeile()+'\n';
+  if(window.PCGeo&&PCGeo.aktiv())t+=PCGeo.quelleText()+'\n';
   t+='Werkzeug: Projekt-Check Radverkehr · '+STAND;
   return t;
 }
@@ -656,6 +706,233 @@ render();
 
 // Kopf- und Fusszeile aus der zentralen Konstante setzen
 ['standTop','standFoot'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=STAND;});
+</script>
+<script>
+/* ══ Standortprüfung (Geodatenabgleich) ═══════════════════════════════════════
+   Eigenständiger Block – kann unverändert in die 2Rat-Vollversion übernommen werden.
+   Quellen: LfS-Straßennetz + SVZ 2021 (eingebettet in rp-geo.js, CC-BY 4.0 © GDI-SL),
+            Radverkehrsplan Saarland 2025 (WMS live, CC-BY 4.0 © GDI-SL),
+            Adresse/Kommune über Nominatim (© OpenStreetMap-Mitwirkende, ODbL),
+            Karte basemap.de (© GeoBasis-DE/BKG, dl-de/by-2-0), Ersatz OSM-Kacheln.
+   Grundsatz: Jeder Wert trägt seine Herkunft (amtlich / lt. RVP / vermutet) und gilt
+   erst nach Übernahme durch die Nutzerin. Abfrage nur auf Knopfdruck.
+   Schnittstellen zum Kern: PCGeo.lageVorschlag(), lageVorschlagHtml(), ergebnisHtml(f),
+   vermerkText(), quelleText(), aktiv(). Fehlt rp-geo.js oder Leaflet, bleibt der Kern nutzbar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+window.PCGeo=(function(){
+  const CFG={
+    osm:false, /* Overpass-Nachlieferung (Tempo, Beleuchtung, vermutete Ortslage) – freie Spiegel sind oft langsam; in der AGFK-Fassung aus */
+    osmEndpoints:['https://overpass.private.coffee/api/interpreter'],osmTimeout:6000,
+    basemap:'https://sgx.geodatenzentrum.de/wmts_basemapde/tile/1.0.0/de_basemapde_web_raster_farbe/default/GLOBAL_WEBMERCATOR/{z}/{y}/{x}.png',
+    osmTiles:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    nominatim:'https://nominatim.openstreetmap.org',
+    saarland:{center:[49.38,6.95],zoom:10,viewbox:'6.35,49.64,7.42,49.10'}
+  };
+  const ok=typeof RPGeo!=='undefined';
+  const nk=(v,n)=>ok?RPGeo.nk(v,n):String(v);
+  const ganz=v=>Number(v).toLocaleString('de-DE',{maximumFractionDigits:0});
+  const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  let map=null,marker=null,punkt=null,erg=null,busy=false,tileErr=0,uebern={};
+  const LAGE_TXT={ortsdurchfahrt:'Ortsdurchfahrt (innerorts)',ausserorts:'außerorts (freie Strecke)'};
+
+  /* ---------- Oberfläche ---------- */
+  function bauen(){
+    const el=document.getElementById('geoBar');if(!el)return;
+    if(!ok){el.innerHTML='<div class="geo-head"><span class="geo-title">Standort prüfen</span><span class="geo-sub">Geodaten-Modul (rp-geo.js) nicht geladen – manuelle Auswahl bleibt möglich.</span></div>';return;}
+    el.innerHTML=
+      '<div class="geo-head"><div><span class="geo-title">Standort prüfen (optional)</span><span class="geo-sub">Schlägt Straße, Lage, Baulast und Netzbezug aus amtlichen Geodaten vor – Sie bestätigen.</span></div>'+
+      '<button class="geo-toggle" id="geoToggle" onclick="PCGeo.toggle()" aria-expanded="false">Karte öffnen</button></div>'+
+      '<div class="geo-body" id="geoBody" hidden>'+
+      '<div class="geo-row"><input type="text" id="geoAdresse" placeholder="Adresse oder Ort, z. B. Hauptstraße 12, Kirkel" onkeydown="if(event.key===\'Enter\')PCGeo.suchen()">'+
+      '<button class="geo-btn" onclick="PCGeo.suchen()">Suchen</button><button class="geo-btn sek" onclick="PCGeo.meinStandort()" title="GPS / Browser-Standort">Mein Standort</button></div>'+
+      '<div id="geoMap" class="geo-map" role="application" aria-label="Karte – Standort setzen"></div>'+
+      '<div class="geo-hint" id="geoHint">Klicken Sie auf die Karte, um den Punkt zu setzen (Marker ist verschiebbar), dann „Standort auswerten".</div>'+
+      '<button class="btn btn-primary geo-auswerten" id="geoAuswerten" onclick="PCGeo.auswerten()" disabled>Standort auswerten</button>'+
+      '<div id="geoErgebnis"></div></div>';
+  }
+  function toggle(){
+    const b=document.getElementById('geoBody'),t=document.getElementById('geoToggle');if(!b)return;
+    const auf=b.hasAttribute('hidden');
+    if(auf){b.removeAttribute('hidden');t.textContent='Karte schließen';t.setAttribute('aria-expanded','true');initMap();}
+    else{b.setAttribute('hidden','');t.textContent='Karte öffnen';t.setAttribute('aria-expanded','false');}
+  }
+  function initMap(){
+    if(map){setTimeout(()=>map.invalidateSize(),50);return;}
+    try{
+      if(typeof L==='undefined')throw new Error('Leaflet fehlt');
+      map=L.map('geoMap',{zoomControl:true,attributionControl:true}).setView(CFG.saarland.center,CFG.saarland.zoom);
+      const bm=L.tileLayer(CFG.basemap,{maxZoom:19,attribution:'© GeoBasis-DE / BKG (2026) <a href="https://www.govdata.de/dl-de/by-2-0" target="_blank" rel="noopener">dl-de/by-2-0</a>',referrerPolicy:'strict-origin-when-cross-origin'});
+      bm.on('tileerror',()=>{if(++tileErr===4){map.removeLayer(bm);L.tileLayer(CFG.osmTiles,{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende',referrerPolicy:'strict-origin-when-cross-origin'}).addTo(map);}});
+      bm.addTo(map);
+      map.on('click',e=>setPunkt(e.latlng.lat,e.latlng.lng));
+      if(state.kommune&&!punkt)geocode(state.kommune+', Saarland').then(p=>{if(p&&!punkt)map.setView([p.lat,p.lng],13);}).catch(()=>{});
+      setTimeout(()=>map.invalidateSize(),50);
+    }catch(e){
+      const m=document.getElementById('geoMap');if(m){m.className='geo-map geo-map-aus';m.innerHTML='Karte nicht verfügbar ('+esc(e.message)+'). Adresse suchen oder Koordinaten „49.4496, 6.9621" ins Suchfeld eingeben.';}
+    }
+  }
+  function setPunkt(lat,lng,zoom){
+    punkt={lat:+lat.toFixed(6),lng:+lng.toFixed(6)};erg=null;uebern={};
+    if(map){
+      if(!marker){marker=L.marker([lat,lng],{draggable:true}).addTo(map);marker.on('dragend',()=>{const p=marker.getLatLng();setPunkt(p.lat,p.lng);});}
+      else marker.setLatLng([lat,lng]);
+      if(zoom)map.setView([lat,lng],zoom);
+    }
+    const b=document.getElementById('geoAuswerten');if(b)b.disabled=false;
+    const h=document.getElementById('geoHint');if(h)h.textContent='Standort: '+nk(punkt.lat,5)+', '+nk(punkt.lng,5)+' – jetzt „Standort auswerten".';
+    const r=document.getElementById('geoErgebnis');if(r)r.innerHTML='';
+  }
+
+  /* ---------- Nominatim ---------- */
+  async function nomi(pfad){
+    const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),8000);
+    try{const r=await fetch(CFG.nominatim+pfad+'&accept-language=de',{headers:{'Accept':'application/json'},referrerPolicy:'strict-origin-when-cross-origin',signal:ctrl.signal});
+      clearTimeout(to);if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}
+    catch(e){clearTimeout(to);throw e;}
+  }
+  async function geocode(q){
+    const m=q.match(/^\s*(-?\d+[.,]\d+)\s*[,; ]\s*(-?\d+[.,]\d+)\s*$/);
+    if(m)return {lat:parseFloat(m[1].replace(',','.')),lng:parseFloat(m[2].replace(',','.')),name:'Koordinate'};
+    const j=await nomi('/search?format=jsonv2&limit=1&countrycodes=de&bounded=1&viewbox='+CFG.saarland.viewbox+'&q='+encodeURIComponent(q));
+    if(!j.length)return null;return {lat:parseFloat(j[0].lat),lng:parseFloat(j[0].lon),name:j[0].display_name};
+  }
+  async function reverse(lat,lng){
+    const j=await nomi('/reverse?format=jsonv2&zoom=17&addressdetails=1&lat='+lat+'&lon='+lng);
+    const a=j.address||{};
+    const strasse=a.road||a.pedestrian||a.footway||a.path||null;
+    const ort=a.village||a.suburb||a.hamlet||a.town||a.city||null;
+    const kand=[a.municipality,a.town,a.city,a.village].filter(Boolean);
+    return {strasse,ort,plz:a.postcode||null,land:a.state||null,kandidaten:kand,text:[strasse,a.house_number].filter(Boolean).join(' ')+(ort?', '+ort:'')};
+  }
+  function kommuneAusKandidaten(kand){
+    const alle=[];KREISE.forEach(k=>alle.push(...k.kommunen));
+    const n=s=>s.toLowerCase().replace(/\s+/g,' ').trim();
+    for(const k of kand){const kn=n(k);
+      let t=alle.find(x=>n(x)===kn);if(t)return t;
+      t=alle.find(x=>n(x).split('/')[0].trim()===kn||kn.split('/')[0].trim()===n(x).split('/')[0].trim());if(t)return t;
+    }
+    return null;
+  }
+  async function suchen(){
+    const q=(document.getElementById('geoAdresse')||{}).value||'';if(!q.trim())return;
+    const h=document.getElementById('geoHint');h.textContent='Suche …';
+    try{const p=await geocode(q);
+      if(!p){h.textContent='Keine Adresse im Saarland gefunden – bitte genauer eingeben oder Punkt auf der Karte setzen.';return;}
+      if(!map)initMap();setPunkt(p.lat,p.lng,16);
+    }catch(e){h.textContent='Adresssuche nicht erreichbar ('+e.message+') – bitte Punkt auf der Karte setzen.';}
+  }
+  function meinStandort(){
+    const h=document.getElementById('geoHint');
+    if(!navigator.geolocation){h.textContent='Standortabfrage wird vom Browser nicht unterstützt.';return;}
+    h.textContent='Standort wird ermittelt …';
+    navigator.geolocation.getCurrentPosition(p=>setPunkt(p.coords.latitude,p.coords.longitude,16),()=>{h.textContent='Standort nicht freigegeben – bitte Punkt auf der Karte setzen.';},{timeout:10000});
+  }
+
+  /* ---------- Auswertung ---------- */
+  async function auswerten(){
+    if(!punkt||busy||!ok)return;busy=true;
+    const b=document.getElementById('geoAuswerten');b.disabled=true;b.textContent='Wird ausgewertet …';
+    const out=document.getElementById('geoErgebnis');out.innerHTML='<div class="geo-lauf">Amtliches Straßennetz, Zählstellen, Radverkehrsplan und Adresse werden abgefragt …</div>';
+    const {lat,lng}=punkt;
+    const e={lat,lng,amt:null,dtv:null,rvp:[],rvpFehler:null,adr:null,adrFehler:null,osm:null,lage:null,baulast:null,netz:null,dtvText:null,kommune:null,ausserhalb:false};
+    try{e.amt=RPGeo.strasseAmStandort(lat,lng);e.dtv=RPGeo.dtvFuer(e.amt,lat,lng);}catch(x){}
+    const jobs=[
+      RPGeo.rvpAbfrage(lat,lng).then(r=>{if(r.fehler)e.rvpFehler=r.fehler;else e.rvp=r.eintraege||[];}).catch(x=>{e.rvpFehler=x.message;}),
+      reverse(lat,lng).then(a=>{e.adr=a;}).catch(x=>{e.adrFehler=x.message;})
+    ];
+    await Promise.all(jobs);
+    /* Lage – nur aus Zählstelle desselben Abschnitts (amtlich) */
+    if(e.dtv&&e.dtv.modus==='abschnitt'&&e.dtv.zst.f){e.lage={wert:e.dtv.zst.f==='FS'?'ausserorts':'ortsdurchfahrt',art:'amtlich',quelle:'SVZ 2021, Zählstelle '+e.dtv.zst.z+' (gleicher Abschnitt)'};}
+    /* Baulast */
+    if(e.dtv&&e.dtv.modus==='abschnitt'&&e.dtv.zst.b){e.baulast={wert:e.dtv.zst.b+(e.dtv.zst.b==='Gemeinde'?'':' (LfS)'),art:'amtlich',quelle:'SVZ 2021, Zählstelle '+e.dtv.zst.z};}
+    else{const rb=e.rvp.find(x=>x.baulast);if(rb)e.baulast={wert:rb.baulast+(rb.sonder?' / '+rb.sonder:''),art:'rvp',quelle:'Radverkehrsplan Saarland 2025'};
+      else if(e.amt)e.baulast={wert:(e.amt.klasseCode==='B'?'Bund':'Land')+' (LfS) – in der Ortsdurchfahrt teilweise abweichend',art:'abgeleitet',quelle:'aus der Straßenklasse abgeleitet'};}
+    /* Netzbezug */
+    if(e.rvp.length){const netze=[...new Set(e.rvp.map(x=>x.netz).filter(Boolean))];const routen=[...new Set(e.rvp.flatMap(x=>x.routen||[]))];const srl=e.rvp.some(x=>x.saarradland);
+      if(netze.length||routen.length||srl)e.netz={wert:[netze.join(', '),routen.length?'SaarRadland-Route: '+routen.join(', '):(srl?'SaarRadland: ja':'')].filter(Boolean).join(' · '),art:'rvp',quelle:'Radverkehrsplan Saarland 2025',fuehrung:e.rvp.map(x=>x.fuehrung).find(Boolean)||null,prio:e.rvp.map(x=>x.prio).find(Boolean)||null};}
+    /* DTV nur zur Information */
+    if(e.dtv&&e.dtv.zst){const z=e.dtv.zst;e.dtvText=(e.dtv.modus==='abschnitt'?'DTV '+ganz(z.dtv)+' Kfz/Tag, Schwerverkehr '+ganz(z.sv)+' – Zählstelle '+z.z+', gleicher Abschnitt':'Nächste Zählstelle '+z.z+' liegt auf einem anderen Abschnitt der '+z.s+' (DTV '+ganz(z.dtv)+', nur Anhalt)');}
+    /* Kommune */
+    if(e.adr){e.kommune=kommuneAusKandidaten(e.adr.kandidaten);e.ausserhalb=e.adr.land&&e.adr.land!=='Saarland';}
+    /* OSM-Nachlieferung (optional, nicht blockierend) */
+    erg=e;uebern={};renderErgebnis();
+    if(CFG.osm){RPGeo.osmAbfrage(lat,lng,{endpoints:CFG.osmEndpoints,timeoutMs:CFG.osmTimeout,amtlicheRef:e.amt?e.amt.strasse:null}).then(r=>{if(erg===e&&r&&r.vorschlag){e.osm=r.vorschlag;if(!e.lage&&e.osm.ortslage)e.lage={wert:e.osm.ortslage,art:'vermutet',quelle:'OpenStreetMap (Tempo/Bebauung) – nur vermutet'};renderErgebnis();}}).catch(()=>{});}
+    busy=false;b.disabled=false;b.textContent='Standort erneut auswerten';
+  }
+  function badge(art){return {amtlich:'<span class="geo-badge amtlich">amtlich</span>',rvp:'<span class="geo-badge rvp">lt. RVP 2025</span>',vermutet:'<span class="geo-badge vermutet">vermutet</span>',abgeleitet:'<span class="geo-badge vermutet">abgeleitet</span>',vorschlag:'<span class="geo-badge vermutet">Vorschlag</span>'}[art]||'';}
+  function zeile(label,html,art,aktion){return '<div class="geo-zeile"><div class="geo-zl">'+label+'</div><div class="geo-zw">'+(art?badge(art):'')+html+'</div><div class="geo-za">'+(aktion||'')+'</div></div>';}
+  function btn(was,label){return uebern[was]?'<span class="geo-uebern">✓ übernommen</span>':'<button class="geo-btn sek klein" onclick="PCGeo.uebernehmen(\''+was+'\')">'+label+'</button>';}
+  function renderErgebnis(){
+    const out=document.getElementById('geoErgebnis');if(!out||!erg)return;const e=erg;
+    let h='<div class="geo-erg"><div class="geo-erg-kopf">Vorschläge für diesen Standort <span class="geo-sub">– nichts wird ohne Ihre Übernahme in den Projekt-Check geschrieben</span></div>';
+    if(e.ausserhalb)h+='<div class="geo-warn">Der Punkt liegt außerhalb des Saarlands ('+esc(e.adr.land)+') – die Geodaten decken nur das Saarland ab.</div>';
+    h+=zeile('Adresse',e.adr?esc(e.adr.text||'–'):(e.adrFehler?'nicht ermittelbar ('+esc(e.adrFehler)+')':'–'),null,'');
+    if(e.kommune)h+=zeile('Kommune',esc(e.kommune)+(state.kommune&&state.kommune!==e.kommune?' <span class="geo-diff">– im Projekt-Check ist derzeit „'+esc(state.kommune)+'" gewählt</span>':''),'vorschlag',state.kommune===e.kommune?'<span class="geo-uebern">✓ gewählt</span>':btn('kommune','Übernehmen'));
+    else if(e.adr)h+=zeile('Kommune','keine saarländische Kommune zugeordnet',null,'');
+    if(e.amt)h+=zeile('Straße',esc(e.amt.strasse)+' · '+esc(e.amt.klasse)+' <span class="geo-sub">(Abstand '+nk(e.amt.dist,0)+' m)</span>','amtlich','');
+    else h+=zeile('Straße','Keine Bundes- oder Landesstraße im Umkreis von 40 m – vermutlich Gemeindestraße oder sonstiger Weg.','vorschlag','');
+    if(e.lage)h+=zeile('Lage',LAGE_TXT[e.lage.wert]+' <span class="geo-sub">('+esc(e.lage.quelle)+')</span>',e.lage.art,state.lage===e.lage.wert?'<span class="geo-uebern">✓ gewählt</span>':btn('lage','Übernehmen'));
+    else if(e.amt)h+=zeile('Lage','nicht eindeutig ermittelbar – bitte im Schritt „Wo genau liegt das?" selbst wählen',null,'');
+    if(e.baulast)h+=zeile('Baulast',esc(e.baulast.wert)+' <span class="geo-sub">('+esc(e.baulast.quelle)+')</span>',e.baulast.art,'');
+    if(e.netz){h+=zeile('Netzbezug',esc(e.netz.wert)+(e.netz.fuehrung?'<br><span class="geo-sub">Führung im Bestand: '+esc(e.netz.fuehrung)+(e.netz.prio?' · '+esc(e.netz.prio):'')+'</span>':''),'rvp',hasExtra('netz')?'<span class="geo-uebern">✓ gewählt</span>':btn('netz','Als Zusatzfaktor übernehmen'));}
+    else if(e.rvpFehler)h+=zeile('Netzbezug','Radverkehrsplan nicht erreichbar ('+esc(e.rvpFehler)+')',null,'');
+    else h+=zeile('Netzbezug','Abschnitt ist nicht Teil des Alltagsradnetzes oder einer SaarRadland-Route','rvp','');
+    if(e.dtvText)h+=zeile('Verkehr',esc(e.dtvText),'amtlich','');
+    if(e.osm)h+=zeile('OSM',[e.osm.tempo!=null?'Tempo '+e.osm.tempo:null,e.osm.lit===true?'beleuchtet':(e.osm.lit===false?'unbeleuchtet':null),e.osm.ofl].filter(Boolean).map(esc).join(' · ')||'–','vermutet','');
+    const offen=[e.kommune&&state.kommune!==e.kommune&&!uebern.kommune?'kommune':null,e.lage&&state.lage!==e.lage.wert&&!uebern.lage?'lage':null,e.netz&&!hasExtra('netz')&&!uebern.netz?'netz':null].filter(Boolean);
+    if(offen.length>1)h+='<div class="geo-alle"><button class="geo-btn" onclick="PCGeo.uebernehmen(\'alle\')">Alle Vorschläge übernehmen</button></div>';
+    h+='<div class="geo-quelle">'+quelleText()+'</div></div>';
+    out.innerHTML=h;
+  }
+  function uebernehmen(was){
+    if(!erg)return;const e=erg;
+    const tue=w=>{
+      if(w==='kommune'&&e.kommune){setKommune(e.kommune);renderKommuneBar();uebern.kommune=true;}
+      if(w==='lage'&&e.lage){state.lage=e.lage.wert;uebern.lage=true;if(state.step===0.5)state.step=1;}
+      if(w==='netz'&&e.netz){if(!hasExtra('netz'))state.extras.push('netz');uebern.netz=true;}
+    };
+    if(was==='alle'){['kommune','lage','netz'].forEach(tue);}else tue(was);
+    renderErgebnis();
+    if(state.step>=1||was==='lage')render();
+    if(was==='lage'||was==='alle'){const g=document.getElementById('geoBar');if(g)g.scrollIntoView({behavior:'smooth',block:'start'});}
+  }
+
+  /* ---------- Schnittstellen zum Kern ---------- */
+  function lageVorschlag(){return erg&&erg.lage?erg.lage.wert:null;}
+  function lageVorschlagHtml(){
+    if(!erg||!erg.lage)return '';
+    return '<div class="geo-vorschlag">'+badge(erg.lage.art)+'Vorschlag aus den Geodaten: <b>'+LAGE_TXT[erg.lage.wert]+'</b> <span class="geo-sub">('+esc(erg.lage.quelle)+')</span>'+(erg.lage.art==='amtlich'?' – die passende Karte ist vorausgewählt, bitte prüfen und anklicken.':' – nur eine Vermutung, bitte selbst prüfen.')+'</div>';
+  }
+  function ergebnisHtml(f){
+    if(!erg)return '';const e=erg;
+    let z='';
+    if(e.adr&&e.adr.text)z+='<div><b>Standort:</b> '+esc(e.adr.text)+'</div>';
+    z+='<div><b>Straße:</b> '+(e.amt?esc(e.amt.strasse)+' – '+esc(e.amt.klasse):'keine Bundes-/Landesstraße im Umkreis (vermutlich Gemeindestraße)')+'</div>';
+    if(e.lage)z+='<div><b>Lage:</b> '+LAGE_TXT[e.lage.wert]+' <span style="color:var(--gray-light)">('+esc(e.lage.quelle)+')</span></div>';
+    if(e.baulast)z+='<div><b>Baulast:</b> '+esc(e.baulast.wert)+' <span style="color:var(--gray-light)">('+esc(e.baulast.quelle)+')</span></div>';
+    if(e.netz)z+='<div><b>Netzbezug:</b> '+esc(e.netz.wert)+'</div>';
+    if(e.dtvText)z+='<div><b>Verkehr:</b> '+esc(e.dtvText)+'</div>';
+    let hinweis='';
+    if(e.amt&&f&&f.id!=='radweg'&&f.id!=='bundlandstrasse')hinweis='<div style="margin-top:8px"><b>Hinweis:</b> Am Standort verläuft eine Bundes- oder Landesstraße. Der Landesbetrieb für Straßenbau (LfS) ist Träger der Straßenbaulast – frühzeitig einbinden; ggf. das Vorhaben „Etwas an einer Durchgangsstraße" prüfen.</div>';
+    if(e.kommune&&state.kommune&&e.kommune!==state.kommune)hinweis+='<div style="margin-top:8px"><b>Hinweis:</b> Der Standort liegt laut Adresse in '+esc(e.kommune)+', gewählt ist '+esc(state.kommune)+'.</div>';
+    return '<div class="info-box"><div class="info-title">Standort – aus Geodaten ermittelt</div><div class="info-body">'+z+hinweis+'<div style="margin-top:8px;font-size:11px;color:var(--gray-light)">'+quelleText()+'</div></div></div>';
+  }
+  function vermerkText(){
+    if(!erg)return '';const e=erg;let t='';
+    t+='Standort: '+(e.adr&&e.adr.text?e.adr.text+' ':'')+'('+nk(e.lat,5)+', '+nk(e.lng,5)+')\n';
+    t+='Straße am Standort: '+(e.amt?e.amt.strasse+' – '+e.amt.klasse+' (amtlich, LfS-Straßennetz)':'keine Bundes-/Landesstraße im Umkreis von 40 m – vermutlich Gemeindestraße')+'\n';
+    if(e.lage)t+='Lage lt. Geodaten: '+LAGE_TXT[e.lage.wert]+' ('+e.lage.quelle+')\n';
+    if(e.baulast)t+='Baulast lt. Geodaten: '+e.baulast.wert+' ('+e.baulast.quelle+')\n';
+    if(e.netz)t+='Netzbezug (Radverkehrsplan 2025): '+e.netz.wert+(e.netz.fuehrung?' · Führung im Bestand: '+e.netz.fuehrung:'')+'\n';
+    if(e.dtvText)t+='Verkehrsbelastung: '+e.dtvText+'\n';
+    return t;
+  }
+  function quelleText(){return 'Geodaten: LfS-Straßennetz, SVZ 2021, Radverkehrsplan Saarland 2025 – CC-BY 4.0 © GDI-SL · Adresse: © OpenStreetMap-Mitwirkende (ODbL)';}
+  function aktiv(){return !!erg;}
+
+  if(document.readyState!=='loading')bauen();else document.addEventListener('DOMContentLoaded',bauen);
+  return {toggle,suchen,meinStandort,auswerten,uebernehmen,lageVorschlag,lageVorschlagHtml,ergebnisHtml,vermerkText,quelleText,aktiv,CFG};
+})();
 </script>
 </body>
 </html>
