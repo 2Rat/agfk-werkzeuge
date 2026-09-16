@@ -804,6 +804,14 @@ window.PCGeo=(function(){
     const kand=[a.municipality,a.town,a.city,a.village].filter(Boolean);
     return {strasse,ort,plz:a.postcode||null,land:a.state||null,kandidaten:kand,text:[strasse,a.house_number].filter(Boolean).join(' ')+(ort?', '+ort:'')};
   }
+  /* Zweite Stufe: auf Adress-Zoom liefert Nominatim oft nur den Ortsteil (z. B. Uchtelfangen statt Illingen) –
+     Gemeinde-Ebene (zoom 10) nachfragen, mit 1 s Abstand (Nominatim-Nutzungsbedingung: max. 1 Anfrage/s). */
+  async function reverseGemeinde(lat,lng){
+    await new Promise(r=>setTimeout(r,1100));
+    const j=await nomi('/reverse?format=jsonv2&zoom=10&addressdetails=1&lat='+lat+'&lon='+lng);
+    const a=j.address||{};
+    return [a.municipality,a.town,a.city,a.village,j.name].filter(Boolean);
+  }
   function kommuneAusKandidaten(kand){
     const alle=[];KREISE.forEach(k=>alle.push(...k.kommunen));
     const n=s=>s.toLowerCase().replace(/\s+/g,' ').trim();
@@ -853,7 +861,8 @@ window.PCGeo=(function(){
     /* DTV nur zur Information */
     if(e.dtv&&e.dtv.zst){const z=e.dtv.zst;e.dtvText=(e.dtv.modus==='abschnitt'?'DTV '+ganz(z.dtv)+' Kfz/Tag, Schwerverkehr '+ganz(z.sv)+' – Zählstelle '+z.z+', gleicher Abschnitt':'Nächste Zählstelle '+z.z+' liegt auf einem anderen Abschnitt der '+z.s+' (DTV '+ganz(z.dtv)+', nur Anhalt)');}
     /* Kommune */
-    if(e.adr){e.kommune=kommuneAusKandidaten(e.adr.kandidaten);e.ausserhalb=e.adr.land&&e.adr.land!=='Saarland';}
+    if(e.adr){e.kommune=kommuneAusKandidaten(e.adr.kandidaten);e.ausserhalb=e.adr.land&&e.adr.land!=='Saarland';
+      if(!e.kommune&&!e.ausserhalb){try{e.kommune=kommuneAusKandidaten(await reverseGemeinde(lat,lng));}catch(x){}}}
     /* OSM-Nachlieferung (optional, nicht blockierend) */
     erg=e;uebern={};renderErgebnis();
     if(CFG.osm){RPGeo.osmAbfrage(lat,lng,{endpoints:CFG.osmEndpoints,timeoutMs:CFG.osmTimeout,amtlicheRef:e.amt?e.amt.strasse:null}).then(r=>{if(erg===e&&r&&r.vorschlag){e.osm=r.vorschlag;if(!e.lage&&e.osm.ortslage)e.lage={wert:e.osm.ortslage,art:'vermutet',quelle:'OpenStreetMap (Tempo/Bebauung) – nur vermutet'};renderErgebnis();}}).catch(()=>{});}
