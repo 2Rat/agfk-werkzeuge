@@ -338,9 +338,9 @@ const FALLTYPEN=[
  varianten:{
    ortsdurchfahrt:{
      lead:"Ihre Kommune ist aktiv beteiligt – die Straße führt durch den Ort (Ortsdurchfahrt).",
-     beteiligte:["Eigene Verkehrsplanung / Bauamt","Straßenverkehrsbehörde (örtlich)","Landesbetrieb für Straßenbau (LfS) als Baulastträger","Polizei"],
-     pruef:["Einvernehmen der Gemeinde sichern (§ 45 Abs. 1b StVO)","Baulast klären: Fahrbahn (inkl. abmarkierter Parkstreifen auf der Fahrbahn) und straßenbegleitende Radwege beim Land/Bund, selbständige Gehwege und eigene Parkflächen bei der Kommune","Kostenteilung bei gemeinsamen Geh-/Radwegen früh mit dem LfS klären","Anordnung mit Straßenverkehrsbehörde abstimmen"],
-     steps:["Frühzeitig Kontakt zum LfS aufnehmen","Eigene Position und Wünsche klären","Baulast- und Kostenfragen klären","Anordnung abstimmen","Umsetzung begleiten"],
+     beteiligte:["Eigene Verkehrsplanung / Bauamt","Straßenverkehrsbehörde (örtlich)","Landesbetrieb für Straßenbau (LfS) als Baulastträger – Ansprechstelle FB 13 Verkehrsverwaltung","Polizei"],
+     pruef:["Planungsvereinbarung mit dem LfS prüfen: Gemeinde plant federführend, LfS beteiligt sich an den Kosten (LfS, Vortrag AGFK-SL 09/2026)","Einvernehmen der Gemeinde sichern (§ 45 Abs. 1b StVO)","Baulast klären: Fahrbahn (inkl. abmarkierter Parkstreifen auf der Fahrbahn) und straßenbegleitende Radwege beim Land/Bund, selbständige Gehwege und eigene Parkflächen bei der Kommune","Kostenteilung bei gemeinsamen Geh-/Radwegen früh mit dem LfS klären","Anordnung mit Straßenverkehrsbehörde abstimmen"],
+     steps:["Frühzeitig Kontakt zum LfS aufnehmen (FB 13 Verkehrsverwaltung)","Eigene Position und Wünsche klären","Baulast- und Kostenfragen klären – ggf. Planungsvereinbarung: Gemeinde plant, LfS zahlt mit","Anordnung abstimmen (Behörde hört LfS und Polizei, innerorts auch die Gemeinde)","Umsetzung begleiten, Vollzugsmeldung"],
      hinweis:"Läuft die Bundes- oder Landstraße durch Ihren Ort (Ortsdurchfahrt), teilen sich Kommune und Land die Verantwortung. Faustregel: <b>Was auf der Fahrbahn liegt, gehört dem Land</b> – auch ein Parkstreifen, der nur aufmarkiert ist, und ein Radweg direkt neben der Fahrbahn. <b>Was daneben liegt, gehört der Kommune</b> – eigenständige Gehwege und eigene Parkflächen.<br><br>Bei Anordnungen auf der Ortsdurchfahrt muss Ihre Kommune zustimmen, bevor sie wirksam werden (§ 45 Abs. 1b StVO).<br><br>Eine Ausnahme gibt es für Städte über 80.000 Einwohner – im Saarland nur Saarbrücken. Dort trägt die Stadt die Ortsdurchfahrt komplett selbst. Wählen Sie oben Saarbrücken aus, zeigt das Ergebnis diesen Sonderfall."
    },
    ausserorts:{
@@ -364,7 +364,7 @@ const FALLTYPEN=[
  desc:"Routenabschnitt, Wegweisung, SaarRadland",
  lead:"Wer baulich zuständig ist, hängt vom konkreten Wegabschnitt ab.",
  beteiligte:["Verkehrsplanung","Baulastträger des Abschnitts","Tourismus Zentrale Saarland / SaarRadland","Straßenverkehrsbehörde"],
- pruef:["Konkreten Wegabschnitt und Baulast klären","Wegweisung nach FGSV-Standard","mit SaarRadland / TZS abstimmen","Mängelmanagement und Unterhaltung"],
+ pruef:["Konkreten Wegabschnitt und Baulast klären – bei selbstständigen Wegen liegt sie beim Flächeneigentümer, nicht beim LfS","Wegweisung: Das Land beschildert das gesamte Landesradverkehrsnetz bis 2030 nach M WBR neu und trägt Konzept und Montage – eigene Wegweisungspläne vorher mit dem LfS abstimmen (LfS, Vortrag AGFK-SL 09/2026)","mit SaarRadland / TZS abstimmen","Mängelmanagement und Unterhaltung"],
  steps:["Wegabschnitt genau bestimmen","Baulast klären","Mit SaarRadland/TZS abstimmen","Maßnahme umsetzen"],
  hinweis:"Touristische Routenverantwortung und bauliche Baulast fallen oft auseinander – maßgeblich ist der konkrete Wegabschnitt (Gemeindestraße, Wirtschaftsweg, Waldweg, private Fläche …).",
  links:["zustaendigkeiten"], askFoerder:true},
@@ -403,7 +403,7 @@ const EXTRAS=[
 {id:"leitung",icon:"🔌",label:"Versorgungsleitungen im Boden (Strom, Wasser, Telekom)",desc:"Tiefbau oder Querungen mit Leitungsbezug",
  stellen:["Leitungsträger / Stadtwerke / Netzbetreiber"],
  pruef:["Leitungsauskunft einholen, Querungen abstimmen"]},
-{id:"netz",icon:"🗺️",label:"Liegt im Alltagsradnetz oder auf einer SaarRadland-Route",desc:"Abschnitt ist Teil des Radverkehrsplans Saarland 2025 (Standortprüfung schlägt das vor)",
+{id:"netz",icon:"🗺️",label:"Liegt im Alltagsradnetz oder auf einer SaarRadland-Route",desc:"Abschnitt ist Teil des Radverkehrsplans Saarland 2025 – 1.850 km Alltagsnetz, 710 km SaarRadland; der LfS setzt daraus 18 Lückenschlüsse ab 2027 und 53 vordringliche Projekte um (Standortprüfung schlägt das vor)",
  stellen:["MUKMAV – Referat Radverkehr (Netzbezug, Radverkehrsplan)"],
  pruef:["Netzbezug laut Radverkehrsplan Saarland 2025 in Antrag und Begründung nennen – stärkt die Förderfähigkeit und begründet ein Gesamtkonzept (z. B. bei Fahrradstraßen)"]},
 {id:"agfk",icon:"🤝",label:"Die AGFK-SL soll unterstützen",desc:"Erstberatung oder fachliche Begleitung gewünscht",
@@ -899,7 +899,7 @@ window.PCGeo=(function(){
         /* Codes 4/5/9 = Legende Plan 4 RVP 2025 „RVP, andere Zuständigkeit“ (am 16.09.2026 am Plan geprüft, u. a. Saar-Nahe-Höhenradweg
            Kirkel–Limbach und Testpunkt Marpingen). Auch SaarRadland-Routen liegen dort nicht beim LfS – nur Wegweisung/Vermarktung ist Landessache. */
         const srl=e.rvp.some(x=>x.saarradland||(x.routen&&x.routen.length));
-        e.baulast={wert:'laut Radverkehrsplan Saarland 2025 „andere Zuständigkeit“ – nicht beim LfS. Bitte vor Ort klären (Gemeinde, Kreis oder anderer Träger).'+(srl?' Touristische SaarRadland-Route: Wegweisung und Vermarktung beim Land, Baulast des Weges laut Plan bei anderer Stelle.':''),art:'hinweis',quelle:'Radverkehrsplan Saarland 2025, Plan 4',sonder:rb.sonder||null};}
+        e.baulast={wert:'laut Radverkehrsplan Saarland 2025 „andere Zuständigkeit“ – nicht beim LfS. Bitte vor Ort klären (Gemeinde, Kreis oder anderer Träger).'+(srl?' Touristische SaarRadland-Route: selbstständiger Weg – Kosten und Unterhaltung beim jeweiligen Flächeneigentümer (Gemeinde, Forst, Privat), nicht beim LfS (LfS 09/2026).':''),art:'hinweis',quelle:'Radverkehrsplan Saarland 2025, Plan 4',sonder:rb.sonder||null};}
       else if(e.amt)e.baulast={wert:(e.amt.klasseCode==='B'?'Bund':'Land')+' (LfS) – in der Ortsdurchfahrt teilweise abweichend',art:'abgeleitet',quelle:'aus der Straßenklasse abgeleitet'};}
     /* Netzbezug */
     if(e.rvp.length){const netze=[...new Set(e.rvp.map(x=>x.netz).filter(Boolean))];const routen=[...new Set(e.rvp.flatMap(x=>x.routen||[]))];const srl=e.rvp.some(x=>x.saarradland);
@@ -972,7 +972,7 @@ window.PCGeo=(function(){
     const od=e.lage&&e.lage.wert==='ortsdurchfahrt';
     if(f.id==='fahrradstrasse'&&amt)k.push({stufe:'rot',titel:'Passt nicht zum Standort',text:'Der Punkt liegt auf der '+strasse+'. Eine Fahrradstraße kommt hier praktisch nicht in Betracht: Eine '+bl+' hat Verbindungsfunktion mit Kfz-Durchgangsverkehr'+(dtv?' ('+dtv.trim().replace(/\.$/,'')+')':'')+', eine Fahrradstraße setzt aber voraus, dass der Radverkehr vorherrscht oder alsbald zu erwarten ist. Zuständig wäre ohnehin nicht Ihre Gemeinde, sondern die Straßenverkehrsbehörde des Landkreises bzw. Regionalverbands; Baulastträger ist der LfS. Eine Fahrradzone darf Bundes- und Landesstraßen gar nicht einschließen. Prüfen Sie eine parallele Gemeindestraße – oder wählen Sie das Vorhaben „Etwas an einer Durchgangsstraße“.'+abstand});
     if(f.id==='markierung'&&amt)k.push({stufe:'gelb',titel:'Zuständigkeit beachten',text:'Der Punkt liegt auf der '+strasse+'. Schilder, Markierungen und Tempolimits ordnet hier nicht Ihre Gemeinde an, sondern die Straßenverkehrsbehörde des Landkreises bzw. Regionalverbands; Markierungen gehen zulasten des LfS als Baulastträger.'+(od?' In der Ortsdurchfahrt ist Ihre Gemeinde über das Einvernehmen beteiligt.':'')+abstand});
-    if((f.id==='radweg'||f.id==='schulweg'||f.id==='unfall')&&amt)k.push({stufe:'gelb',titel:'Bundes-/Landesstraße – LfS einbinden',text:'Der Punkt liegt auf der '+strasse+'. Bauliche Maßnahmen liegen in der Baulast des LfS'+(od?' – für Radwege auch in der Ortsdurchfahrt':'')+', verkehrsrechtliche Anordnungen trifft die Straßenverkehrsbehörde des Landkreises bzw. Regionalverbands. Ihre Gemeinde kann anstoßen und mitwirken, aber nicht selbst umsetzen. Das Vorhaben „Etwas an einer Durchgangsstraße“ bildet das genauer ab.'+dtv+abstand});
+    if((f.id==='radweg'||f.id==='schulweg'||f.id==='unfall')&&amt)k.push({stufe:'gelb',titel:'Bundes-/Landesstraße – LfS einbinden',text:'Der Punkt liegt auf der '+strasse+'. Bauliche Maßnahmen liegen in der Baulast des LfS'+(od?' – Radwege auch in der Ortsdurchfahrt; bei gemeinsamen Geh-/Radwegen teilen sich LfS und Gemeinde die Kosten 50/50, der LfS baut, die Gemeinde unterhält':'')+', verkehrsrechtliche Anordnungen trifft die Straßenverkehrsbehörde des Landkreises bzw. Regionalverbands. Ihre Gemeinde kann anstoßen und über eine Planungsvereinbarung sogar federführend planen, setzt aber nicht allein um. Das Vorhaben „Etwas an einer Durchgangsstraße“ bildet das genauer ab.'+dtv+abstand});
     if(f.id==='bundlandstrasse'&&!amt)k.push({stufe:'gelb',titel:'Keine Durchgangsstraße erkannt',text:'Im Umkreis von 40 m um den Punkt verläuft keine Bundes- oder Landesstraße – vermutlich eine Gemeindestraße oder ein sonstiger Weg. Dann ist Ihre Gemeinde selbst zuständig, und das Vorhaben „Etwas an einer Durchgangsstraße“ passt eventuell nicht. Punkt prüfen oder ein anderes Vorhaben wählen.'});
     return k;
   }

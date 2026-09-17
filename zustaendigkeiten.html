@@ -187,7 +187,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <div class="header-title">Zuständigkeiten <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br><span data-stand>Stand 09/2026 · v36</span></div>
+    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br><span data-stand>Stand 09/2026 · v37</span></div>
   </div>
 </div>
 
@@ -223,7 +223,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
 
 <script>
 (function(){var l=document.getElementById('logo');l.alt='AGFK-SL';l.onerror=function(){l.style.display='none';};l.src='agfk-logo.png';})();
-const STAND='Stand 09/2026 · v36';
+const STAND='Stand 09/2026 · v37';
 document.querySelectorAll('[data-stand]').forEach(function(n){n.textContent=STAND;});
 
 const MEASURES=[
@@ -376,7 +376,7 @@ function applyGeo(g){
   /* Radverkehrsplan */
   if(g.rvp.length){const rb=g.rvp.find(function(x){return x.baulastLfS===true;})||g.rvp.find(function(x){return x.baulastLfS===false;});
     if(rb){const srl=g.rvp.some(function(x){return x.saarradland||(x.routen&&x.routen.length);});
-      g.baulastRvp={text:rb.baulastLfS?rb.baulast:('laut Radverkehrsplan Saarland 2025 „andere Zuständigkeit“ – nicht beim LfS, vor Ort klären (Plan 4)'+(srl?'. Touristische SaarRadland-Route: Wegweisung und Vermarktung beim Land, Baulast des Weges laut Plan bei anderer Stelle':'')),lfs:rb.baulastLfS,sonder:rb.sonder||null};}
+      g.baulastRvp={text:rb.baulastLfS?rb.baulast:('laut Radverkehrsplan Saarland 2025 „andere Zuständigkeit“ – nicht beim LfS, vor Ort klären (Plan 4)'+(srl?'. Touristische SaarRadland-Route: selbstständiger Weg – Kosten und Unterhaltung beim jeweiligen Flächeneigentümer (Gemeinde, Forst, Privat), nicht beim LfS (LfS 09/2026)':'')),lfs:rb.baulastLfS,sonder:rb.sonder||null};}
     const netze=[];g.rvp.forEach(function(x){if(x.netz&&netze.indexOf(x.netz)<0)netze.push(x.netz);});const routen=[];g.rvp.forEach(function(x){(x.routen||[]).forEach(function(r){if(routen.indexOf(r)<0)routen.push(r);});});
     const fu=g.rvp.map(function(x){return x.fuehrung;}).filter(Boolean)[0]||null;const pr=g.rvp.map(function(x){return x.prio;}).filter(Boolean)[0]||null;
     if(netze.length||routen.length)g.netz={text:netze.join(', ')+(routen.length?(netze.length?' · ':'')+'SaarRadland-Route: '+routen.join(', '):''),fuehrung:fu,prio:pr};}
@@ -422,6 +422,8 @@ function geoVermerk(){const g=state.geo;if(!g)return '';let t='';
 /* Praxishinweise: primär ERA 2010; ergänzend Qualitätsstandards und Musterlösungen BW (Stand Okt. 2025, Ausgabe 02/2026; im Saarland nicht verbindlich – Vorgriff auf die ERA-Neufassung) */
 const PRAXIS={
   schutzstreifen:[
+    "SL|Kosten und Unterhaltung: Der Schutzstreifen ist Bestandteil der Fahrbahn – beides trägt der Baulastträger der Straße, an Bundes- und Landstraßen also der LfS. Erforderlich ist immer eine verkehrsrechtliche Anordnung (LfS, Vortrag AGFK-SL 02.09.2026)",
+    "SL|Auf dem Schutzstreifen darf nicht gehalten werden (StVO Anlage 3 lfd. Nr. 22). Der LfS empfiehlt deshalb, Anwohner und Gewerbetreibende vorab einzubinden und die Maßnahme durch einen Gemeinderatsbeschluss zu tragen – sonst scheitert sie erfahrungsgemäß am Parkdruck (LfS, Vortrag AGFK-SL 02.09.2026)",
     "G|Ein Schutzstreifen ist in der Regel 1,50 m breit, mindestens 1,25 m (ERA 2010, Kap. 3.2). Anders als beim Radfahrstreifen sagt die ERA hier nicht, dass die Markierung mitzählt","G|Diese Maße sind zu vergrößern, wenn die nutzbare Breite eingeschränkt ist – etwa durch eine Rinne, die sich schlecht befahren lässt. Die Rinne zählt also faktisch nicht zum Schutzstreifen",
     "G|Schutzstreifen sind Fahrbahnmarkierungen – sie erhöhen nicht die Gesamtfahrbahnbreite","G|Der Schutzstreifen ist Teil der Fahrbahn. Lkw dürfen ihn im Bedarfsfall überfahren, parken darf dort niemand. Genau deshalb soll er bei hohem Schwerverkehr vermieden werden – die ERA nennt als Grenze mehr als 1.000 Schwerverkehrsfahrzeuge am Tag (ERA 2010, Kap. 3.2)","G|An Mittelinseln endet der Schutzstreifen etwa 20 m vorher, wenn neben der Insel weniger als 2,25 m Restfahrbahn bleiben (ERA 2010, Kap. 3.2)",
     "G|Kein Einsatz bei zulässiger Höchstgeschwindigkeit über 50 km/h oder mehr als 15.000 Kfz in 24 h (DTV)",
@@ -434,6 +436,7 @@ const PRAXIS={
     "BW|Verbleibende Kernfahrbahn ≥ 4,50 m bei Gegenverkehr (ohne Parken)"
   ],
   radfahrstreifen:[
+    "SL|Kosten und Unterhaltung: Der Radfahrstreifen ist Bestandteil der Fahrbahn – beides trägt der Baulastträger der Straße, an Bundes- und Landstraßen der LfS. Verkehrsrechtliche Anordnung erforderlich. LfS-Maße innerorts: Breite ≥ 1,85 m, Restfahrbahn ≥ 5,50 m, Sicherheitstrennstreifen zu Längsparkständen 0,50–0,75 m (LfS, Vortrag AGFK-SL 02.09.2026)",
     "G|Radfahrstreifen sollen 1,85 m breit sein – einschließlich der Breitstrichmarkierung, die also mitzählt (ERA 2010, Kap. 3.3). Bestätigt am Originaltext",
     "G|Bei hohen Kfz- oder Radverkehrsstärken, Vzul über 50 km/h oder häufigem Anhängerverkehr mindestens 2,00 m (ERA 2010, Kap. 3.3)",
     "G|Ein Maß unterhalb von 1,85 m sieht die ERA 2010 nicht vor – es gibt kein Klammer-Mindestmaß für Radfahrstreifen",
@@ -481,6 +484,7 @@ const PRAXIS={
     "SL|Zeichen 244.3 als Sinnbild in regelmäßigen Abständen auf der Fahrbahn aufbringen"
   ],
   gehweg_frei:[
+    "SL|LfS-Vorgabe: Breite ≥ 2,50 m, keine Benutzungspflicht, Schrittgeschwindigkeit, Vorrang Fußverkehr (LfS, Vortrag AGFK-SL 02.09.2026)",
     "G|Auf dem freigegebenen Gehweg gilt Schrittgeschwindigkeit (StVO Anlage 2, Erläuterung zu Z 239 Nr. 2)",
     "G|Unter 2,50 m nutzbarer Wegbreite ist die gemeinsame Führung generell ausgeschlossen (ERA 2010, Abschnitt 3.6, Bild 15)",
     "G|Einsatzgrenze Fußgänger + Radfahrer je Spitzenstunde (ERA 2010, Bild 15, Näherungswerte): rund 70 bei 2,50 m, rund 100 bei 3,00 m, rund 130 bei 3,50 m, rund 155 bei 4,00 m",
@@ -490,6 +494,10 @@ const PRAXIS={
     "G|§ 2 Abs. 5 StVO: Kinder bis zum vollendeten 8. Lebensjahr müssen den Gehweg benutzen, bis zum vollendeten 10. Lebensjahr dürfen sie. Eine geeignete Aufsichtsperson ab 16 Jahren darf sie dabei auf dem Gehweg begleiten. Die Freigabe ändert daran nichts – sie richtet sich an alle übrigen Radfahrenden"
   ],
   radweg_bau:[
+    "SL|Kosten und Unterhaltung innerorts: Baulastträger der Straße – an Bundes- und Landstraßen der LfS. Besonderheit im Saarland: Die Unterhaltung wird häufig gegen eine Ablösesumme an die Kommune übertragen. Vor dem Bau klären, ob das gewollt ist (LfS, Vortrag AGFK-SL 02.09.2026)",
+    "SL|Außerorts sind straßenbegleitende Rad- und Gehwege Bestandteil der Straße – Kosten und Unterhaltung beim Baulastträger der Straße. LfS-Maße: Breite ≥ 2,50 m, Sicherheitstrennstreifen zur Fahrbahn 1,75 m (LfS, Vortrag AGFK-SL 02.09.2026)",
+    "SL|Selbstständige und touristische Radwege (auch SaarRadland-Routen): Kosten und Unterhaltung liegen beim jeweiligen Flächeneigentümer – Gemeinde, Forst, Privat –, nicht beim LfS. Das gilt auch dort, wo der LfS punktuell Instandsetzungen übernimmt (LfS, Vortrag AGFK-SL 02.09.2026)",
+    "SL|LfS-Maße innerorts: Einrichtungsradweg 2,00 m, beidseitiger Zweirichtungsradweg 2,50 m, einseitiger Zweirichtungsradweg 3,00 m; Sicherheitstrennstreifen zur Fahrbahn 0,50–0,75 m, zu Längsparkständen 0,75 m (LfS, Vortrag AGFK-SL 02.09.2026)",
     "G|Ein Radweg für eine Fahrtrichtung ist im Regelfall 2,00 m breit. Nur bei geringem Radverkehr sind 1,60 m zulässig – das ist kein allgemeines Mindestmaß, sondern an diese Bedingung geknüpft. Die 2,00 m ermöglichen das Überholen (ERA 2010, Kap. 3.4)","G|Breiter als 2,00 m sollte der Radweg werden bei Hauptverbindungen des Radverkehrs, bei hoher Nutzung des Seitenraums, bei häufigen Belastungsspitzen (Fahrradpulks) und bei starkem Gefälle (ERA 2010, Kap. 3.4)","G|Zweirichtungsradweg: 2,50 m im Regelfall bei beidseitiger Führung, 3,00 m bei einseitiger. Das Mindestmaß von 2,00 m gilt nur bei geringem Radverkehr und nur dann, wenn im Begegnungsfall zweier Gespanne mit Anhänger der Sicherheitstrennstreifen mitbenutzt werden kann (ERA 2010, Kap. 3.5)","G|Am Radwegende gehört eine Verflechtungsstrecke von 10 bis 20 m dazu, ausgeführt als Radfahrstreifen oder Schutzstreifen. Ohne sie endet der Radweg an der Bordkante und die Einfädelung bleibt dem Zufall überlassen (ERA 2010, Kap. 3.4)",
     "G|Innerorts nur Radverkehr einschließlich Elektrokleinstfahrzeuge; außerorts dürfen zusätzlich Mofas Radwege benutzen. Pedelecs bis 25 km/h gelten als Fahrrad und sind damit ohnehin erfasst; S-Pedelecs sind Kleinkrafträder und dürfen Radwege nicht benutzen. Der Begriff »E-Bike« ist in der StVO nicht definiert und sollte in Anordnungen vermieden werden",
     "SL|Breite 2,00 m, gemeinsamer Geh- und Radweg 2,50 m",
@@ -497,7 +505,7 @@ const PRAXIS={
     "SL|Radverkehr an Radwegeenden baulich getrennt auf die Fahrbahn führen (Bordführung oder Schutzinsel)",
     "BW|Sicherheitstrennstreifen zur Fahrbahn ≥ 0,75 m","BW|Einrichtungsradweg ≥ 2,00 m zzgl. Sicherheitstrennstreifen (Basisstandard) – die ERA-Regelbreite von 2,00 m wird damit zum Mindestmaß, der Klammerwert 1,60 m entfällt","BW|Bei beengten Verhältnissen und geringer Radverkehrsnachfrage ausnahmsweise geringere Breite, aber nicht unter 1,60 m","BW|Zweirichtungsradweg ≥ 2,50 m (beidseitig) bzw. ≥ 3,00 m (einseitig), jeweils zzgl. Sicherheitstrennstreifen; straßenbegleitend nur im Ausnahmefall","BW|Zweirichtungsradwege innerorts sind als Neuanlage nur ausnahmsweise und nach sorgfältiger Einzelfallprüfung möglich – erhöhtes Unfallrisiko an Knotenpunkten und Grundstückszufahrten","BW|Zweirichtungsradwege an Einmündungen ca. 4,00–5,00 m von der Hauptfahrbahn absetzen; Sichtfelder nach RASt einhalten","BW|In Steigungs- und Gefällestrecken sowie in Kurvenbereichen ist eine Aufweitung des Radweges anzustreben","BW|Seitentrennstreifen außerorts ≥ 1,75 m; Unterschreitung nur in begründeten Ausnahmefällen und auf kurze Abschnitte begrenzt, dann Hochbord und Sicherheitstrennstreifen ≥ 0,75 m"
   ],
-  gemeinsamer_geh_radweg:["G|Vor jeder Breitendiskussion zuerst die acht Ausschlusskriterien der ERA 2010, Kap. 3.6 prüfen – sie stehen ausführlich bei »Gehweg – Radfahrer frei«. Greift eines davon, ist die gemeinsame Führung unabhängig von der Breite ausgeschlossen. Besonders häufig übersehen: Hauptverbindungen des Radverkehrs sind ausgenommen","BW|Die gemeinsame Führung mit dem Fußverkehr kommt nur in Ausnahmefällen in Betracht, wenn keine andere Führungsform in Frage kommt","BW|Außerorts bei 10 bis ca. 25 Fußgängern in der Spitzenstunde des Radverkehrs: ≥ 4,00 m im Einrichtungs-, ≥ 5,00 m im Zweirichtungsverkehr; unter 10 Fußgängern keine Verbreiterung nötig","BW|Nur auf Streckenabschnitten ohne starke Längsneigung; bei fahrbahnparalleler Führung zusätzlich der reguläre Sicherheitstrennstreifen","BW|Im Haltestellenbereich gemeinsamer Geh- und Radweg ≥ 3,00 m",
+  gemeinsamer_geh_radweg:["SL|Geteilte Zuständigkeit an Bundes- und Landstraßen innerorts: Kosten und Unterhaltung werden 50/50 zwischen Straßenbaulastträger und Gehweg-Baulastträger geteilt – der LfS baut, die Kommune unterhält. Das vor Planungsbeginn schriftlich festhalten. Breite ≥ 2,50 m, Sicherheitstrennstreifen zur Fahrbahn 0,50–0,75 m (LfS, Vortrag AGFK-SL 02.09.2026)","G|Vor jeder Breitendiskussion zuerst die acht Ausschlusskriterien der ERA 2010, Kap. 3.6 prüfen – sie stehen ausführlich bei »Gehweg – Radfahrer frei«. Greift eines davon, ist die gemeinsame Führung unabhängig von der Breite ausgeschlossen. Besonders häufig übersehen: Hauptverbindungen des Radverkehrs sind ausgenommen","BW|Die gemeinsame Führung mit dem Fußverkehr kommt nur in Ausnahmefällen in Betracht, wenn keine andere Führungsform in Frage kommt","BW|Außerorts bei 10 bis ca. 25 Fußgängern in der Spitzenstunde des Radverkehrs: ≥ 4,00 m im Einrichtungs-, ≥ 5,00 m im Zweirichtungsverkehr; unter 10 Fußgängern keine Verbreiterung nötig","BW|Nur auf Streckenabschnitten ohne starke Längsneigung; bei fahrbahnparalleler Führung zusätzlich der reguläre Sicherheitstrennstreifen","BW|Im Haltestellenbereich gemeinsamer Geh- und Radweg ≥ 3,00 m",
     "G|Regelbreite 2,50 m (ERA 2010)",
     "G|Mindestbreite 2,00 m (nur bei geringem Fußgänger- und Radverkehr)",
     "G|Nur bei geringem Fußgängeraufkommen zulässig (VwV-StVO zu Z 240)",
@@ -559,6 +567,7 @@ const PRAXIS={
     "SL|Kommunengrenzen früh adressieren: Radschnellverbindungen verlaufen fast immer über mehrere Baulastträger. Trägerschaft, Unterhaltung und Winterdienst vor der Förderantragstellung schriftlich regeln – die FRL NMOB-Rad-Fuß verlangt die gesicherte Unterhaltung inklusive Winterdienst als Zuwendungsvoraussetzung"
   ],
   rotmarkierung:[
+    "SL|Piktogrammketten (Fahrradsinnbilder in Folge auf der Fahrbahn) sind im Saarland nicht anordnungsfähig: Die StVO sieht sie nicht vor, und die Oberste Straßenverkehrsbehörde hat eine Regelung per Erlass abgelehnt – anders als etwa Baden-Württemberg. Wer sie markiert, tut das ohne Rechtsgrundlage (LfS, Vortrag AGFK-SL 02.09.2026)",
     "G|Wichtig zu unterscheiden: Die weiße Furt aus unterbrochenen Querstrichen ist die eigentliche Markierung und muss angeordnet werden. Die rote Fläche darunter ist rechtlich keine Markierung – nach § 39 Abs. 5 StVO sind Markierungen grundsätzlich weiß. Sie zählt als Gestaltung der Fahrbahnoberfläche",
     "G|Daraus folgt für die Zuständigkeit: Über die Roteinfärbung entscheidet der Baulastträger, nicht die Straßenverkehrsbehörde. Eine Anordnung braucht es dafür nicht. Das erklärt, warum sie mal gemacht wird und mal nicht – es gibt keinen Anspruch darauf, sondern eine Ermessens- und Kostenentscheidung",
     "G|Trotzdem sollte die Straßenverkehrsbehörde eingebunden werden, üblicherweise zusammen mit der Polizei. Die Einfärbung verändert, wie die Vorfahrtsituation wahrgenommen wird – das gehört abgestimmt, auch wenn es formal nicht vorgeschrieben ist",
@@ -588,6 +597,8 @@ const PRAXIS={
     "SL|Ohne bauliche Sperre wird die Beschilderung erfahrungsgemäß missachtet. Wenn eine Wirkung gewollt ist, gehört ein physisches Element dazu"
   ],
   wegweisung:[
+    "SL|Das Land plant die wegweisende Beschilderung des gesamten Landesradverkehrsnetzes bis 2030 neu, nach dem Merkblatt M WBR (FGSV 2024). Konzept, Demontage der alten und Erstmontage der neuen Wegweiser zahlt das Land; die Abstimmung mit den Kommunen läuft ab 2027 regional. Eigene Wegweisungsprojekte deshalb vorher mit dem LfS abstimmen, sonst wird doppelt montiert (LfS, Vortrag AGFK-SL 02.09.2026)",
+    "SL|Der bisherige saarländische Wegweisungsstandard weicht vom bundesweiten ab – Folge: keine Fördermittel dafür und höchstens 4 statt 5 Sterne bei ADFC-Qualitätsradrouten. Die Neubeschilderung behebt das (LfS, Vortrag AGFK-SL 02.09.2026)",
     "G|Fahrradwegweiser sind keine Verkehrszeichen der StVO, sondern wegweisende Beschilderung nach dem FGSV-Regelwerk (Merkblatt 1998, heute HBR). Trotzdem läuft die Aufstellung über eine Anordnungsbehörde – vor der Beauftragung der Montagefirma klären, wer im konkreten Fall anordnet und wer die Standorte festlegt",
     "G|Grundlage ist immer eine Netzplanung, nicht die einzelne Schilderstelle. Sie legt fest, welche Ziele aufgenommen werden und über welche Wege der Radverkehr geführt wird. Ohne dieses Grundgerüst entstehen Insellösungen, die an der Gemeindegrenze enden",
     "G|Zwei Systeme, die zusammengehören: Die zielorientierte Wegweisung mit Ziel- und Kilometerangaben ist das Grundgerüst und für Alltag wie Freizeit erforderlich. Die routenorientierte Wegweisung mit Logos für Themenrouten wird als Zusatzplakette daran gehängt – sie ist kein eigenes System und darf keines werden",
@@ -698,12 +709,13 @@ function getResult(){
 
   /* Zuständige Behörde (verkehrsrechtliche Anordnung) */
   if(m.type==="anordnung"||m.type==="anordnung_bau"){
-    if(s==="gemeindestrasse"||s==="sonstige"){authority="Gemeinde (eigene Zuständigkeit nach § 12 StVZustG)";authorityDetail="§ 12 Abs. 1 StVZustG Saarland";notes.push("Auf Gemeindestraßen und sonstigen öffentlichen Straßen sind die Gemeinden selbst zuständig für: Verkehrsbeschränkungen aller Art (§ 45 Abs. 1 bis 1d StVO – damit auch Fahrradstraßen, Tempo-30-Zonen und Maßnahmen der Flächenbereitstellung nach § 45 Abs. 1 S. 2 Nr. 7), Fußgängerüberwege, Vorfahrtsregelungen und Spielstraßen (§ 12 Abs. 1 Nr. 1–4 StVZustG). Nicht übertragen sind Maßnahmen nach § 45 Abs. 1e ff. StVO – insbesondere Fahrradzonen (Abs. 1i).");}
+    if(s==="gemeindestrasse"||s==="sonstige"){authority="Gemeinde als Ortspolizeibehörde (eigene Zuständigkeit nach § 12 StVZustG)";authorityDetail="§ 12 Abs. 1 StVZustG Saarland";notes.push("Auf Gemeindestraßen und sonstigen öffentlichen Straßen sind die Gemeinden selbst zuständig für: Verkehrsbeschränkungen aller Art (§ 45 Abs. 1 bis 1d StVO – damit auch Fahrradstraßen, Tempo-30-Zonen und Maßnahmen der Flächenbereitstellung nach § 45 Abs. 1 S. 2 Nr. 7), Fußgängerüberwege, Vorfahrtsregelungen und Spielstraßen (§ 12 Abs. 1 Nr. 1–4 StVZustG). Nicht übertragen sind Maßnahmen nach § 45 Abs. 1e ff. StVO – insbesondere Fahrradzonen (Abs. 1i).");}
     else{
       if(k&&k.eigeneStVB){authority="Stadt "+k.name+" – eigene Straßenverkehrsbehörde";authorityDetail="§ 1 Abs. 1 Nr. 8 Mittelstadtverordnung bzw. § 7 Abs. 1 StVZustG – "+k.name+" ordnet auch auf Bundes- und Landstraßen im Stadtgebiet selbst an";}
       else if(k){authority="Untere Straßenverkehrsbehörde: "+k.kreis;authorityDetail="§ 7 Abs. 1 StVZustG Saarland";}
       else{authority="Straßenverkehrsbehörde (Landkreis / Regionalverband Saarbrücken)";authorityDetail="§ 7 Abs. 1 StVZustG Saarland";notes.push("Eigene Straßenverkehrsbehörden haben: die Landeshauptstadt Saarbrücken (§ 7 Abs. 1 StVZustG) sowie die Mittelstädte Völklingen und St. Ingbert. Den Mittelstädten sind die Befugnisse nach der StVO vollumfänglich als Auftragsangelegenheit übertragen (§ 1 Abs. 1 Nr. 8 Mittelstadtverordnung i. V. m. § 7 KSVG) – sie ordnen in ihrem Stadtgebiet daher auch auf Bundes- und Landstraßen selbst an. Tipp: Kommune oben auswählen für ein konkretes Ergebnis.");}
-      if(loc==="innerorts"||loc==="ortsdurchfahrt")notes.push("Bei Maßnahmen in Ortsdurchfahrten ist Einvernehmen mit der Gemeinde und dem Baulastträger herzustellen (§ 45 Abs. 1b StVO).");}
+      if(loc==="innerorts"||loc==="ortsdurchfahrt")notes.push("Bei Maßnahmen in Ortsdurchfahrten ist Einvernehmen mit der Gemeinde und dem Baulastträger herzustellen (§ 45 Abs. 1b StVO).");
+      notes.push("Ablauf beim LfS: Vor jeder Anordnung hört die Straßenverkehrsbehörde den LfS als Baulastträger und die Polizei an, innerorts bei Gehwegen und ruhendem Verkehr auch die Gemeinde. Ansprechstelle im LfS ist der Fachbereich 13 (Verkehrsverwaltung), der den Markierungs- und Beschilderungsplan vorprüft. Die Anordnung geht an den LfS zur Umsetzung, danach Vollzugsmeldung an die Behörde (LfS, Vortrag AGFK-SL 02.09.2026).");}
 
     /* VwV-StVO 2025: Tempo 30 */
     if(m.id==="tempo30_strecke"&&(s==="bundesstrasse"||s.startsWith("landesstrasse")))
@@ -743,6 +755,7 @@ function getResult(){
     if(m.id==="abstellanlage"){ba="Gemeinde (oder privater Grundstückseigentümer)";if(isBL)notes.push("Sondernutzung an Bundes-/Landstraßen: Die Erlaubnis erteilt der Träger der Straßenbaulast (Bund bzw. Land – Landesbetrieb für Straßenbau), nicht die Gemeinde (§ 8 FStrG bzw. § 18 SaarlStrG).");else{notes.push("Außerhalb des öffentlichen Verkehrsraums (Schulhof, Rathausvorplatz, Bauhofgelände, privates Grundstück): keine Beteiligung der Straßenverkehrsbehörde – es gilt Bauordnungsrecht, ggf. die kommunale Stellplatzsatzung.");notes.push("Im öffentlichen Straßenraum, errichtet durch die Gemeinde selbst: keine Sondernutzungserlaubnis erforderlich – die Gemeinde ist selbst Trägerin der Straßenbaulast.");notes.push("Aber: Entfallen dafür Kfz-Stellplätze oder ändert sich Beschilderung bzw. Markierung, ist zusätzlich eine verkehrsrechtliche Anordnung nötig (§ 45 StVO) – dann ist die Straßenverkehrsbehörde einzubinden.");notes.push("Errichtet ein Dritter (Gewerbe, Verein) die Anlage auf öffentlichem Straßengrund, braucht er eine Sondernutzungserlaubnis der Gemeinde (§ 18 SaarlStrG).");}}
     else if(m.id==="radschnellweg"){ba="Land Saarland / ggf. interkommunale Zusammenarbeit";notes.push("Fördermöglichkeiten über Bundes- und Landesprogramme prüfen (u. a. FRL-NMOB-Rad-Fuß).");}
     if(m.type==="bau"){authority=ba+(/\)\s*$/.test(ba)?"":" (als Baulastträger)");authorityDetail=baulastDetail;}
+    if(isBL&&m.id!=="abstellanlage"&&m.id!=="radschnellweg")notes.push("Planungsvereinbarung: Der LfS setzt Radprojekte an Bundes- und Landstraßen auch so um, dass die Gemeinde die Planung federführend betreibt und der LfS sich an den Kosten beteiligt oder sie trägt – das nutzt kommunale Personalkapazität und einfachere Vergabewege. Früh ansprechen (LfS, Vortrag AGFK-SL 02.09.2026).");
     if(m.type==="anordnung_bau")notes.push("Erfordert sowohl bauliche Umsetzung (Baulastträger) als auch verkehrsrechtliche Anordnung (Straßenverkehrsbehörde).");
     if(m.id!=="abstellanlage"&&m.id!=="radschnellweg")notes.push("Abstimmung zwischen Baulastträger und Straßenverkehrsbehörde erforderlich.");
   }
