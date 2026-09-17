@@ -172,6 +172,12 @@ h3{font-size:14px;font-weight:700;margin:18px 0 8px}
 .geo-warn{background:var(--warn-bg);border-top:1px solid var(--warn-border);color:var(--warn);font-size:12.5px;padding:8px 12px}
 .geo-alle{padding:10px 12px;border-top:1px solid var(--gray-border)}
 .geo-quelle{padding:8px 12px;border-top:1px solid var(--gray-border);font-size:10.5px;color:var(--gray-light);line-height:1.5}
+.geo-konflikt{border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.55;margin:12px 0 0}
+.geo-konflikt.rot{background:#fdecec;border:1.5px solid #e35d5d;color:#7a1f1f}
+.geo-konflikt.gelb{background:var(--warn-bg);border:1.5px solid var(--warn-border);color:#6b4d00}
+.geo-konflikt b{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.geo-konflikt.rot b{color:#b91c1c}.geo-konflikt.gelb b{color:var(--warn)}
+.geo-konflikt.im-ergebnis{margin:0 0 14px}
 .geo-vorschlag{background:var(--green-light);border:1px solid rgba(var(--green-rgb),.35);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;line-height:1.5}
 @media (max-width:520px){.geo-zeile{grid-template-columns:1fr;gap:3px}}
 </style>
@@ -489,6 +495,7 @@ function viewVorhaben(){
 function pickFalltyp(id){
   state.falltyp=id;state.lage=null;state.extras=[];
   const f=FALLTYPEN.find(x=>x.id===id);
+  if(window.PCGeo)PCGeo.refresh();
   if(f.askLage)state.step=0.5;
   else state.step=1;
   render();
@@ -932,6 +939,8 @@ window.PCGeo=(function(){
     else h+=zeile('Netzbezug','Abschnitt ist nicht Teil des Alltagsradnetzes oder einer SaarRadland-Route','rvp','');
     if(e.dtvText)h+=zeile('Verkehr',esc(e.dtvText),'amtlich','');
     if(e.osm)h+=zeile('OSM',[e.osm.tempo!=null?'Tempo '+e.osm.tempo:null,e.osm.lit===true?'beleuchtet':(e.osm.lit===false?'unbeleuchtet':null),e.osm.ofl].filter(Boolean).map(esc).join(' · ')||'–','vermutet','');
+    const fAkt=state.falltyp?FALLTYPEN.find(x=>x.id===state.falltyp):null;
+    if(fAkt){const kh=konfliktHtml(fAkt);if(kh)h+='<div style="padding:0 12px 4px;border-top:1px solid var(--gray-border)">'+kh+'</div>';}
     const offen=[e.kommune&&state.kommune!==e.kommune&&!uebern.kommune?'kommune':null,e.lage&&state.lage!==e.lage.wert&&!uebern.lage?'lage':null,e.netz&&!hasExtra('netz')&&!uebern.netz?'netz':null].filter(Boolean);
     if(offen.length>1)h+='<div class="geo-alle"><button class="geo-btn" onclick="PCGeo.uebernehmen(\'alle\')">Alle Vorschläge übernehmen</button></div>';
     h+='<div class="geo-quelle">'+quelleText()+'</div></div>';
@@ -950,6 +959,27 @@ window.PCGeo=(function(){
     if(state.step>=1||was==='lage'||was==='alle')render(false);
   }
 
+  /* ---------- Konfliktprüfung Vorhaben × Standort ----------
+     Warnung, kein Verbot. Nur dort, wo die amtlichen Daten wirklich etwas hergeben. Rechtlicher Rahmen:
+     § 12 Abs. 1 Nr. 4 StVZustG Saarland (Gemeinden nur für Gemeindestraßen), § 45 Abs. 1i StVO (Fahrradzone),
+     VwV-StVO zu § 45 (Fahrradstraße: Radverkehr vorherrschend oder alsbald zu erwarten), § 5 FStrG / § 47 SaarlStrG (Baulast). */
+  function konflikte(f){
+    if(!erg||!f)return [];const e=erg;const k=[];
+    const amt=e.amt;const strasse=amt?amt.strasse+' ('+amt.klasse+')':null;
+    const bl=amt?(amt.klasseCode==='B'?'Bundesstraße':'Landesstraße'):null;
+    const abstand=amt&&amt.dist>25?' Der Punkt liegt '+nk(amt.dist,0)+' m neben der Fahrbahn – falls die Nebenstraße gemeint war, Punkt bitte neu setzen.':'';
+    const dtv=e.dtvText?' Verkehr laut Zählung: '+e.dtvText.replace(/ – Zählstelle.*$/,'')+'.':'';
+    const od=e.lage&&e.lage.wert==='ortsdurchfahrt';
+    if(f.id==='fahrradstrasse'&&amt)k.push({stufe:'rot',titel:'Passt nicht zum Standort',text:'Der Punkt liegt auf der '+strasse+'. Eine Fahrradstraße kommt hier praktisch nicht in Betracht: Eine '+bl+' hat Verbindungsfunktion mit Kfz-Durchgangsverkehr'+(dtv?' ('+dtv.trim().replace(/\.$/,'')+')':'')+', eine Fahrradstraße setzt aber voraus, dass der Radverkehr vorherrscht oder alsbald zu erwarten ist. Zuständig wäre ohnehin nicht Ihre Gemeinde, sondern die Straßenverkehrsbehörde des Landkreises bzw. Regionalverbands; Baulastträger ist der LfS. Eine Fahrradzone darf Bundes- und Landesstraßen gar nicht einschließen. Prüfen Sie eine parallele Gemeindestraße – oder wählen Sie das Vorhaben „Etwas an einer Durchgangsstraße“.'+abstand});
+    if(f.id==='markierung'&&amt)k.push({stufe:'gelb',titel:'Zuständigkeit beachten',text:'Der Punkt liegt auf der '+strasse+'. Schilder, Markierungen und Tempolimits ordnet hier nicht Ihre Gemeinde an, sondern die Straßenverkehrsbehörde des Landkreises bzw. Regionalverbands; Markierungen gehen zulasten des LfS als Baulastträger.'+(od?' In der Ortsdurchfahrt ist Ihre Gemeinde über das Einvernehmen beteiligt.':'')+abstand});
+    if((f.id==='radweg'||f.id==='schulweg'||f.id==='unfall')&&amt)k.push({stufe:'gelb',titel:'Bundes-/Landesstraße – LfS einbinden',text:'Der Punkt liegt auf der '+strasse+'. Bauliche Maßnahmen liegen in der Baulast des LfS'+(od?' – für Radwege auch in der Ortsdurchfahrt':'')+', verkehrsrechtliche Anordnungen trifft die Straßenverkehrsbehörde des Landkreises bzw. Regionalverbands. Ihre Gemeinde kann anstoßen und mitwirken, aber nicht selbst umsetzen. Das Vorhaben „Etwas an einer Durchgangsstraße“ bildet das genauer ab.'+dtv+abstand});
+    if(f.id==='bundlandstrasse'&&!amt)k.push({stufe:'gelb',titel:'Keine Durchgangsstraße erkannt',text:'Im Umkreis von 40 m um den Punkt verläuft keine Bundes- oder Landesstraße – vermutlich eine Gemeindestraße oder ein sonstiger Weg. Dann ist Ihre Gemeinde selbst zuständig, und das Vorhaben „Etwas an einer Durchgangsstraße“ passt eventuell nicht. Punkt prüfen oder ein anderes Vorhaben wählen.'});
+    return k;
+  }
+  function konfliktHtml(f,cls){return konflikte(f).map(x=>'<div class="geo-konflikt '+x.stufe+(cls?' '+cls:'')+'"><b>'+(x.stufe==='rot'?'⛔ ':'⚠️ ')+x.titel+'</b>'+esc(x.text)+'</div>').join('');}
+  function konfliktText(f){return konflikte(f).map(x=>(x.stufe==='rot'?'ACHTUNG – ':'HINWEIS – ')+x.titel+': '+x.text+'\n').join('');}
+  function refresh(){if(erg)renderErgebnis();}
+
   /* ---------- Schnittstellen zum Kern ---------- */
   function lageVorschlag(){return erg&&erg.lage&&erg.lage.art==='amtlich'?erg.lage.wert:null;}
   function lageVorschlagHtml(){
@@ -959,6 +989,7 @@ window.PCGeo=(function(){
   function ergebnisHtml(f){
     if(!erg)return '';const e=erg;
     let z='';
+    const kh=konfliktHtml(f,'im-ergebnis');
     if(e.adr&&e.adr.text)z+='<div><b>Standort:</b> '+esc(e.adr.text)+'</div>';
     z+='<div><b>Straße:</b> '+(e.amt?esc(e.amt.strasse)+' – '+esc(e.amt.klasse):'keine Bundes-/Landesstraße im Umkreis (vermutlich Gemeindestraße)')+'</div>';
     if(e.lage)z+='<div><b>Lage:</b> '+LAGE_TXT[e.lage.wert]+' <span style="color:var(--gray-light)">('+esc(e.lage.quelle)+')</span></div>';
@@ -968,7 +999,7 @@ window.PCGeo=(function(){
     let hinweis='';
     if(e.amt&&f&&f.id!=='radweg'&&f.id!=='bundlandstrasse')hinweis='<div style="margin-top:8px"><b>Hinweis:</b> Am Standort verläuft eine Bundes- oder Landesstraße. Der Landesbetrieb für Straßenbau (LfS) ist Träger der Straßenbaulast – frühzeitig einbinden; ggf. das Vorhaben „Etwas an einer Durchgangsstraße" prüfen.</div>';
     if(e.kommune&&state.kommune&&e.kommune!==state.kommune)hinweis+='<div style="margin-top:8px"><b>Hinweis:</b> Der Standort liegt laut Adresse in '+esc(e.kommune)+', gewählt ist '+esc(state.kommune)+'.</div>';
-    return '<div class="info-box"><div class="info-title">Standort – aus Geodaten ermittelt</div><div class="info-body">'+z+hinweis+'<div style="margin-top:8px;font-size:11px;color:var(--gray-light)">'+quelleText()+'</div></div></div>';
+    return kh+'<div class="info-box"><div class="info-title">Standort – aus Geodaten ermittelt</div><div class="info-body">'+z+hinweis+'<div style="margin-top:8px;font-size:11px;color:var(--gray-light)">'+quelleText()+'</div></div></div>';
   }
   function vermerkText(){
     if(!erg)return '';const e=erg;let t='';
@@ -978,13 +1009,14 @@ window.PCGeo=(function(){
     if(e.baulast)t+='Baulast lt. Geodaten: '+e.baulast.wert+' ('+e.baulast.quelle+')'+(e.baulast.sonder?' – Sonderregelung: '+e.baulast.sonder:'')+'\n';
     if(e.netz)t+='Netzbezug (Radverkehrsplan 2025): '+e.netz.wert+(e.netz.fuehrung?' · Führung im Bestand: '+e.netz.fuehrung:'')+'\n';
     if(e.dtvText)t+='Verkehrsbelastung: '+e.dtvText+'\n';
+    const fAkt=state.falltyp?FALLTYPEN.find(x=>x.id===state.falltyp):null;if(fAkt)t+=konfliktText(fAkt);
     return t;
   }
   function quelleText(){return 'Geodaten: LfS-Straßennetz, SVZ 2021, Radverkehrsplan Saarland 2025 – CC-BY 4.0 © GDI-SL · Adresse: © OpenStreetMap-Mitwirkende (ODbL)';}
   function aktiv(){return !!erg;}
 
   if(document.readyState!=='loading')bauen();else document.addEventListener('DOMContentLoaded',bauen);
-  return {toggle,suchen,meinStandort,auswerten,uebernehmen,lageVorschlag,lageVorschlagHtml,ergebnisHtml,vermerkText,quelleText,aktiv,CFG};
+  return {toggle,suchen,meinStandort,auswerten,uebernehmen,refresh,lageVorschlag,lageVorschlagHtml,ergebnisHtml,vermerkText,quelleText,aktiv,CFG};
 })();
 </script>
 </body>
