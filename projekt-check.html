@@ -892,18 +892,15 @@ window.PCGeo=(function(){
     if(e.dtv&&e.dtv.modus==='abschnitt'&&e.dtv.zst.f){e.lage={wert:e.dtv.zst.f==='FS'?'ausserorts':'ortsdurchfahrt',art:'amtlich',quelle:'SVZ 2021, Zählstelle '+e.dtv.zst.z+' (gleicher Abschnitt)'};}
     /* Baulast */
     if(e.dtv&&e.dtv.modus==='abschnitt'&&e.dtv.zst.b){e.baulast={wert:e.dtv.zst.b+(e.dtv.zst.b==='Gemeinde'?'':' (LfS)'),art:'amtlich',quelle:'SVZ 2021, Zählstelle '+e.dtv.zst.z};}
-    else{ /* Radverkehrsplan: baulastLfS true → Vorschlag LfS; false → nur Hinweis „vor Ort klären“ (Codes 4/5/9); Sonderregelung als Zusatz */
-      const rb=e.rvp.find(x=>x.baulastLfS===true)||e.rvp.find(x=>x.baulastLfS===false);
-      if(rb&&rb.baulastLfS===true)e.baulast={wert:rb.baulast+(e.lage&&e.lage.wert==='ortsdurchfahrt'?' – in der Ortsdurchfahrt teilweise Kommune':''),art:'rvp',quelle:'Radverkehrsplan Saarland 2025',sonder:rb.sonder||null};
-      else if(rb&&rb.baulastLfS===false){
-        /* Codes 4/5/9 = Legende Plan 4 RVP 2025 „RVP, andere Zuständigkeit“ (am 16.09.2026 am Plan geprüft, u. a. Saar-Nahe-Höhenradweg
-           Kirkel–Limbach und Testpunkt Marpingen). Auch SaarRadland-Routen liegen dort nicht beim LfS – nur Wegweisung/Vermarktung ist Landessache. */
-        const srl=e.rvp.some(x=>x.saarradland||(x.routen&&x.routen.length));
-        e.baulast={wert:'laut Radverkehrsplan Saarland 2025 „andere Zuständigkeit“ – nicht beim LfS. Bitte vor Ort klären (Gemeinde, Kreis oder anderer Träger).'+(srl?' Touristische SaarRadland-Route: selbstständiger Weg – Kosten und Unterhaltung beim jeweiligen Flächeneigentümer (Gemeinde, Forst, Privat), nicht beim LfS (LfS 09/2026).':''),art:'hinweis',quelle:'Radverkehrsplan Saarland 2025, Plan 4',sonder:rb.sonder||null};}
+    else{ /* Radverkehrsplan über RPGeo.rvpKompakt(): LfS-Eintrag hat Vorrang; Wortlaut kommt aus dem Bündel (RadPlan Pro führt) */
+      const k=e.rvp.length?RPGeo.rvpKompakt(e.rvp):null;
+      const srl=!!(k&&(k.saarradland||(k.routen&&k.routen.length)));
+      if(k&&k.baulastLfS===true)e.baulast={wert:k.baulast+(e.lage&&e.lage.wert==='ortsdurchfahrt'?' – in der Ortsdurchfahrt teilweise Kommune':''),art:'rvp',quelle:'Radverkehrsplan Saarland 2025',sonder:k.sonder||null};
+      else if(k&&k.baulastLfS===false)e.baulast={wert:k.baulast+(srl?'. Touristische SaarRadland-Route: selbstständiger Weg – Kosten und Unterhaltung beim jeweiligen Flächeneigentümer (Gemeinde, Forst, Privat), nicht beim LfS (LfS 09/2026).':''),art:'hinweis',quelle:'Radverkehrsplan Saarland 2025, Plan 4',sonder:k.sonder||null};
       else if(e.amt)e.baulast={wert:(e.amt.klasseCode==='B'?'Bund':'Land')+' (LfS) – in der Ortsdurchfahrt teilweise abweichend',art:'abgeleitet',quelle:'aus der Straßenklasse abgeleitet'};}
     /* Netzbezug */
-    if(e.rvp.length){const netze=[...new Set(e.rvp.map(x=>x.netz).filter(Boolean))];const routen=[...new Set(e.rvp.flatMap(x=>x.routen||[]))];const srl=e.rvp.some(x=>x.saarradland);
-      if(netze.length||routen.length||srl)e.netz={wert:[netze.join(', '),routen.length?'SaarRadland-Route: '+routen.join(', '):(srl?'SaarRadland: ja':'')].filter(Boolean).join(' · '),art:'rvp',quelle:'Radverkehrsplan Saarland 2025',fuehrung:e.rvp.map(x=>x.fuehrung).find(Boolean)||null,prio:e.rvp.map(x=>x.prio).find(Boolean)||null};}
+    if(e.rvp.length){const k=RPGeo.rvpKompakt(e.rvp);
+      if(k&&(k.netz||k.routen.length||k.saarradland))e.netz={wert:[k.netz,k.routen.length?'SaarRadland-Route: '+k.routen.join(', '):(k.saarradland?'SaarRadland: ja':'')].filter(Boolean).join(' · '),art:'rvp',quelle:'Radverkehrsplan Saarland 2025',fuehrung:k.fuehrung||null,prio:k.prio||null};}
     /* DTV nur zur Information */
     if(e.dtv&&e.dtv.modus==='abschnitt'&&e.dtv.zst&&e.dtv.zst.dtv>0){const z=e.dtv.zst;e.dtvText='DTV '+ganz(z.dtv)+' Kfz/Tag, Schwerverkehr '+ganz(z.sv)+' – Zählstelle '+z.z+', gleicher Abschnitt';}
     /* Lage-Vermutung aus der Adresse (nur wenn keine Zählstelle des Abschnitts): benannte Straße mit Hausnummern → Ortsdurchfahrt,

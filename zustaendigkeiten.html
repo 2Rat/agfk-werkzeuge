@@ -187,7 +187,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <div class="header-title">Zuständigkeiten <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br><span data-stand>Stand 09/2026 · v37</span></div>
+    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br><span data-stand>Stand 09/2026 · v38</span></div>
   </div>
 </div>
 
@@ -223,7 +223,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
 
 <script>
 (function(){var l=document.getElementById('logo');l.alt='AGFK-SL';l.onerror=function(){l.style.display='none';};l.src='agfk-logo.png';})();
-const STAND='Stand 09/2026 · v37';
+const STAND='Stand 09/2026 · v38';
 document.querySelectorAll('[data-stand]').forEach(function(n){n.textContent=STAND;});
 
 const MEASURES=[
@@ -373,13 +373,11 @@ function applyGeo(g){
   state.location=g.lage;
   /* Kommune */
   if(g.adr&&g.adr.kommune)state.kommune=g.adr.kommune;
-  /* Radverkehrsplan */
-  if(g.rvp.length){const rb=g.rvp.find(function(x){return x.baulastLfS===true;})||g.rvp.find(function(x){return x.baulastLfS===false;});
-    if(rb){const srl=g.rvp.some(function(x){return x.saarradland||(x.routen&&x.routen.length);});
-      g.baulastRvp={text:rb.baulastLfS?rb.baulast:('laut Radverkehrsplan Saarland 2025 „andere Zuständigkeit“ – nicht beim LfS, vor Ort klären (Plan 4)'+(srl?'. Touristische SaarRadland-Route: selbstständiger Weg – Kosten und Unterhaltung beim jeweiligen Flächeneigentümer (Gemeinde, Forst, Privat), nicht beim LfS (LfS 09/2026)':'')),lfs:rb.baulastLfS,sonder:rb.sonder||null};}
-    const netze=[];g.rvp.forEach(function(x){if(x.netz&&netze.indexOf(x.netz)<0)netze.push(x.netz);});const routen=[];g.rvp.forEach(function(x){(x.routen||[]).forEach(function(r){if(routen.indexOf(r)<0)routen.push(r);});});
-    const fu=g.rvp.map(function(x){return x.fuehrung;}).filter(Boolean)[0]||null;const pr=g.rvp.map(function(x){return x.prio;}).filter(Boolean)[0]||null;
-    if(netze.length||routen.length)g.netz={text:netze.join(', ')+(routen.length?(netze.length?' · ':'')+'SaarRadland-Route: '+routen.join(', '):''),fuehrung:fu,prio:pr};}
+  /* Radverkehrsplan über RPGeo.rvpKompakt() – Wortlaut aus dem Bündel (RadPlan Pro führt) */
+  if(g.rvp.length){const k=RPGeo.rvpKompakt(g.rvp);
+    if(k&&k.baulastLfS!==null){const srl=!!(k.saarradland||(k.routen&&k.routen.length));
+      g.baulastRvp={text:k.baulast+(k.baulastLfS===false&&srl?'. Touristische SaarRadland-Route: selbstständiger Weg – Kosten und Unterhaltung beim jeweiligen Flächeneigentümer (Gemeinde, Forst, Privat), nicht beim LfS (LfS 09/2026)':''),lfs:k.baulastLfS,sonder:k.sonder||null};}
+    if(k&&(k.netz||k.routen.length||k.saarradland))g.netz={text:[k.netz,k.routen.length?'SaarRadland-Route: '+k.routen.join(', '):(k.saarradland?'SaarRadland: ja':'')].filter(Boolean).join(' · '),fuehrung:k.fuehrung||null,prio:k.prio||null};}
   if(g.dtv&&g.dtv.modus==='abschnitt'&&g.dtv.zst.dtv>0){const z=g.dtv.zst;g.dtvText='DTV '+Number(z.dtv).toLocaleString('de-DE')+' Kfz/Tag, Schwerverkehr '+Number(z.sv).toLocaleString('de-DE')+' (SVZ 2021, Zählstelle '+z.z+')';}
   /* OSM-Zusatz: begleitende Radinfrastruktur und Routen (nur Anzeige) */
   let radHint='',routeHtml='';
