@@ -224,7 +224,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
 
 <script>
 (function(){var l=document.getElementById('logo');l.alt='AGFK-SL';l.onerror=function(){l.style.display='none';};l.src='agfk-logo.png';})();
-const STAND='Stand 09/2026 · v39';
+const STAND='Stand 09/2026 · v40';
 document.querySelectorAll('[data-stand]').forEach(function(n){n.textContent=STAND;});
 
 const MEASURES=[
@@ -347,9 +347,10 @@ function zmapClick(ev){
   const lat=+ev.latlng.lat.toFixed(6),lon=+ev.latlng.lng.toFixed(6);
   if(zmarker)zmarker.setLatLng(ev.latlng);else zmarker=L.marker(ev.latlng).addTo(zmap);
   setMapStatus('<div class="ok">⏳ Stelle wird ausgewertet – amtliches Straßennetz, Zählstellen, Radverkehrsplan und Adresse …</div>');
-  const g={lat:lat,lon:lon,amt:null,dtv:null,rvp:[],rvpFehler:null,adr:null,lage:null,lageArt:null,lageQuelle:null,baulastRvp:null,netz:null,dtvText:null,osm:null,unfall:null};
+  const g={lat:lat,lon:lon,amt:null,dtv:null,rvp:[],rvpFehler:null,adr:null,lage:null,lageArt:null,lageQuelle:null,baulastRvp:null,netz:null,dtvText:null,osm:null,unfall:null,unfallStrecke:null};
   if(GEO_OK){try{g.amt=RPGeo.strasseAmStandort(lat,lon);g.dtv=RPGeo.dtvFuer(g.amt,lat,lon);}catch(e){}}
   if(GEO_OK&&typeof RPGeo.unfaelleImUmkreis==='function'){try{g.unfall=RPGeo.unfaelleImUmkreis(lat,lon,100);}catch(e){}}
+  if(GEO_OK&&g.amt&&typeof RPGeo.unfaelleEntlang==='function'){try{g.unfallStrecke=RPGeo.unfaelleEntlang(g.amt,lat,lon,1000);}catch(e){}}
   const jobs=[];
   if(GEO_OK)jobs.push(RPGeo.rvpAbfrage(lat,lon).then(function(r){if(r.fehler)g.rvpFehler=r.fehler;else g.rvp=r.eintraege||[];}).catch(function(e){g.rvpFehler=e.message;}));
   jobs.push(geoAdresse(lat,lon).then(function(a){g.adr=a;}).catch(function(){}));
@@ -392,7 +393,7 @@ function applyGeo(g){
     else if(!clickedIsPath){let bestRad=null,bestD=Infinity,bestTyp=null;ways.forEach(function(w){if(w.id===nw.way.id)return;const typ=begleitTyp(w.tags||{});if(!typ)return;const md=wayMinDist(w,lat,lon);if(md<bestD){bestD=md;bestRad=w;bestTyp=typ;}});
       if(bestRad&&bestD<=50)radHint='<br><b>Begleitende Radinfrastruktur lt. OSM:</b> 🚲 '+escH(bestTyp)+' – '+(bestD<=20?'an dieser Stelle':('in der Nähe (~'+Math.round(bestD)+' m)'));
       else{const rc=roadCycleway(nw.way.tags||{});if(rc)radHint='<br><b>Begleitende Radinfrastruktur lt. OSM:</b> 🚲 '+escH(rc);}}}
-  state.geo={amt:g.amt?{strasse:g.amt.strasse,klasse:g.amt.klasse}:null,lage:g.lage,lageArt:g.lageArt,lageQuelle:g.lageQuelle,baulastRvp:g.baulastRvp,netz:g.netz,dtvText:g.dtvText,unfall:g.unfall,adresse:g.adr?g.adr.text:null,lat:lat,lon:lon};
+  state.geo={amt:g.amt?{strasse:g.amt.strasse,klasse:g.amt.klasse}:null,lage:g.lage,lageArt:g.lageArt,lageQuelle:g.lageQuelle,baulastRvp:g.baulastRvp,netz:g.netz,dtvText:g.dtvText,unfall:g.unfall,unfallStrecke:g.unfallStrecke,adresse:g.adr?g.adr.text:null,lat:lat,lon:lon};
   state.mapPrefill=true;state.step=0;state.category=null;state.measure=null;renderKommuneBar();
   const LT={innerorts:'innerorts',ausserorts:'außerorts'};
   let h='<div class="ok"><b>Aus Geodaten ermittelt</b> <span style="color:var(--gray-light);font-size:11.5px">– Vorschlag, alles unten änderbar</span>';
@@ -404,8 +405,9 @@ function applyGeo(g){
   if(g.netz)h+='<br>Netzbezug: '+HERK.rvp+escH(g.netz.text)+(g.netz.fuehrung?' <span style="color:var(--gray-light);font-size:11.5px">(Führung im Bestand: '+escH(g.netz.fuehrung)+(g.netz.prio?' · '+escH(g.netz.prio):'')+')</span>':'');
   else if(g.rvpFehler)h+='<br>Netzbezug: Radverkehrsplan nicht erreichbar';
   if(g.dtvText)h+='<br>Verkehr: '+HERK.amtlich+escH(g.dtvText);
-  if(g.unfall){const u=g.unfall;h+='<br>Unfallgeschehen: '+HERK.amtlich+escH(unfallKurz(u));
-    if(unfallAuffaellig(u))h+='<br><span style="color:#b5722a;font-weight:600">⚠️ Auffälliges Unfallgeschehen – Unfallkommission einbinden (1- und 3-Jahres-Karte der Polizei anfordern). Der Unfallatlas zeigt nur Unfälle mit Personenschaden, Sachschadensunfälle fehlen.</span>';}
+  if(g.unfall){const u=g.unfall;h+='<br>Unfallgeschehen (Punkt): '+HERK.amtlich+escH(unfallKurz(u));
+    if(g.unfallStrecke)h+='<br>Unfallgeschehen (Strecke): '+HERK.amtlich+escH(RPGeo.unfallTextStrecke(g.unfallStrecke));
+    if(unfallAuffaellig(u)||unfallStreckeAuffaellig(g.unfallStrecke))h+='<br><span style="color:#b5722a;font-weight:600">⚠️ Auffälliges Unfallgeschehen – Unfallkommission einbinden (1- und 3-Jahres-Karte der Polizei anfordern). Der Unfallatlas zeigt nur Unfälle mit Personenschaden, Sachschadensunfälle fehlen.</span>';}
   h+=routeHtml+radHint;
   h+='<br><span style="color:var(--gray-light);font-size:11.5px">Kommune, Straße und Lage sind eingetragen – Sie wählen nur noch die Maßnahme. '+GEO_QUELLE+'</span></div>';
   setMapStatus(h);render();
@@ -416,6 +418,8 @@ function unfallKurz(u){if(!u.gesamt)return 'keine Unfälle mit Personenschaden 2
   const f=[];if(u.getoetet)f.push(u.getoetet+' mit Getöteten');if(u.schwer)f.push(u.schwer+' mit Schwerverletzten');if(u.leicht)f.push(u.leicht+' mit Leichtverletzten');
   return u.gesamt+' Unfälle mit Personenschaden 2023–2025 im Umkreis von 100 m ('+f.join(', ')+'; '+u.rad+' mit Rad-, '+u.fuss+' mit Fußgängerbeteiligung)';}
 function unfallAuffaellig(u){return !!u&&(u.gesamt>=3||u.getoetet>0||u.schwer>0||(u.rad+u.fuss)>=2);}
+/* Strecke (±1 km entlang der LfS-Achse, nur Bundes-/Landstraßen): auffällig bei Getöteten, ≥ 2 Schwerverletzten, ≥ 3 Rad-/Fußunfällen oder einer 100-m-Häufung ≥ 3 */
+function unfallStreckeAuffaellig(r){return !!r&&(r.getoetet>0||r.schwer>=2||(r.rad+r.fuss)>=3||(r.schwerpunkt&&r.schwerpunkt.n>=3));}
 function geoVermerk(){const g=state.geo;if(!g)return '';let t='';
   t+='Standort: '+(g.adresse?g.adresse+' ':'')+'('+String(g.lat).replace('.',',')+', '+String(g.lon).replace('.',',')+')\n';
   t+='Straße lt. Geodaten: '+(g.amt?g.amt.strasse+' – '+g.amt.klasse+' (amtlich, LfS-Straßennetz)':'keine Bundes-/Landesstraße im Umkreis von 40 m')+'\n';
@@ -423,7 +427,8 @@ function geoVermerk(){const g=state.geo;if(!g)return '';let t='';
   if(g.baulastRvp)t+='Baulast lt. Radverkehrsplan 2025: '+g.baulastRvp.text+(g.baulastRvp.sonder?' – Sonderregelung: '+g.baulastRvp.sonder:'')+'\n';
   if(g.netz)t+='Netzbezug (Radverkehrsplan 2025): '+g.netz.text+(g.netz.fuehrung?' · Führung im Bestand: '+g.netz.fuehrung:'')+'\n';
   if(g.dtvText)t+='Verkehrsbelastung: '+g.dtvText+'\n';
-  if(g.unfall)t+='Unfallgeschehen (Unfallatlas): '+unfallKurz(g.unfall)+(unfallAuffaellig(g.unfall)?' – auffällig, Unfallkommission einbinden':'')+'\n';
+  if(g.unfall)t+='Unfallgeschehen Punkt (Unfallatlas): '+unfallKurz(g.unfall)+(unfallAuffaellig(g.unfall)?' – auffällig, Unfallkommission einbinden':'')+'\n';
+  if(g.unfallStrecke)t+='Unfallgeschehen Strecke (Unfallatlas): '+RPGeo.unfallTextStrecke(g.unfallStrecke)+(unfallStreckeAuffaellig(g.unfallStrecke)?' – auffällig, Unfallkommission einbinden':'')+'\n';
   return t;}
 
 
