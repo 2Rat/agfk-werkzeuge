@@ -214,7 +214,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
     Grundlagen: StVZustG Saarland, StVO, VwV-StVO 2025, SaarlStrG, FStrG, ERA 2010 sowie die Landesvorgabe „Maßgaben und Richtlinien beim Ausbau von Radverkehrsanlagen“ (MUKMAV, Stand 05/2023).
     Ergänzend die Musterlösungen für Radverkehrsanlagen Baden-Württemberg (Stand 10/2025): im Saarland nicht eingeführt und damit nicht verbindlich, fachlich aber der aktuellste verfügbare Stand – sie nehmen die laufende ERA-Fortschreibung (Veröffentlichung ab 2026 erwartet) in Systematik und Maßen weitgehend vorweg. Empfehlung 2Rat: bei Neu- und Umbauten als Zielwert ansetzen.
     Im Einzelfall bitte Zuständigkeit mit der jeweiligen Behörde prüfen.
-    Kartenmodus: LfS-Straßennetz, SVZ 2021, Radverkehrsplan Saarland 2025 – <a href="https://creativecommons.org/licenses/by/4.0/deed.de" target="_blank" rel="noopener">CC-BY 4.0</a> © GDI-SL · Karte: © GeoBasis-DE/BKG (dl-de/by-2-0) · Adresse: © OpenStreetMap-Mitwirkende (ODbL).
+    Kartenmodus: LfS-Straßennetz, SVZ 2021, Radverkehrsplan Saarland 2025 – © GDI-SL 2026, <a href="https://creativecommons.org/licenses/by/4.0/deed.de" target="_blank" rel="noopener">CC BY 4.0</a> · Karte: © GeoBasis-DE/BKG (dl-de/by-2-0) · Adresse: © OpenStreetMap-Mitwirkende (ODbL).
     <br>
     <strong style="color:var(--gray)">Entwickelt und gepflegt von 2Rat</strong> – Büro für Radverkehrsplanung · Armin Jung · Radverkehrsplaner EIPOS · <a href="https://www.2rat.org">www.2rat.org</a>
     <br><span style="display:inline-block;margin-top:5px;opacity:.85">Lizenziert an die AGFK-SL · Bereitgestellt über die Arbeitsgemeinschaft fahrradfreundlicher Kommunen im Saarland e.V.</span>
@@ -406,7 +406,7 @@ function applyGeo(g){
   h+='<br><span style="color:var(--gray-light);font-size:11.5px">Kommune, Straße und Lage sind eingetragen – Sie wählen nur noch die Maßnahme. '+GEO_QUELLE+'</span></div>';
   setMapStatus(h);render();
 }
-const GEO_QUELLE='Geodaten: LfS-Straßennetz, SVZ 2021, Radverkehrsplan Saarland 2025 – CC-BY 4.0 © GDI-SL · Adresse: © OpenStreetMap-Mitwirkende (ODbL)';
+const GEO_QUELLE='Geodaten: LfS-Straßennetz, SVZ 2021, Radverkehrsplan Saarland 2025 – © GDI-SL 2026, CC BY 4.0 · Adresse: © OpenStreetMap-Mitwirkende (ODbL)';
 function geoVermerk(){const g=state.geo;if(!g)return '';let t='';
   t+='Standort: '+(g.adresse?g.adresse+' ':'')+'('+String(g.lat).replace('.',',')+', '+String(g.lon).replace('.',',')+')\n';
   t+='Straße lt. Geodaten: '+(g.amt?g.amt.strasse+' – '+g.amt.klasse+' (amtlich, LfS-Straßennetz)':'keine Bundes-/Landesstraße im Umkreis von 40 m')+'\n';
