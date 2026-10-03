@@ -26,6 +26,9 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background
 .intro{background:var(--white);border:1px solid var(--gray-border);border-radius:8px;padding:18px 20px;margin-bottom:26px}
 .intro h1{font-size:22px;margin-bottom:10px}
 .intro p{font-size:15px;color:#555;max-width:70ch}
+.intro .anleitung{margin-top:12px}
+.intro .anleitung a{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--blue);font-weight:600;text-decoration:none}
+.intro .anleitung a:hover,.intro .anleitung a:focus-visible{text-decoration:underline}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(400px,100%),1fr));gap:18px}
 
@@ -55,6 +58,21 @@ font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;transitio
 .card.blue .card-open{background:var(--blue)}
 .card.blue:hover .card-open,.card.blue:focus-visible .card-open{background:var(--blue-dark)}
 
+/* Wegweiser: Einstieg über die Frage statt über das Werkzeug */
+.wegweiser{margin-top:38px}
+.wegweiser h2{font-size:19px;font-weight:700;line-height:1.3;letter-spacing:-.01em}
+.wegweiser-sub{font-size:15px;color:#555;margin:4px 0 14px;max-width:70ch}
+.fragen{list-style:none;background:var(--white);border:1px solid #e2e6e8;border-radius:18px;overflow:hidden}
+.fragen li+li{border-top:1px solid #e9ecee}
+.frage{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:60px;padding:14px 26px;
+text-decoration:none;color:inherit;transition:background .18s ease}
+.frage:hover,.frage:focus-visible{background:#F2FAF8}
+.frage:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.frage-text{font-size:16px;line-height:1.45}
+.frage-ziel{flex:0 0 auto;font-size:14px;font-weight:600;color:var(--green-dark);white-space:nowrap}
+.frage.blue:hover,.frage.blue:focus-visible{background:#F3F6FA}
+.frage.blue .frage-ziel{color:var(--blue)}
+
 .hinweis{margin-top:24px;background:var(--blue-light);border-radius:8px;padding:14px 16px;font-size:13px;color:var(--blue-dark)}
 .footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--gray-border);font-size:11px;color:var(--gray-light);line-height:1.6}
 .footer a{color:var(--blue);text-decoration:none}
@@ -63,9 +81,10 @@ font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;transitio
   .header-inner{flex-direction:column;align-items:flex-start}
   .header-right{text-align:left}
   .card{padding:22px 20px 20px}
+  .frage{flex-direction:column;align-items:flex-start;gap:4px;padding:14px 20px}
 }
 @media(prefers-reduced-motion:reduce){
-  .card,.card-open,.card-open .arrow{transition:none}
+  .card,.card-open,.card-open .arrow,.frage{transition:none}
   .card:hover,.card:focus-visible{transform:none}
 }
 </style>
@@ -93,6 +112,7 @@ font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;transitio
     Fragen, die vor einer Entscheidung geklärt sein sollten – wer zuständig ist, welche Stellen
     zu beteiligen sind, welche Förderung in Frage kommt und welches Vergabeverfahren gilt.
     Kein Zugangscode, keine Anmeldung.</p>
+    <p class="anleitung"><a href="so-gehts.html">So geht's: Kurzanleitung mit Beispiel <span aria-hidden="true">→</span></a></p>
   </div>
 
   <div class="grid">
@@ -150,6 +170,31 @@ font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;transitio
     </a>
 
   </div>
+
+  <section class="wegweiser" aria-labelledby="wegweiser-titel">
+    <h2 id="wegweiser-titel">Welche Frage haben Sie?</h2>
+    <p class="wegweiser-sub">Wer nicht beim ersten Schritt anfangen möchte, steigt direkt bei der eigenen Frage ein.</p>
+    <ul class="fragen">
+      <li><a class="frage" href="projekt-check.html">
+        <span class="frage-text">Wir haben eine Idee – wo fangen wir an, und wen müssen wir einbinden?</span>
+        <span class="frage-ziel">Projekt-Check <span aria-hidden="true">→</span></span></a></li>
+      <li><a class="frage" href="projekt-check.html">
+        <span class="frage-text">Passt das Vorhaben an diese Stelle – was für eine Straße ist das, gab es dort Unfälle?</span>
+        <span class="frage-ziel">Projekt-Check <span aria-hidden="true">→</span></span></a></li>
+      <li><a class="frage" href="zustaendigkeiten.html">
+        <span class="frage-text">Wer ordnet eine Fahrradstraße, Tempo 30 oder die Öffnung einer Einbahnstraße an?</span>
+        <span class="frage-ziel">Zuständigkeiten <span aria-hidden="true">→</span></span></a></li>
+      <li><a class="frage" href="zustaendigkeiten.html">
+        <span class="frage-text">Wie breit muss ein Schutzstreifen oder ein Radweg sein?</span>
+        <span class="frage-ziel">Zuständigkeiten <span aria-hidden="true">→</span></span></a></li>
+      <li><a class="frage" href="foerdermittel-finder.html">
+        <span class="frage-text">Gibt es Fördergeld für Radweg, Abstellanlage oder Konzept – und wie hoch ist die Quote?</span>
+        <span class="frage-ziel">Fördermittel-Finder <span aria-hidden="true">→</span></span></a></li>
+      <li><a class="frage blue" href="vergabe-assistent.html">
+        <span class="frage-text">Dürfen wir das Planungsbüro direkt beauftragen, oder müssen wir ausschreiben?</span>
+        <span class="frage-ziel">Vergabe-Assistent <span aria-hidden="true">→</span></span></a></li>
+    </ul>
+  </section>
 
   <div class="hinweis">
     Alle Werkzeuge sind Orientierungshilfen. Sie ersetzen keine Rechts- oder Fachberatung im
