@@ -27,33 +27,33 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background
 .intro h1{font-size:22px;margin-bottom:10px}
 .intro p{font-size:15px;color:#555;max-width:70ch}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(400px,100%),1fr));gap:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(400px,100%),1fr));gap:18px}
 
-.card{position:relative;display:flex;flex-direction:column;background:var(--white);
-border:1px solid var(--gray-border);border-radius:8px;padding:20px 22px 16px;
-text-decoration:none;color:inherit;overflow:hidden;
+.card{display:flex;flex-direction:column;gap:16px;background:var(--white);
+border:1px solid #e2e6e8;border-radius:18px;padding:26px 26px 24px;
+text-decoration:none;color:inherit;
 transition:box-shadow .18s ease,transform .18s ease,border-color .18s ease}
-/* farbige Kante links – wächst beim Überfahren */
-.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--green);transition:width .18s ease}
-.card:hover,.card:focus-visible{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px);border-color:#c4c4c4}
-.card:hover::before,.card:focus-visible::before{width:7px}
+.card:hover,.card:focus-visible{box-shadow:0 8px 24px rgba(20,40,40,.09);transform:translateY(-2px);border-color:#cdd5d8}
 .card:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
-.card-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.card-num{flex:0 0 auto;width:26px;height:26px;border-radius:6px;background:var(--green-light);color:var(--green-dark);
-font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
-.card-step{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-light)}
-.card-title{font-size:17px;font-weight:700;margin-bottom:7px;letter-spacing:-.01em}
-.card-text{font-size:13.5px;color:#555;line-height:1.6;flex:1 0 auto}
-.card-open{margin-top:16px;padding-top:12px;border-top:1px solid #ececec;
-font-size:12.5px;font-weight:600;color:var(--green-dark);display:flex;align-items:center;gap:6px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.card-icon{flex:0 0 auto;width:52px;height:52px;border-radius:14px;background:var(--green-light);color:var(--green-dark);
+display:flex;align-items:center;justify-content:center}
+.card-icon svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card-step{font-size:13px;font-weight:600;color:#5f6564;text-align:right}
+.card-body{display:flex;flex-direction:column;gap:6px;flex:1 0 auto}
+.card-title{font-size:21px;font-weight:700;line-height:1.25;letter-spacing:-.01em}
+.card-text{font-size:15px;color:#555;line-height:1.6}
+.card-open{align-self:flex-start;min-height:44px;padding:0 20px;border-radius:999px;background:var(--green-dark);color:#fff;
+font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;transition:background .18s ease}
+.card:hover .card-open,.card:focus-visible .card-open{background:#095F54}
 .card-open .arrow{transition:transform .18s ease}
 .card:hover .card-open .arrow,.card:focus-visible .card-open .arrow{transform:translateX(4px)}
 
 /* Schritt 4 – Beauftragung: blau abgesetzt */
-.card.blue::before{background:var(--blue)}
-.card.blue .card-num{background:var(--blue-light);color:var(--blue-dark)}
-.card.blue .card-open{color:var(--blue-dark)}
+.card.blue .card-icon{background:var(--blue-light);color:var(--blue)}
+.card.blue .card-open{background:var(--blue)}
+.card.blue:hover .card-open,.card.blue:focus-visible .card-open{background:var(--blue-dark)}
 
 .hinweis{margin-top:24px;background:var(--blue-light);border-radius:8px;padding:14px 16px;font-size:13px;color:var(--blue-dark)}
 .footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--gray-border);font-size:11px;color:var(--gray-light);line-height:1.6}
@@ -62,10 +62,10 @@ font-size:12.5px;font-weight:600;color:var(--green-dark);display:flex;align-item
 @media(max-width:640px){
   .header-inner{flex-direction:column;align-items:flex-start}
   .header-right{text-align:left}
-  .card{padding:18px 18px 14px}
+  .card{padding:22px 20px 20px}
 }
 @media(prefers-reduced-motion:reduce){
-  .card,.card::before,.card-open .arrow{transition:none}
+  .card,.card-open,.card-open .arrow{transition:none}
   .card:hover,.card:focus-visible{transform:none}
 }
 </style>
@@ -81,7 +81,7 @@ font-size:12.5px;font-weight:600;color:var(--green-dark);display:flex;align-item
         <div class="header-title">Werkzeuge <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right">Für die Mitgliedskommunen<br>Stand 08/2026</div>
+    <div class="header-right">Für die Mitgliedskommunen<br>Stand 10/2026</div>
   </div>
 </div>
 
@@ -99,45 +99,53 @@ font-size:12.5px;font-weight:600;color:var(--green-dark);display:flex;align-item
 
     <a class="card" href="projekt-check.html">
       <div class="card-head">
-        <div class="card-num">1</div>
-        <div class="card-step">Einstieg</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="card-step">Schritt 1 · Einstieg</div>
       </div>
+      <div class="card-body">
       <div class="card-title">Projekt-Check Radverkehr</div>
       <div class="card-text">Führt in wenigen Schritten zu Federführung, einzubindenden Stellen
       und Prüfpunkten. Grundlage ist die Zuständigkeitslandkarte Radverkehr Saarland der AGFK-SL.</div>
+      </div>
       <div class="card-open">Werkzeug öffnen <span class="arrow" aria-hidden="true">→</span></div>
     </a>
 
     <a class="card" href="zustaendigkeiten.html">
       <div class="card-head">
-        <div class="card-num">2</div>
-        <div class="card-step">Zuständigkeit</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V10"/><path d="M9.5 21V10"/><path d="M14.5 21V10"/><path d="M19 21V10"/><path d="M2.5 10L12 4l9.5 6z"/></svg></div>
+        <div class="card-step">Schritt 2 · Zuständigkeit</div>
       </div>
+      <div class="card-body">
       <div class="card-title">Zuständigkeiten Radverkehr</div>
       <div class="card-text">Klärt im Detail, welche Behörde für eine Maßnahme zuständig ist –
       Gemeinde, Landkreis, Regionalverband oder Land – nach StVO und SaarlStrG.</div>
+      </div>
       <div class="card-open">Werkzeug öffnen <span class="arrow" aria-hidden="true">→</span></div>
     </a>
 
     <a class="card" href="foerdermittel-finder.html">
       <div class="card-head">
-        <div class="card-num">3</div>
-        <div class="card-step">Finanzierung</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.6a4.4 4.4 0 1 0 0 6.8"/><path d="M7.5 11h6"/><path d="M7.5 13.4h5"/></svg></div>
+        <div class="card-step">Schritt 3 · Finanzierung</div>
       </div>
+      <div class="card-body">
       <div class="card-title">Fördermittel-Finder</div>
       <div class="card-text">Prüft, ob eine Maßnahme unter die Förderrichtlinie Rad- und
       Fußverkehr (FRL-NMOB) fällt, und zeigt Fristen, Quoten und Antragsweg.</div>
+      </div>
       <div class="card-open">Werkzeug öffnen <span class="arrow" aria-hidden="true">→</span></div>
     </a>
 
     <a class="card blue" href="vergabe-assistent.html">
       <div class="card-head">
-        <div class="card-num">4</div>
-        <div class="card-step">Beauftragung</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg></div>
+        <div class="card-step">Schritt 4 · Beauftragung</div>
       </div>
+      <div class="card-body">
       <div class="card-title">Vergabe-Assistent Saarland</div>
       <div class="card-text">Bestimmt anhand von Auftragswert und Leistungsart das richtige
       Vergabeverfahren – vom Direktauftrag bis zur öffentlichen Ausschreibung.</div>
+      </div>
       <div class="card-open">Werkzeug öffnen <span class="arrow" aria-hidden="true">→</span></div>
     </a>
 
