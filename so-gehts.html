@@ -105,6 +105,28 @@ background:var(--green-dark);color:#fff;font-size:14px;font-weight:600;text-deco
   .sprung a,.oeffnen{transition:none}
 }
 </style>
+<style>
+.bsp{background:var(--green-light);border-left:5px solid var(--green);border-radius:8px;padding:18px 20px;margin:0 0 26px}
+.bsp .lab{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-dark)}
+.bsp h1{font-size:22px;margin:4px 0 6px;line-height:1.3}
+.bsp p{font-size:15px;color:#444;margin:0}
+.stat{background:var(--white);border:1px solid var(--gray-border);border-radius:10px;padding:18px 20px;margin-bottom:18px}
+.stat-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.stat-num{width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;font-size:16px}
+.stat-head h2{font-size:18px;margin:0}
+.stat-head .tool{font-size:12px;color:var(--gray-light)}
+.qa{display:grid;grid-template-columns:110px 1fr;gap:6px 14px;font-size:15px;margin-bottom:12px}
+.qa dt{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-light);padding-top:3px}
+.qa dd{margin:0;color:#333}
+.qa dd.antwort{font-weight:600;color:var(--blue-dark)}
+.chip{display:inline-block;background:var(--green-light);color:var(--green-dark);border-radius:6px;padding:2px 9px;font-weight:600;font-size:13.5px;margin:0 4px 4px 0}
+.stat img{width:100%;max-width:640px;border:1px solid var(--gray-border);border-radius:6px;display:block;margin:6px 0 12px}
+.stat .merke{font-size:13.5px;background:#fff4e5;border-left:4px solid #e0922b;border-radius:6px;padding:8px 12px;margin-bottom:12px;color:#5a3d10}
+.stat .go{display:inline-block;background:var(--green);color:#fff;text-decoration:none;font-weight:600;border-radius:8px;padding:9px 16px;font-size:14px}
+.stat .go:hover{background:var(--green-dark)}
+.nachher{font-size:14px;color:#555;margin:22px 0 0}
+@media(max-width:560px){.qa{grid-template-columns:1fr;gap:2px 0}.qa dd{margin-bottom:8px}}
+</style>
 </head>
 <body>
 
@@ -123,273 +145,56 @@ background:var(--green-dark);color:#fff;font-size:14px;font-weight:600;text-deco
 
 <main class="main">
 
-  <div class="kopf">
-    <h1>So geht's</h1>
-    <p>Jedes Werkzeug stellt ein paar Fragen zum Anklicken und zeigt am Ende ein Ergebnis, das Sie
-    in eine E-Mail oder in die Akte übernehmen können.</p>
-    <p>Diese Anleitung spielt alle vier Werkzeuge an einem Beispiel durch: Eine Gemeinde möchte in
-    einer Gemeindestraße eine Fahrradstraße einrichten.</p>
-    <ul class="sprung" aria-label="Zum Werkzeug springen">
-      <li><a href="#projekt-check">Projekt-Check</a></li>
-      <li><a href="#zustaendigkeiten">Zuständigkeiten</a></li>
-      <li><a href="#foerdermittel-finder">Fördermittel-Finder</a></li>
-      <li><a href="#vergabe-assistent">Vergabe-Assistent</a></li>
-    </ul>
+  <div class="bsp">
+    <div class="lab">Ein Beispiel zum Mitklicken</div>
+    <h1>Die Gemeinde möchte in der Schulstraße eine Fahrradstraße einrichten.</h1>
+    <p>Wer darf das entscheiden, wer muss mitreden, gibt es Geld dafür, und wie wird der Auftrag vergeben?
+    Vier Werkzeuge, vier Antworten – in dieser Reihenfolge.</p>
   </div>
 
-  <section class="allgemein" aria-labelledby="allgemein-titel">
-    <h2 id="allgemein-titel">Das gilt für alle vier Werkzeuge</h2>
-    <ul>
-      <li>Sie klicken Antworten an, getippt wird fast nichts. Mit „← Zurück“ ändern Sie eine Antwort.</li>
-      <li>Am Ende steht ein Vermerk. Mit „Kopieren“ übernehmen Sie ihn in eine E-Mail oder in die Akte.</li>
-      <li>Die Karte ist freiwillig. Lädt sie in Ihrem Behördennetz nicht, wählen Sie Kommune, Straße
-      und Lage über die Listen. Die Werkzeuge funktionieren auch ohne Karte.</li>
-      <li>Oben rechts steht der Stand des Werkzeugs. Über „← Übersicht“ kommen Sie zurück zu allen Werkzeugen.</li>
-      <li>Die Werkzeuge sind Orientierungshilfen. Sie ersetzen nicht die Abstimmung mit den zuständigen Behörden.</li>
-    </ul>
-  </section>
+  <div class="stat">
+    <div class="stat-head"><div class="stat-num">1</div><div><h2>Wer hat den Hut auf, wer muss mitreden?</h2><div class="tool">Werkzeug: Projekt-Check</div></div></div>
+    <dl class="qa">
+      <dt>Sie klicken</dt><dd><span class="chip">Fahrradstraße einrichten</span><span class="chip">Gemeindestraße</span><span class="chip">Fördermittel geplant</span></dd>
+      <dt>Antwort</dt><dd class="antwort">Die Gemeinde kann die Fahrradstraße selbst anordnen. Mit an den Tisch: Straßenverkehrsbehörde, Polizei, Bauamt, Bauhof, Anlieger – und früh die Kämmerei wegen der Förderung.</dd>
+    </dl>
+    <img src="hilfe/bsp-projekt-check.png" alt="Ergebnis im Projekt-Check: Wer hat den Hut auf, wer sollte mit an den Tisch">
+    <a class="go" href="projekt-check.html">Selbst ausprobieren →</a>
+  </div>
 
-  <!-- ═══ Projekt-Check ═══════════════════════════════════════════════ -->
-  <section class="werkzeug" id="projekt-check" aria-labelledby="pc-titel">
-    <div class="werkzeug-kopf">
-      <div class="werkzeug-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
-      <div>
-        <div class="werkzeug-stufe">Schritt 1 · Einstieg</div>
-        <h2 id="pc-titel">Projekt-Check Radverkehr</h2>
-      </div>
-    </div>
-    <p class="wofuer">Für den Anfang eines Vorhabens: Das Werkzeug zeigt, wer die Federführung hat,
-    wer mit an den Tisch muss, woran zu denken ist und welche Schritte anstehen.</p>
+  <div class="stat">
+    <div class="stat-head"><div class="stat-num">2</div><div><h2>Welche Behörde ordnet das an?</h2><div class="tool">Werkzeug: Zuständigkeiten</div></div></div>
+    <dl class="qa">
+      <dt>Sie klicken</dt><dd><span class="chip">Beschilderung &amp; Anordnung</span><span class="chip">Fahrradstraße</span><span class="chip">Gemeindestraße</span></dd>
+      <dt>Antwort</dt><dd class="antwort">Die Gemeinde selbst, als Ortspolizeibehörde. Sie trägt auch die Baulast. Dazu bekommen Sie die Rechtsgrundlage und Praxistipps, etwa dass die Fahrgasse mindestens 4 Meter breit sein muss.</dd>
+    </dl>
+    <img src="hilfe/bsp-zustaendigkeiten.png" alt="Ergebnis in Zuständigkeiten: zuständige Behörde, Baulastträger, Rechtsgrundlage">
+    <a class="go" href="zustaendigkeiten.html">Selbst ausprobieren →</a>
+  </div>
 
-    <ol class="ablauf">
-      <li>
-        <h3>Kommune und Standort angeben – wenn Sie möchten</h3>
-        <p>Wählen Sie Ihre Kommune, nennt das Ergebnis die zuständige Behörde. Über „Karte öffnen“
-        setzen Sie einen Punkt und klicken auf „Standort auswerten“. Das Werkzeug schlägt dann
-        Straße, Lage, Baulast und Netzbezug aus amtlichen Geodaten vor, und Sie bestätigen.</p>
-        <figure class="bild">
-          <a href="hilfe/projekt-check-1.png"><img src="hilfe/projekt-check-1.png" width="708" height="157" loading="lazy"
-          alt="Auswahlfeld für die Kommune und darunter der Bereich „Standort prüfen“ mit dem Knopf „Karte öffnen“"></a>
-          <figcaption>Beides ist freiwillig. Der Check funktioniert auch ohne diese Angaben.</figcaption>
-        </figure>
-      </li>
-      <li>
-        <h3>Vorhaben anklicken</h3>
-        <p>Zur Auswahl stehen zehn typische Vorhaben, vom Radweg bis zur Kampagne.
-        <span class="beispiel">Im Beispiel: „Fahrradstraße oder -zone einrichten“.</span></p>
-        <figure class="bild">
-          <a href="hilfe/projekt-check-2.png"><img src="hilfe/projekt-check-2.png" width="708" height="521" loading="lazy"
-          alt="Schritt 1 des Projekt-Checks mit der Frage „Was möchten Sie tun?“ und Kacheln für die Vorhaben"></a>
-        </figure>
-      </li>
-      <li>
-        <h3>Ankreuzen, was zusätzlich zutrifft</h3>
-        <p>Jede Angabe ergänzt, wer einzubinden ist. Mehrere Kreuze sind möglich, keines auch.
-        Danach „Ergebnis anzeigen“. <span class="beispiel">Im Beispiel: Es sollen Fördermittel
-        eingesetzt werden.</span></p>
-        <figure class="bild">
-          <a href="hilfe/projekt-check-3.png"><img src="hilfe/projekt-check-3.png" width="708" height="343" loading="lazy"
-          alt="Schritt 2 des Projekt-Checks mit der Frage „Trifft zusätzlich etwas davon zu?“, angekreuzt ist „Es sollen Fördermittel eingesetzt werden“"></a>
-        </figure>
-      </li>
-      <li>
-        <h3>Ergebnis lesen</h3>
-        <p>Das Ergebnis beantwortet vier Fragen: Wer hat den Hut auf? Wer sollte mit an den Tisch?
-        Woran müssen Sie denken? Was sind die nächsten Schritte? Grün markierte Stellen sind immer
-        dabei, blau markierte kommen wegen Ihrer Angaben dazu. Darunter erklärt „Gut zu wissen“
-        den rechtlichen Hintergrund.</p>
-        <figure class="bild">
-          <a href="hilfe/projekt-check-4.png"><img src="hilfe/projekt-check-4.png" width="708" height="672" loading="lazy"
-          alt="Ergebnis des Projekt-Checks für eine Fahrradstraße: Federführung, einzubindende Stellen, Prüfpunkte und nächste Schritte"></a>
-        </figure>
-      </li>
-      <li>
-        <h3>Vermerk kopieren</h3>
-        <p>Unter dem Ergebnis steht alles noch einmal als Text. „Kopieren“ legt ihn in die
-        Zwischenablage.</p>
-        <figure class="bild">
-          <a href="hilfe/projekt-check-5.png"><img src="hilfe/projekt-check-5.png" width="708" height="330" loading="lazy"
-          alt="Projektvermerk für E-Mail oder Akte mit dem Knopf „Kopieren“"></a>
-        </figure>
-      </li>
-    </ol>
+  <div class="stat">
+    <div class="stat-head"><div class="stat-num">3</div><div><h2>Gibt es Geld vom Land?</h2><div class="tool">Werkzeug: Fördermittel-Finder</div></div></div>
+    <dl class="qa">
+      <dt>Sie klicken</dt><dd><span class="chip">Gemeinde / Stadt</span><span class="chip">Infrastruktur &amp; Bau</span><span class="chip">Nr. 2.1 Infrastruktur</span></dd>
+      <dt>Antwort</dt><dd class="antwort">Ja: 75 % der Kosten, bei Schulbezug 95 %. Dazu Fristen, Mindestsumme und die Stelle, bei der Sie den Antrag stellen.</dd>
+    </dl>
+    <div class="merke">Wichtig: Erst den Antrag stellen, dann bauen oder beauftragen. Wer vorher anfängt, bekommt keine Förderung.</div>
+    <img src="hilfe/bsp-foerdermittel.png" alt="Ergebnis im Fördermittel-Finder: Förderquoten">
+    <a class="go" href="foerdermittel-finder.html">Selbst ausprobieren →</a>
+  </div>
 
-    <div class="merke">
-      <strong>Wenn Sie den Standort geprüft haben</strong>
-      Das Werkzeug weist darauf hin, wenn Vorhaben und Standort nicht zusammenpassen, etwa eine
-      Fahrradstraße auf einer Bundes- oder Landstraße, oder wenn das Unfallgeschehen an der Stelle
-      auffällig ist. Das sind Hinweise, keine Verbote.
-    </div>
+  <div class="stat">
+    <div class="stat-head"><div class="stat-num">4</div><div><h2>Wie vergeben wir den Auftrag?</h2><div class="tool">Werkzeug: Vergabe-Assistent</div></div></div>
+    <dl class="qa">
+      <dt>Sie klicken</dt><dd><span class="chip">Bau</span><span class="chip">50.000 € netto</span></dd>
+      <dt>Antwort</dt><dd class="antwort">Direktauftrag – kein förmliches Verfahren nötig. Das Werkzeug listet die drei Pflichtschritte zum Abhaken.</dd>
+    </dl>
+    <div class="merke">Bei geförderten Vorhaben können strengere Regeln gelten. Deshalb erst die Förderung klären, dann vergeben.</div>
+    <img src="hilfe/bsp-vergabe.png" alt="Ergebnis im Vergabe-Assistent: Direktauftrag">
+    <a class="go" href="vergabe-assistent.html">Selbst ausprobieren →</a>
+  </div>
 
-    <a class="oeffnen" href="projekt-check.html">Projekt-Check öffnen <span aria-hidden="true">→</span></a>
-  </section>
-
-  <!-- ═══ Zuständigkeiten ═════════════════════════════════════════════ -->
-  <section class="werkzeug" id="zustaendigkeiten" aria-labelledby="zu-titel">
-    <div class="werkzeug-kopf">
-      <div class="werkzeug-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V10"/><path d="M9.5 21V10"/><path d="M14.5 21V10"/><path d="M19 21V10"/><path d="M2.5 10L12 4l9.5 6z"/></svg></div>
-      <div>
-        <div class="werkzeug-stufe">Schritt 2 · Zuständigkeit</div>
-        <h2 id="zu-titel">Zuständigkeiten Radverkehr</h2>
-      </div>
-    </div>
-    <p class="wofuer">Für die genaue Rechtslage zu einer einzelnen Maßnahme: Wer ordnet an, wer
-    trägt die Baulast, auf welche Vorschrift stützt sich das – und welche Maße gelten.</p>
-
-    <ol class="ablauf">
-      <li>
-        <h3>Maßnahme wählen</h3>
-        <p>Erst die Kategorie – Markierung, Beschilderung und Anordnung oder bauliche Maßnahmen –,
-        dann die konkrete Maßnahme. <span class="beispiel">Im Beispiel: „Beschilderung &amp;
-        Anordnung“, dann „Fahrradstraße“.</span></p>
-        <figure class="bild">
-          <a href="hilfe/zustaendigkeiten-1.png"><img src="hilfe/zustaendigkeiten-1.png" width="668" height="611" loading="lazy"
-          alt="Schritt 1 der Zuständigkeiten: drei Kategorien, darunter die Liste der Maßnahmen mit ausgewählter Fahrradstraße"></a>
-        </figure>
-      </li>
-      <li>
-        <h3>Straße und Lage angeben</h3>
-        <p>Bundes- oder Landstraße, Gemeindestraße oder sonstige öffentliche Straße. Je nach Maßnahme
-        fragt das Werkzeug zusätzlich, ob die Stelle innerorts oder außerorts liegt.
-        <span class="beispiel">Im Beispiel: Gemeindestraße.</span></p>
-        <p>Wer die Straßenklasse nicht kennt, klickt oben auf „Auf der Karte klicken“. Das Werkzeug
-        schlägt dann Kommune, Straße, Lage und Baulast aus amtlichen Geodaten vor.</p>
-      </li>
-      <li>
-        <h3>Ergebnis lesen</h3>
-        <p>Oben steht die Behörde, die anordnet. Darunter folgen Straßenbaulastträger,
-        Rechtsgrundlage und Aufsichtsbehörde, dann rechtliche Hinweise und Praxistipps.</p>
-        <figure class="bild">
-          <a href="hilfe/zustaendigkeiten-2.png"><img src="hilfe/zustaendigkeiten-2.png" width="668" height="414" loading="lazy"
-          alt="Ergebnis der Zuständigkeiten für eine Fahrradstraße auf einer Gemeindestraße: zuständige Behörde, Baulastträger, Rechtsgrundlage und Aufsichtsbehörde"></a>
-        </figure>
-      </li>
-      <li>
-        <h3>Bei den Maßen auf die Marke achten</h3>
-        <p>Vor jedem Maß und jedem Planungshinweis steht, woher die Angabe stammt:</p>
-        <ul class="marken">
-          <li><span class="marke g">GESETZ</span>StVO und VwV-StVO einschließlich der dort genannten
-          Regelwerke. Bei Widerspruch gilt diese Ebene.</li>
-          <li><span class="marke sl">SAARLAND</span>Landesvorgabe des Ministeriums zum Ausbau von
-          Radverkehrsanlagen (Stand 05/2023).</li>
-          <li><span class="marke bw">BW · ERA-VORGRIFF</span>Musterlösungen Baden-Württemberg. Im
-          Saarland nicht verbindlich, fachlich aber der aktuellste Stand.</li>
-          <li><span class="marke al">ANDERES BUNDESLAND</span>Leitfäden anderer Länder. Im Saarland
-          nicht verbindlich, als Argumentationshilfe brauchbar.</li>
-        </ul>
-        <figure class="bild">
-          <a href="hilfe/zustaendigkeiten-3.png"><img src="hilfe/zustaendigkeiten-3.png" width="660" height="225" loading="lazy"
-          alt="Ausschnitt aus den Maßen und Planungshinweisen mit den Marken GESETZ, SAARLAND und BW · ERA-VORGRIFF"></a>
-        </figure>
-      </li>
-      <li>
-        <h3>Vermerk kopieren</h3>
-        <p>Am Ende der Seite steht der Ergebnis-Vermerk für E-Mail oder Akte.</p>
-      </li>
-    </ol>
-
-    <a class="oeffnen" href="zustaendigkeiten.html">Zuständigkeiten öffnen <span aria-hidden="true">→</span></a>
-  </section>
-
-  <!-- ═══ Fördermittel-Finder ═════════════════════════════════════════ -->
-  <section class="werkzeug" id="foerdermittel-finder" aria-labelledby="ff-titel">
-    <div class="werkzeug-kopf">
-      <div class="werkzeug-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.6a4.4 4.4 0 1 0 0 6.8"/><path d="M7.5 11h6"/><path d="M7.5 13.4h5"/></svg></div>
-      <div>
-        <div class="werkzeug-stufe">Schritt 3 · Finanzierung</div>
-        <h2 id="ff-titel">Fördermittel-Finder</h2>
-      </div>
-    </div>
-    <p class="wofuer">Für die Frage, ob das Land die Maßnahme fördert: Das Werkzeug zeigt Quote,
-    Fristen und Antragsweg nach der Förderrichtlinie Rad- und Fußverkehr des Saarlandes
-    (FRL-NMOB-Rad-Fuß). Förderprogramme des Bundes sind nicht enthalten.</p>
-
-    <ol class="ablauf">
-      <li>
-        <h3>Antragsteller wählen</h3>
-        <p>Gemeinde oder Stadt, Landkreis, Schule oder Kita, gemeinnützige Organisation, Verein oder
-        Unternehmen. Danach zeigt das Werkzeug nur, was dieser Antragsteller beantragen darf.
-        <span class="beispiel">Im Beispiel: „Gemeinde / Stadt“.</span></p>
-      </li>
-      <li>
-        <h3>Bereich und Fördergegenstand wählen</h3>
-        <p>Erst der Bereich, dann der Fördergegenstand mit seiner Nummer aus der Richtlinie. Danach
-        „Ergebnis anzeigen“. <span class="beispiel">Im Beispiel: „Infrastruktur &amp; Bau“, dann
-        „Nr. 2.1 – Infrastruktur“.</span></p>
-        <figure class="bild">
-          <a href="hilfe/foerdermittel-finder-1.png"><img src="hilfe/foerdermittel-finder-1.png" width="668" height="804" loading="lazy"
-          alt="Schritt 2 des Fördermittel-Finders: sechs Bereiche, ausgewählt ist „Infrastruktur &amp; Bau“ mit dem Fördergegenstand Nr. 2.1"></a>
-        </figure>
-      </li>
-      <li>
-        <h3>Ergebnis lesen</h3>
-        <p>Oben stehen die Förderquoten: der Regelsatz und die höheren Sätze für finanzschwache
-        Kommunen, bei Schul- oder Kita-Bezug und bei besonderem Landesinteresse. Darunter folgen
-        Mindestinvestition, Zweckbindungsfrist, nächste Antragsfrist, wichtige Hinweise und die
-        Bewilligungsbehörde mit Kontakt.</p>
-        <figure class="bild">
-          <a href="hilfe/foerdermittel-finder-2.png"><img src="hilfe/foerdermittel-finder-2.png" width="668" height="404" loading="lazy"
-          alt="Ergebnis des Fördermittel-Finders für Nr. 2.1 Infrastruktur: vier Förderquoten und der Warnhinweis „Erst beantragen, dann beginnen“"></a>
-        </figure>
-      </li>
-      <li>
-        <h3>Vermerk kopieren</h3>
-        <p>Am Ende der Seite steht der Ergebnis-Vermerk für E-Mail oder Akte.</p>
-      </li>
-    </ol>
-
-    <div class="merke">
-      <strong>Erst beantragen, dann beginnen</strong>
-      Der Antrag muss der Bewilligungsbehörde vorliegen, bevor das Vorhaben beginnt. Wer vorher
-      beauftragt, bestellt oder baut, verliert den Förderanspruch für die gesamte Maßnahme.
-    </div>
-
-    <a class="oeffnen" href="foerdermittel-finder.html">Fördermittel-Finder öffnen <span aria-hidden="true">→</span></a>
-  </section>
-
-  <!-- ═══ Vergabe-Assistent ═══════════════════════════════════════════ -->
-  <section class="werkzeug blue" id="vergabe-assistent" aria-labelledby="va-titel">
-    <div class="werkzeug-kopf">
-      <div class="werkzeug-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg></div>
-      <div>
-        <div class="werkzeug-stufe">Schritt 4 · Beauftragung</div>
-        <h2 id="va-titel">Vergabe-Assistent Saarland</h2>
-      </div>
-    </div>
-    <p class="wofuer">Für die Frage, wie ein Auftrag vergeben werden darf: Aus Leistungsart und
-    Auftragswert bestimmt das Werkzeug das einfachste zulässige Verfahren.</p>
-
-    <ol class="ablauf">
-      <li>
-        <h3>Leistungsart wählen</h3>
-        <p>Bau, Lieferung und Dienstleistung oder freiberufliche Leistung.
-        <span class="beispiel">Im Beispiel: „Bau“.</span></p>
-      </li>
-      <li>
-        <h3>Auftragswert netto eingeben</h3>
-        <p>Tippen Sie den geschätzten Wert ein oder wählen Sie einen der Schnellwerte. Alle Lose und
-        Teilaufträge desselben Vorhabens zählen zusammen. <span class="beispiel">Im Beispiel:
-        50.000 €.</span></p>
-      </li>
-      <li>
-        <h3>Ergebnis lesen</h3>
-        <p>Das Ergebnis erscheint sofort unter der Eingabe: das Verfahren, die Pflichtschritte zum
-        Abhaken, Empfehlungen, eine Vorlage für den Vergabevermerk und die Rechtsgrundlagen.</p>
-        <figure class="bild">
-          <a href="hilfe/vergabe-assistent-1.png"><img src="hilfe/vergabe-assistent-1.png" width="636" height="659" loading="lazy"
-          alt="Vergabe-Assistent mit Leistungsart Bau und 50.000 Euro Auftragswert: Ergebnis Direktauftrag mit drei Pflichtschritten"></a>
-        </figure>
-      </li>
-    </ol>
-
-    <div class="merke">
-      <strong>Bei geförderten Vorhaben</strong>
-      Mit Fördermitteln können strengere Vergabevorgaben gelten. Prüfen Sie deshalb erst die
-      Förderung und vergeben Sie danach.
-    </div>
-
-    <a class="oeffnen" href="vergabe-assistent.html">Vergabe-Assistent öffnen <span aria-hidden="true">→</span></a>
-  </section>
+  <p class="nachher">Jedes Ergebnis lässt sich mit einem Klick als Text kopieren – für die E-Mail oder die Akte. Die Karte in den Werkzeugen ist freiwillig; alles geht auch ohne.</p>
 
   <div class="hinweis">
     Alle Werkzeuge sind Orientierungshilfen. Sie ersetzen keine Rechts- oder Fachberatung im
