@@ -871,7 +871,7 @@ window.PCGeo=(function(){
     try{const p=await geocode(q);
       if(!p){h.textContent='Keine Adresse im Saarland gefunden – bitte genauer eingeben oder Punkt auf der Karte setzen.';return;}
       if(!map)initMap();setPunkt(p.lat,p.lng,16);
-    }catch(e){h.textContent='Adresssuche nicht erreichbar ('+e.message+') – bitte Punkt auf der Karte setzen.';}
+    }catch(e){h.textContent='Adresssuche nicht erreichbar ('+fehlerText(e.message)+') – bitte Punkt auf der Karte setzen.';}
   }
   function meinStandort(){
     const h=document.getElementById('geoHint');
@@ -891,8 +891,8 @@ window.PCGeo=(function(){
     /* Unfallatlas (rp-unfaelle.js, optional): Punkt 100 m, Strecke ±1 km entlang der LfS-Achse (nur Bundes-/Landstraßen) */
     if(typeof RPGeo.unfaelleImUmkreis==='function'){try{e.unfall=RPGeo.unfaelleImUmkreis(lat,lng,100);if(e.amt)e.unfallStrecke=RPGeo.unfaelleEntlang(e.amt,lat,lng,1000);}catch(x){}}
     const jobs=[
-      RPGeo.rvpAbfrage(lat,lng).then(r=>{if(r.fehler)e.rvpFehler=r.fehler;else e.rvp=r.eintraege||[];}).catch(x=>{e.rvpFehler=x.message;}),
-      reverse(lat,lng).then(a=>{e.adr=a;}).catch(x=>{e.adrFehler=x.message;})
+      RPGeo.rvpAbfrage(lat,lng).then(r=>{if(r.fehler)e.rvpFehler=r.fehler;else e.rvp=r.eintraege||[];}).catch(x=>{e.rvpFehler=fehlerText(x.message);}),
+      reverse(lat,lng).then(a=>{e.adr=a;}).catch(x=>{e.adrFehler=fehlerText(x.message);})
     ];
     await Promise.all(jobs);
     /* Lage – nur aus Zählstelle desselben Abschnitts (amtlich) */
@@ -923,6 +923,8 @@ window.PCGeo=(function(){
     if(CFG.osm){RPGeo.osmAbfrage(lat,lng,{endpoints:CFG.osmEndpoints,timeoutMs:CFG.osmTimeout,amtlicheRef:e.amt?e.amt.strasse:null}).then(r=>{if(erg===e&&r&&r.vorschlag){e.osm=r.vorschlag;if(!e.lage&&e.osm.ortslage)e.lage={wert:e.osm.ortslage,art:'vermutet',quelle:'OpenStreetMap (Tempo/Bebauung) – nur vermutet'};renderErgebnis();}}).catch(()=>{});}
     busy=false;b.disabled=false;b.textContent='Standort erneut auswerten';
   }
+  /* Technische Fehlermeldungen (z. B. „Failed to fetch“ bei gesperrtem Dienst im Behördennetz) in verständliches Deutsch */
+  function fehlerText(m){m=String(m||'');return /fetch|network|abort|timeout|NetworkError|Load failed/i.test(m)?'Dienst nicht erreichbar – im Behördennetz oft gesperrt':m;}
   function badge(art){return {hinweis:'<span class="geo-badge vermutet">Hinweis</span>',amtlich:'<span class="geo-badge amtlich">amtlich</span>',rvp:'<span class="geo-badge rvp">lt. RVP 2025</span>',vermutet:'<span class="geo-badge vermutet">vermutet</span>',abgeleitet:'<span class="geo-badge vermutet">abgeleitet</span>',vorschlag:'<span class="geo-badge vermutet">Vorschlag</span>'}[art]||'';}
   function zeile(label,html,art,aktion){return '<div class="geo-zeile"><div class="geo-zl">'+label+'</div><div class="geo-zw">'+(art?badge(art):'')+html+'</div><div class="geo-za">'+(aktion||'')+'</div></div>';}
   function btn(was,label){return uebern[was]?'<span class="geo-uebern">✓ übernommen</span>':'<button class="geo-btn sek klein" onclick="PCGeo.uebernehmen(\''+was+'\')">'+label+'</button>';}
