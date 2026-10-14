@@ -230,7 +230,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <div class="header-title">Zuständigkeiten <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a class="portal-link" id="brandPortal" href="index.html"></a><br>Saarland<br><span data-stand>Stand 10/2026 · v43</span><br><span data-lizenz style="font-weight:600"></span></div>
+    <div class="header-right"><a class="portal-link" id="brandPortal" href="index.html"></a><br>Saarland<br><span data-stand>Stand 10/2026 · v44</span><br><span data-lizenz style="font-weight:600"></span></div>
   </div>
 </div>
 
@@ -239,15 +239,15 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
     <button class="map-toggle" id="mapToggle" aria-expanded="false" onclick="toggleMap()">🗺 Auf der Karte klicken (optional) – Kommune, Straße, Lage und Baulast aus amtlichen Geodaten vorschlagen lassen</button>
     <div class="map-datenhinweis" style="font-size:11.5px;color:var(--gray-light);margin-top:6px;line-height:1.5">Beim Öffnen der Karte werden Kartendienste abgerufen (basemap.de/BKG, OpenStreetMap, Geoportal Saarland, Overpass); dabei wird Ihre IP-Adresse an diese Dienste übertragen. Ohne Karte ist das Werkzeug vollständig nutzbar. <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutz</a></div>
     <div id="zmap"></div>
-    <div class="map-tip">💡 Tipp: möglichst <b>mittig auf die Fahrbahn</b> klicken – Straße und Klasse kommen aus dem amtlichen Straßennetz des LfS (Bundes- und Landesstraßen), Lage und Verkehr aus der Straßenverkehrszählung 2021, Baulast und Netzbezug aus dem Radverkehrsplan Saarland 2025. Jeder Wert zeigt seine Herkunft und ist nur ein Vorschlag.</div>
+    <div class="map-tip">💡 Tipp: möglichst <b>mittig auf die Fahrbahn</b> klicken – Straße und Klasse kommen aus dem amtlichen Straßennetz des LfS (Bundes- und Landstraßen), Lage und Verkehr aus der Straßenverkehrszählung 2021, Baulast und Netzbezug aus dem Radverkehrsplan Saarland 2025. Jeder Wert zeigt seine Herkunft und ist nur ein Vorschlag.</div>
     <div class="map-status" id="mapStatus"></div>
   </div>
   <div class="kommune-bar" id="kommuneBar"></div>
   <details class="lernbox"><summary><span class="lernbox-t">Gesetz oder Regelwerk? Was davon wirklich verbindlich ist</span><span class="lernbox-sub">StVO · VwV-StVO 2025 · ERA und die übrigen FGSV-Regelwerke · Landesvorgabe Saarland · Musterlösungen Baden-Württemberg</span></summary><div class="lernbox-body">
     <p><b>StVO</b> – Rechtsverordnung, gilt unmittelbar für alle. Sie regelt, <b>ob</b> etwas angeordnet werden darf.</p>
     <p><b>VwV-StVO</b> (Fassung vom 03.04.2025, BAnz AT 09.04.2025 B2, in Kraft seit 10.04.2025) – Verwaltungsvorschrift. Sie bindet die Behörde nach innen, nicht die Verkehrsteilnehmenden, und sagt der Straßenverkehrsbehörde, wie sie die StVO anzuwenden hat. Ein Abweichen ist möglich, aber begründungsbedürftig.</p>
-    <p><b>Technische Regelwerke der FGSV</b> (ERA 2010, RASt 06, RMS, RiLSA) – keine Rechtsnormen, sondern anerkannte Regeln der Technik. Sie sagen, <b>wie</b> eine Anlage auszusehen hat. Verbindlich werden sie, weil die VwV-StVO auf sie verweist, weil ein Land sie einführt oder weil ein Fördermittelgeber sie fordert. Wer ohne Begründung darunterbleibt, trägt das Haftungsrisiko.</p>
-    <p><b>Landesvorgaben</b> – im Saarland die Maßgaben und Richtlinien des MUKMAV (05/2023). Formal keine Rechtsnorm, im Förderverfahren praktisch bindend.</p>
+    <p><b>Technische Regelwerke der FGSV</b> (ERA 2010, RASt 06, RMS, RiLSA) – keine Rechtsnormen, sondern anerkannte Regeln der Technik. Sie sagen, <b>wie</b> eine Anlage auszusehen hat. Verbindlich werden sie, wenn die VwV-StVO auf sie verweist, wenn ein Land sie per Erlass einführt (im Saarland nicht geschehen) oder wenn ein Fördermittelgeber sie im Förderverfahren fordert. Wer ohne Begründung darunterbleibt, trägt das Haftungsrisiko.</p>
+    <p><b>Landesvorgaben</b> – im Saarland die Maßgaben und Richtlinien des MUKMAV (05/2023). Formal keine Rechtsnorm und im Förderverfahren nicht bindend – als fachliche Orientierung des Landes wird sie dort aber regelmäßig herangezogen.</p>
     <p><b>Musterlösungen anderer Länder</b> – etwa Baden-Württemberg. Im Saarland nicht eingeführt: fachliche Orientierung, kein Anspruch darauf und keine Pflicht dazu.</p>
     <div class="lernbox-merk">Merksatz: StVO und VwV-StVO entscheiden, <b>ob</b> – die technischen Regelwerke entscheiden, <b>wie</b>.</div>
   </div></details>
@@ -285,7 +285,7 @@ const BRAND=BRANDS[document.documentElement.getAttribute('data-brand')]||BRANDS.
   document.getElementById('brandFoot').innerHTML=BRAND.foot;
   lizenzInit();
 })();
-const STAND='Stand 10/2026 · v43';
+const STAND='Stand 10/2026 · v44';
 document.querySelectorAll('[data-stand]').forEach(function(n){n.textContent=STAND;});
 
 const MEASURES=[
@@ -323,8 +323,7 @@ const STREETS=[
 /* Unterauswahl, wenn Bundes-/Landstraße gewählt wird – hält die Rechtslogik exakt */
 const BL_SUB=[
 {id:"bundesstrasse",label:"Bundesstraße (B)",desc:"Baulast Bund · FStrG"},
-{id:"landesstrasse1",label:"Landstraße I. Ordnung (L)",desc:"Baulast Land · SaarlStrG"},
-{id:"landesstrasse2",label:"Landstraße II. Ordnung (L)",desc:"Baulast Land · SaarlStrG"}
+{id:"landesstrasse1",label:"Landstraße (L)",desc:"Baulast Land · SaarlStrG – I. oder II. Ordnung, für Zuständigkeit und Baulast ohne Unterschied"}
 ];
 
 const LOCATIONS=[
@@ -374,7 +373,7 @@ function nearestWay(ways,lat,lon){let best=null,bestD=Infinity;ways.forEach(func
 var ROAD_RE=/^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|road|service|track)(_link)?$/;
 function wayMinDist(w,lat,lon){var g=w.geometry||[];var md=Infinity;for(var i=0;i+1<g.length;i++){var dd=segDist(lat,lon,g[i].lat,g[i].lon,g[i+1].lat,g[i+1].lon);if(dd<md)md=dd;}return md;}
 function pickMainWay(ways,lat,lon){var rRoad=null,dRoad=Infinity,rOther=null,dOther=Infinity;ways.forEach(function(w){var md=wayMinDist(w,lat,lon);var isRoad=ROAD_RE.test((w.tags&&w.tags.highway)||'');if(isRoad){if(md<dRoad){dRoad=md;rRoad=w;}}else{if(md<dOther){dOther=md;rOther=w;}}});if(rRoad&&(!rOther||dRoad<=dOther+25))return {way:rRoad,dist:dRoad};if(rOther)return {way:rOther,dist:dOther};if(rRoad)return {way:rRoad,dist:dRoad};return null;}
-function strKlasseMap(tags){const ref=(tags.ref||'').replace(/\s+/g,' ').trim();const hw=tags.highway||'';if(hw==='motorway'||hw==='motorway_link')return {street:null,blsub:null,autobahn:true,klasse:'Bundesautobahn'+(ref?(' '+ref):'')};if(/^B\s?\d/i.test(ref))return {street:'bundeslandstrasse',blsub:'bundesstrasse',klasse:'Bundesstraße'+(ref?(' '+ref):'')};if(hw==='trunk')return {street:'bundeslandstrasse',blsub:'bundesstrasse',kraftfahrstrasse:true,klasse:'Kraftfahrstraße'+(ref?(' '+ref):'')};if(/^L\s?\d/i.test(ref))return {street:'bundeslandstrasse',blsub:'landesstrasse1',klasse:'Landstraße I. Ordnung'+(ref?(' '+ref):'')};if(/^K\s?\d/i.test(ref))return {street:'bundeslandstrasse',blsub:'landesstrasse2',kreisRef:true,klasse:'Landstraße II. Ordnung ('+ref+')'};if(hw==='track')return {street:'sonstige',blsub:null,klasse:'Wirtschafts-/Feldweg'};if(hw==='service')return {street:'sonstige',blsub:null,klasse:'Erschließungs-/Wirtschaftsweg'};if(hw==='cycleway')return {street:'sonstige',blsub:null,klasse:'Eigenständiger Radweg'};if(hw==='path'||hw==='footway')return {street:'sonstige',blsub:null,klasse:'Weg (Rad-/Fußweg)'};return {street:'gemeindestrasse',blsub:null,klasse:'Gemeindestraße'};}
+function strKlasseMap(tags){const ref=(tags.ref||'').replace(/\s+/g,' ').trim();const hw=tags.highway||'';if(hw==='motorway'||hw==='motorway_link')return {street:null,blsub:null,autobahn:true,klasse:'Bundesautobahn'+(ref?(' '+ref):'')};if(/^B\s?\d/i.test(ref))return {street:'bundeslandstrasse',blsub:'bundesstrasse',klasse:'Bundesstraße'+(ref?(' '+ref):'')};if(hw==='trunk')return {street:'bundeslandstrasse',blsub:'bundesstrasse',kraftfahrstrasse:true,klasse:'Kraftfahrstraße'+(ref?(' '+ref):'')};if(/^L\s?\d/i.test(ref))return {street:'bundeslandstrasse',blsub:'landesstrasse1',klasse:'Landstraße I. Ordnung'+(ref?(' '+ref):'')};if(/^K\s?\d/i.test(ref))return {street:'bundeslandstrasse',blsub:'landesstrasse1',kreisRef:true,klasse:'Landstraße II. Ordnung ('+ref+')'};if(hw==='track')return {street:'sonstige',blsub:null,klasse:'Wirtschafts-/Feldweg'};if(hw==='service')return {street:'sonstige',blsub:null,klasse:'Erschließungs-/Wirtschaftsweg'};if(hw==='cycleway')return {street:'sonstige',blsub:null,klasse:'Eigenständiger Radweg'};if(hw==='path'||hw==='footway')return {street:'sonstige',blsub:null,klasse:'Weg (Rad-/Fußweg)'};return {street:'gemeindestrasse',blsub:null,klasse:'Gemeindestraße'};}
 function lageGuessMap(tags,inRes){const ms=parseInt(String(tags.maxspeed||'').replace(/[^0-9]/g,''),10);if(tags['zone:traffic']==='DE:urban'||inRes||(ms&&ms<=50))return 'innerorts';if(tags['zone:traffic']==='DE:rural'||(ms&&ms>50))return 'ausserorts';return null;}
 function radwegTyp(t){const hw=t.highway;const foot=(t.foot||''),bic=(t.bicycle||''),seg=(t.segregated||'');const ts=(t.traffic_sign||'')+'|'+(t['traffic_sign:forward']||'')+'|'+(t['traffic_sign:backward']||'');if(hw==='cycleway'){return (foot==='designated'||foot==='yes')?(seg==='yes'?'getrennter Geh- und Radweg':'gemeinsamer Geh- und Radweg'):'Radweg';}if(hw==='path'){if(/240/.test(ts))return 'gemeinsamer Geh- und Radweg';if(/241/.test(ts)||seg==='yes')return 'getrennter Geh- und Radweg';return null;}if(hw==='footway'){return (bic==='yes'||bic==='designated')?'Gehweg (Rad frei)':null;}return null;}
 function roadCycleway(t){var vals=[t.cycleway,t['cycleway:both'],t['cycleway:right'],t['cycleway:left']].filter(Boolean);var found=null;vals.forEach(function(v){if(v==='track'||v==='sidepath')found=found||'begleitender Radweg (baulich getrennt)';else if(v==='lane')found=found||'Radfahrstreifen';else if(v==='shared_lane')found=found||'Schutzstreifen / Shared Lane';});return found;}
@@ -425,11 +424,11 @@ function applyGeo(g){
   const nw=ways.length?pickMainWay(ways,lat,lon):null;const osmCls=nw?strKlasseMap(nw.way.tags):null;
   /* Straße: amtlich vor OSM */
   let strasseHtml,strasseArt;
-  if(g.amt){state.street='bundeslandstrasse';state.blsub=g.amt.klasseCode==='B'?'bundesstrasse':(g.amt.klasseCode==='L1'?'landesstrasse1':'landesstrasse2');
+  if(g.amt){state.street='bundeslandstrasse';state.blsub=g.amt.klasseCode==='B'?'bundesstrasse':'landesstrasse1';
     strasseHtml=escH(g.amt.strasse)+' · '+escH(g.amt.klasse)+' <span style="color:var(--gray-light);font-size:11.5px">(LfS-Straßennetz, Abstand '+Math.round(g.amt.dist)+' m)</span>';strasseArt='amtlich';}
-  else if(osmCls&&!osmCls.autobahn&&osmCls.street!=='bundeslandstrasse'){state.street=osmCls.street;state.blsub=null;strasseHtml=escH(osmCls.klasse)+' – keine Bundes-/Landesstraße im Umkreis von 40 m';strasseArt='osm';}
+  else if(osmCls&&!osmCls.autobahn&&osmCls.street!=='bundeslandstrasse'){state.street=osmCls.street;state.blsub=null;strasseHtml=escH(osmCls.klasse)+' – keine Bundes-/Landstraße im Umkreis von 40 m';strasseArt='osm';}
   else if(osmCls&&osmCls.autobahn){state.street=null;state.blsub=null;strasseHtml=escH(osmCls.klasse)+'<br><span style="color:#b5722a;font-weight:600">⚠️ Autobahnen dürfen mit dem Rad nicht befahren werden (§ 18 Abs. 1 StVO) – bitte die parallele Straße anklicken.</span>';strasseArt='osm';}
-  else{state.street=null;state.blsub=null;strasseHtml='keine Bundes-/Landesstraße im Umkreis von 40 m – vermutlich Gemeindestraße oder sonstiger Weg (bitte unten wählen)';strasseArt='vermutet';}
+  else{state.street=null;state.blsub=null;strasseHtml='keine Bundes-/Landstraße im Umkreis von 40 m – vermutlich Gemeindestraße oder sonstiger Weg (bitte unten wählen)';strasseArt='vermutet';}
   /* Lage: Zählstelle gleicher Abschnitt (amtlich) → OSM → Adresse → offen */
   if(g.dtv&&g.dtv.modus==='abschnitt'&&g.dtv.zst.f){g.lage=g.dtv.zst.f==='FS'?'ausserorts':'innerorts';g.lageArt='amtlich';g.lageQuelle='SVZ 2021, Zählstelle '+g.dtv.zst.z+', gleicher Abschnitt';}
   else if(nw){const inRes=els.some(function(e){return e.type==='area'&&e.tags&&e.tags.landuse==='residential';});const lg=lageGuessMap(nw.way.tags,inRes);if(lg){g.lage=lg;g.lageArt='osm';g.lageQuelle='Tempo/Zone lt. OSM';}}
@@ -459,7 +458,7 @@ function applyGeo(g){
   const LT={innerorts:'innerorts',ausserorts:'außerorts'};
   let h='<div class="ok"><b>Aus Geodaten ermittelt</b> <span style="color:var(--gray-light);font-size:11.5px">– Vorschlag, alles unten änderbar</span>';
   h+='<br>Adresse: '+(g.adr&&g.adr.text?escH(g.adr.text):'—')+(g.adr&&g.adr.land&&g.adr.land!=='Saarland'?' <span style="color:#b5722a">– außerhalb des Saarlands, Geodaten decken nur das Saarland ab</span>':'');
-  h+='<br>Kommune: '+(state.kommune?escH(state.kommune):'— (nicht erkannt – bitte unten wählen)');
+  h+='<br>Kommune: <span id="geoKommune">'+(state.kommune?escH(state.kommune):'— (nicht erkannt – bitte unten wählen)')+'</span>';
   h+='<br>Straße: '+HERK[strasseArt]+strasseHtml;
   h+='<br>Lage: '+(g.lage?HERK[g.lageArt]+LT[g.lage]+' <span style="color:var(--gray-light);font-size:11.5px">('+escH(g.lageQuelle)+')</span>':'unbekannt (wird abgefragt)');
   if(g.baulastRvp)h+='<br>Baulast: '+HERK.rvp+escH(g.baulastRvp.text)+(g.baulastRvp.sonder?' · Sonderregelung: '+escH(g.baulastRvp.sonder):'');
@@ -470,7 +469,8 @@ function applyGeo(g){
     if(g.unfallStrecke)h+='<br>Unfallgeschehen (Strecke): '+HERK.amtlich+escH(RPGeo.unfallTextStrecke(g.unfallStrecke));
     if(unfallAuffaellig(u)||unfallStreckeAuffaellig(g.unfallStrecke))h+='<br><span style="color:#b5722a;font-weight:600">⚠️ Auffälliges Unfallgeschehen – Unfallkommission einbinden (1- und 3-Jahres-Karte der Polizei anfordern). Der Unfallatlas zeigt nur Unfälle mit Personenschaden, Sachschadensunfälle fehlen.</span>';}
   h+=routeHtml+radHint;
-  h+='<br><span style="color:var(--gray-light);font-size:11.5px">Kommune, Straße und Lage sind eingetragen – Sie wählen nur noch die Maßnahme. '+GEO_QUELLE+'</span></div>';
+  h+='<br><span style="color:var(--gray-light);font-size:11.5px">Kommune, Straße und Lage sind eingetragen – Sie wählen nur noch die Maßnahme. Kommune lässt sich unten in der Auswahlliste ändern. '+GEO_QUELLE+'</span>';
+  h+='<br><button class="btn btn-outline" style="width:auto;margin-top:8px;padding:5px 12px;font-size:12px" onclick="resetGeo()">Standort verwerfen</button></div>';
   setMapStatus(h);render();
 }
 const GEO_QUELLE='Geodaten: LfS-Straßennetz, SVZ 2021, Radverkehrsplan Saarland 2025 – © GDI-SL 2026, CC BY 4.0 · Unfälle: Unfallatlas 2023–2025, Statistische Ämter des Bundes und der Länder (dl-de/by-2.0) · Adresse: © OpenStreetMap-Mitwirkende (ODbL)';
@@ -483,7 +483,7 @@ function unfallAuffaellig(u){return !!u&&(u.gesamt>=3||u.getoetet>0||u.schwer>0|
 function unfallStreckeAuffaellig(r){return !!r&&(r.getoetet>0||r.schwer>=2||(r.rad+r.fuss)>=3||(r.schwerpunkt&&r.schwerpunkt.n>=3));}
 function geoVermerk(){const g=state.geo;if(!g)return '';let t='';
   t+='Standort: '+(g.adresse?g.adresse+' ':'')+'('+String(g.lat).replace('.',',')+', '+String(g.lon).replace('.',',')+')\n';
-  t+='Straße lt. Geodaten: '+(g.amt?g.amt.strasse+' – '+g.amt.klasse+' (amtlich, LfS-Straßennetz)':'keine Bundes-/Landesstraße im Umkreis von 40 m')+'\n';
+  t+='Straße lt. Geodaten: '+(g.amt?g.amt.strasse+' – '+g.amt.klasse+' (amtlich, LfS-Straßennetz)':'keine Bundes-/Landstraße im Umkreis von 40 m')+'\n';
   if(g.lage)t+='Lage lt. Geodaten: '+(g.lage==='innerorts'?'innerorts':'außerorts')+' ('+g.lageQuelle+', '+g.lageArt+')\n';
   if(g.baulastRvp)t+='Baulast lt. Radverkehrsplan 2025: '+g.baulastRvp.text+(g.baulastRvp.sonder?' – Sonderregelung: '+g.baulastRvp.sonder:'')+'\n';
   if(g.netz)t+='Netzbezug (Radverkehrsplan 2025): '+g.netz.text+(g.netz.fuehrung?' · Führung im Bestand: '+g.netz.fuehrung:'')+'\n';
@@ -496,30 +496,28 @@ function geoVermerk(){const g=state.geo;if(!g)return '';let t='';
 /* Praxishinweise: primär ERA 2010; ergänzend Qualitätsstandards und Musterlösungen BW (Stand Okt. 2025, Ausgabe 02/2026; im Saarland nicht verbindlich – Vorgriff auf die ERA-Neufassung) */
 const PRAXIS={
   schutzstreifen:[
-    "SL|Kosten und Unterhaltung: Der Schutzstreifen ist Bestandteil der Fahrbahn – beides trägt der Baulastträger der Straße, an Bundes- und Landstraßen also der LfS. Erforderlich ist immer eine verkehrsrechtliche Anordnung (LfS, Vortrag AGFK-SL 02.09.2026)",
+    "SL|Kosten und Unterhaltung: Der Schutzstreifen ist Bestandteil der Fahrbahn – beides trägt der Baulastträger der Straße, an Bundes- und Landstraßen also der LfS (LfS, Vortrag AGFK-SL 02.09.2026). Davon zu trennen: Die Markierung selbst muss die Straßenverkehrsbehörde anordnen",
     "SL|Auf dem Schutzstreifen darf nicht gehalten werden (StVO Anlage 3 lfd. Nr. 22). Der LfS empfiehlt deshalb, Anwohner und Gewerbetreibende vorab einzubinden und die Maßnahme durch einen Gemeinderatsbeschluss zu tragen – sonst scheitert sie erfahrungsgemäß am Parkdruck (LfS, Vortrag AGFK-SL 02.09.2026)",
     "G|Ein Schutzstreifen ist in der Regel 1,50 m breit, mindestens 1,25 m (ERA 2010, Kap. 3.2). Anders als beim Radfahrstreifen sagt die ERA hier nicht, dass die Markierung mitzählt","G|Diese Maße sind zu vergrößern, wenn die nutzbare Breite eingeschränkt ist – etwa durch eine Rinne, die sich schlecht befahren lässt. Die Rinne zählt also faktisch nicht zum Schutzstreifen",
     "G|Schutzstreifen sind Fahrbahnmarkierungen – sie erhöhen nicht die Gesamtfahrbahnbreite","G|Der Schutzstreifen ist Teil der Fahrbahn. Lkw dürfen ihn im Bedarfsfall überfahren, parken darf dort niemand. Genau deshalb soll er bei hohem Schwerverkehr vermieden werden – die ERA nennt als Grenze mehr als 1.000 Schwerverkehrsfahrzeuge am Tag (ERA 2010, Kap. 3.2)","G|An Mittelinseln endet der Schutzstreifen etwa 20 m vorher, wenn neben der Insel weniger als 2,25 m Restfahrbahn bleiben (ERA 2010, Kap. 3.2)",
     "G|Kein Einsatz bei zulässiger Höchstgeschwindigkeit über 50 km/h oder mehr als 15.000 Kfz in 24 h (DTV)",
-    "SL|Breite 1,50 m; Schmalstrich-Lücke-Markierung 1,00 m / 1,00 m, Strichbreite 0,12 m",
+    "G|Markierung: Schmalstrich-Lücke 1,00 m / 1,00 m, Strichbreite 0,12 m (ERA 2010, RMS; so auch die Landesvorgabe MUKMAV 05/2023)",
     "SL|Fahrradpiktogramm ca. alle 300 m markieren",
-    "G|Zwischen den Schutzstreifen müssen mindestens 4,50 m bleiben, bei hohen Verkehrsstärken besser 5,00 m. Damit können sich zwei Pkw begegnen. Für Lkw reicht es nicht – bei 4,50 m ist der Begegnungsfall Lkw/Lkw nicht möglich (ERA 2010, Kap. 3.2)","G|Ist die verbleibende Fahrgasse schmaler als 5,50 m, darf in der Fahrbahnmitte keine Leitlinie markiert werden. Das wird in der Praxis häufig übersehen und macht die Markierung angreifbar","SL|Kernfahrbahn ≥ 4,50 m; bis ≤ 5,50 m keine mittlere Leitlinie – deckungsgleich mit der ERA",
+    "G|Zwischen den Schutzstreifen müssen mindestens 4,50 m bleiben, bei hohen Verkehrsstärken besser 5,00 m. Damit können sich zwei Pkw begegnen. Für Lkw reicht es nicht – bei 4,50 m ist der Begegnungsfall Lkw/Lkw nicht möglich (ERA 2010, Kap. 3.2)","G|Ist die verbleibende Fahrgasse schmaler als 5,50 m, darf in der Fahrbahnmitte keine Leitlinie markiert werden (ERA 2010, Kap. 3.2; so auch die Landesvorgabe)",
     "G|VwV-StVO 2025 (Rn. 14e): Flächen für den Rad- und Fußverkehr sind grundsätzlich angemessen, wenn sie mindestens den einschlägigen technischen Regelwerken entsprechen – die VwV selbst enthält keine Maßangaben. Maßgeblich ist damit der jeweils aktuelle Stand der Technik, nicht der jeweils niedrigste dokumentierte Wert","G|Sicherheitstrennstreifen zu parkenden Autos: Bei Längsparkstreifen mit häufigem Parkwechsel soll er 0,50 m erkennbar sein, bei Schrägparken 0,75 m (ERA 2010, Kap. 3.2). Das ist der Wert von 2010 – neuere Regelwerke fordern durchgängig 0,75 m","SL|Die Landesvorgabe (MUKMAV 05/2023) übernimmt die ERA-Werte 0,50 m und 0,75 m unverändert. Wer heute plant, sollte 0,75 m ansetzen und eine Unterschreitung begründen – die Türöffnungsbreite eines Pkw hat sich seit 2010 nicht verkleinert",
-    "SL|Nur innerörtlich anzulegen; in Kreisverkehrsplätzen nicht zulässig",
+    "G|Nur innerorts anzulegen; in Kreisverkehrsplätzen nicht zulässig (ERA 2010; so auch die Landesvorgabe)",
     "SL|Auch auf vierstreifigen Straßen möglich",
     "BW|Verbleibende Kernfahrbahn ≥ 4,50 m bei Gegenverkehr (ohne Parken)"
   ],
   radfahrstreifen:[
-    "SL|Kosten und Unterhaltung: Der Radfahrstreifen ist Bestandteil der Fahrbahn – beides trägt der Baulastträger der Straße, an Bundes- und Landstraßen der LfS. Verkehrsrechtliche Anordnung erforderlich. LfS-Maße innerorts: Breite ≥ 1,85 m, Restfahrbahn ≥ 5,50 m, Sicherheitstrennstreifen zu Längsparkständen 0,50–0,75 m (LfS, Vortrag AGFK-SL 02.09.2026)",
+    "SL|Kosten und Unterhaltung: Anders als der Schutzstreifen ist der Radfahrstreifen rechtlich kein Teil der Fahrbahn, sondern ein durch Z 295 abgetrennter Sonderweg für den Radverkehr (VwV-StVO zu § 2 Abs. 4 Satz 2). Baulast und Unterhaltung liegen trotzdem beim Baulastträger der Straße, an Bundes- und Landstraßen beim LfS. Die Markierung selbst muss die Straßenverkehrsbehörde anordnen. LfS-Maße innerorts: Breite ≥ 1,85 m, Restfahrbahn ≥ 5,50 m, Sicherheitstrennstreifen zu Längsparkständen 0,50–0,75 m (LfS, Vortrag AGFK-SL 02.09.2026)",
     "G|Radfahrstreifen sollen 1,85 m breit sein – einschließlich der Breitstrichmarkierung, die also mitzählt (ERA 2010, Kap. 3.3). Bestätigt am Originaltext",
     "G|Bei hohen Kfz- oder Radverkehrsstärken, Vzul über 50 km/h oder häufigem Anhängerverkehr mindestens 2,00 m (ERA 2010, Kap. 3.3)",
     "G|Ein Maß unterhalb von 1,85 m sieht die ERA 2010 nicht vor – es gibt kein Klammer-Mindestmaß für Radfahrstreifen",
-    "SL|Breite 1,85 m einschl. Markierung; bei hohen Kfz-/Radverkehrsstärken mind. 2,00 m",
-    "SL|Durchgezogener Breitstrich 0,25 m (Z 295); Kernfahrbahn ≥ 5,50 m mit mittlerer Leitlinie zur Fahrstreifentrennung",
-    "SL|Anwendungsbereich innerorts bei ca. 500 bis 2.000 Kfz/h, abhängig von der zulässigen Höchstgeschwindigkeit",
-    "SL|Sicherheitsraum zu parkenden Fahrzeugen: 0,50–0,75 m bei Längsparkstreifen, 0,75 m bei Schrägparkständen",
-    "SL|Fortsetzung an Knotenpunkten als Furt mit enger Breitstrich-Lücke-Markierung 0,50 m / 0,20 m, ggf. Roteinfärbung",
-    "SL|In Kreisverkehrsplätzen nicht zulässig; Führung ausschließlich auf Fahrbahnniveau",
+    "G|Durchgezogener Breitstrich 0,25 m (Z 295); Kernfahrbahn ≥ 5,50 m mit mittlerer Leitlinie zur Fahrstreifentrennung (ERA 2010, RMS; so auch die Landesvorgabe)",
+    "G|Anwendungsbereich innerorts bei ca. 500 bis 2.000 Kfz/h, abhängig von der zulässigen Höchstgeschwindigkeit (ERA 2010, Kap. 2.3; so auch die Landesvorgabe)",
+    "G|Fortsetzung an Knotenpunkten als Furt mit Breitstrich-Lücke-Markierung 0,50 m / 0,20 m, ggf. Roteinfärbung (ERA 2010, RMS; so auch die Landesvorgabe)",
+    "G|In Kreisverkehrsplätzen nicht zulässig; Führung ausschließlich auf Fahrbahnniveau (ERA 2010; so auch die Landesvorgabe)",
     "BW|Sicherheitstrennstreifen zum Parken ≥ 0,75 m",
     "BW|Anti-Musterlösung: Ein fehlender Sicherheitstrennstreifen zum ruhenden Verkehr lässt Radfahrende in den Türöffnungsbereich geraten (Dooring). Vorrangig Entfall der Kfz-Parkstände prüfen; auf Kurzzeitparken verzichten, um Parkwechselvorgänge zu reduzieren",
     "BW|Regelmaß Radfahrstreifen ≥ 2,00 m zzgl. Sicherheitstrennstreifen (Basisstandard); Radvorrangroute ≥ 2,50 m, Radschnellverbindung ≥ 3,00 m"
@@ -568,10 +566,10 @@ const PRAXIS={
     "G|§ 2 Abs. 5 StVO: Kinder bis zum vollendeten 8. Lebensjahr müssen den Gehweg benutzen, bis zum vollendeten 10. Lebensjahr dürfen sie. Eine geeignete Aufsichtsperson ab 16 Jahren darf sie dabei auf dem Gehweg begleiten. Die Freigabe ändert daran nichts – sie richtet sich an alle übrigen Radfahrenden"
   ],
   radweg_bau:[
-    "SL|Kosten und Unterhaltung innerorts: Baulastträger der Straße – an Bundes- und Landstraßen der LfS. Besonderheit im Saarland: Die Unterhaltung wird häufig gegen eine Ablösesumme an die Kommune übertragen. Vor dem Bau klären, ob das gewollt ist (LfS, Vortrag AGFK-SL 02.09.2026)",
-    "SL|Außerorts sind straßenbegleitende Rad- und Gehwege Bestandteil der Straße – Kosten und Unterhaltung beim Baulastträger der Straße. LfS-Maße: Breite ≥ 2,50 m, Sicherheitstrennstreifen zur Fahrbahn 1,75 m (LfS, Vortrag AGFK-SL 02.09.2026)",
+    "SL|io|Kosten und Unterhaltung innerorts: Baulastträger der Straße – an Bundes- und Landstraßen der LfS. Besonderheit im Saarland: Die Unterhaltung wird häufig gegen eine Ablösesumme an die Kommune übertragen. Vor dem Bau klären, ob das gewollt ist (LfS, Vortrag AGFK-SL 02.09.2026)",
+    "SL|ao|Außerorts sind straßenbegleitende Rad- und Gehwege Bestandteil der Straße – Kosten und Unterhaltung beim Baulastträger der Straße. LfS-Maße: Breite ≥ 2,50 m, Sicherheitstrennstreifen zur Fahrbahn 1,75 m (LfS, Vortrag AGFK-SL 02.09.2026)",
     "SL|Selbstständige und touristische Radwege (auch SaarRadland-Routen): Kosten und Unterhaltung liegen beim jeweiligen Flächeneigentümer – Gemeinde, Forst, Privat –, nicht beim LfS. Das gilt auch dort, wo der LfS punktuell Instandsetzungen übernimmt (LfS, Vortrag AGFK-SL 02.09.2026)",
-    "SL|LfS-Maße innerorts: Einrichtungsradweg 2,00 m, beidseitiger Zweirichtungsradweg 2,50 m, einseitiger Zweirichtungsradweg 3,00 m; Sicherheitstrennstreifen zur Fahrbahn 0,50–0,75 m, zu Längsparkständen 0,75 m (LfS, Vortrag AGFK-SL 02.09.2026)",
+    "SL|io|LfS-Maße innerorts: Einrichtungsradweg 2,00 m, beidseitiger Zweirichtungsradweg 2,50 m, einseitiger Zweirichtungsradweg 3,00 m; Sicherheitstrennstreifen zur Fahrbahn 0,50–0,75 m, zu Längsparkständen 0,75 m (LfS, Vortrag AGFK-SL 02.09.2026)",
     "G|Ein Radweg für eine Fahrtrichtung ist im Regelfall 2,00 m breit. Nur bei geringem Radverkehr sind 1,60 m zulässig – das ist kein allgemeines Mindestmaß, sondern an diese Bedingung geknüpft. Die 2,00 m ermöglichen das Überholen (ERA 2010, Kap. 3.4)","G|Breiter als 2,00 m sollte der Radweg werden bei Hauptverbindungen des Radverkehrs, bei hoher Nutzung des Seitenraums, bei häufigen Belastungsspitzen (Fahrradpulks) und bei starkem Gefälle (ERA 2010, Kap. 3.4)","G|Zweirichtungsradweg: 2,50 m im Regelfall bei beidseitiger Führung, 3,00 m bei einseitiger. Das Mindestmaß von 2,00 m gilt nur bei geringem Radverkehr und nur dann, wenn im Begegnungsfall zweier Gespanne mit Anhänger der Sicherheitstrennstreifen mitbenutzt werden kann (ERA 2010, Kap. 3.5)","G|Am Radwegende gehört eine Verflechtungsstrecke von 10 bis 20 m dazu, ausgeführt als Radfahrstreifen oder Schutzstreifen. Ohne sie endet der Radweg an der Bordkante und die Einfädelung bleibt dem Zufall überlassen (ERA 2010, Kap. 3.4)",
     "G|Innerorts nur Radverkehr einschließlich Elektrokleinstfahrzeuge; außerorts dürfen zusätzlich Mofas Radwege benutzen. Pedelecs bis 25 km/h gelten als Fahrrad und sind damit ohnehin erfasst; S-Pedelecs sind Kleinkrafträder und dürfen Radwege nicht benutzen. Der Begriff »E-Bike« ist in der StVO nicht definiert und sollte in Anordnungen vermieden werden",
     "SL|Breite 2,00 m, gemeinsamer Geh- und Radweg 2,50 m",
@@ -579,7 +577,7 @@ const PRAXIS={
     "SL|Radverkehr an Radwegeenden baulich getrennt auf die Fahrbahn führen (Bordführung oder Schutzinsel)",
     "BW|Sicherheitstrennstreifen zur Fahrbahn ≥ 0,75 m","BW|Einrichtungsradweg ≥ 2,00 m zzgl. Sicherheitstrennstreifen (Basisstandard) – die ERA-Regelbreite von 2,00 m wird damit zum Mindestmaß, der Klammerwert 1,60 m entfällt","BW|Bei beengten Verhältnissen und geringer Radverkehrsnachfrage ausnahmsweise geringere Breite, aber nicht unter 1,60 m","BW|Zweirichtungsradweg ≥ 2,50 m (beidseitig) bzw. ≥ 3,00 m (einseitig), jeweils zzgl. Sicherheitstrennstreifen; straßenbegleitend nur im Ausnahmefall","BW|Zweirichtungsradwege innerorts sind als Neuanlage nur ausnahmsweise und nach sorgfältiger Einzelfallprüfung möglich – erhöhtes Unfallrisiko an Knotenpunkten und Grundstückszufahrten","BW|Zweirichtungsradwege an Einmündungen ca. 4,00–5,00 m von der Hauptfahrbahn absetzen; Sichtfelder nach RASt einhalten","BW|In Steigungs- und Gefällestrecken sowie in Kurvenbereichen ist eine Aufweitung des Radweges anzustreben","BW|Seitentrennstreifen außerorts ≥ 1,75 m; Unterschreitung nur in begründeten Ausnahmefällen und auf kurze Abschnitte begrenzt, dann Hochbord und Sicherheitstrennstreifen ≥ 0,75 m"
   ],
-  gemeinsamer_geh_radweg:["SL|Geteilte Zuständigkeit an Bundes- und Landstraßen innerorts: Kosten und Unterhaltung werden 50/50 zwischen Straßenbaulastträger und Gehweg-Baulastträger geteilt – der LfS baut, die Kommune unterhält. Das vor Planungsbeginn schriftlich festhalten. Breite ≥ 2,50 m, Sicherheitstrennstreifen zur Fahrbahn 0,50–0,75 m (LfS, Vortrag AGFK-SL 02.09.2026)","G|Vor jeder Breitendiskussion zuerst die acht Ausschlusskriterien der ERA 2010, Kap. 3.6 prüfen – sie stehen ausführlich bei »Gehweg – Radfahrer frei«. Greift eines davon, ist die gemeinsame Führung unabhängig von der Breite ausgeschlossen. Besonders häufig übersehen: Hauptverbindungen des Radverkehrs sind ausgenommen","BW|Die gemeinsame Führung mit dem Fußverkehr kommt nur in Ausnahmefällen in Betracht, wenn keine andere Führungsform in Frage kommt","BW|Außerorts bei 10 bis ca. 25 Fußgängern in der Spitzenstunde des Radverkehrs: ≥ 4,00 m im Einrichtungs-, ≥ 5,00 m im Zweirichtungsverkehr; unter 10 Fußgängern keine Verbreiterung nötig","BW|Nur auf Streckenabschnitten ohne starke Längsneigung; bei fahrbahnparalleler Führung zusätzlich der reguläre Sicherheitstrennstreifen","BW|Im Haltestellenbereich gemeinsamer Geh- und Radweg ≥ 3,00 m",
+  gemeinsamer_geh_radweg:["SL|Geteilte Zuständigkeit an Bundes- und Landstraßen innerorts: Kosten und Unterhaltung werden 50/50 zwischen Straßenbaulastträger und Gehweg-Baulastträger geteilt – der LfS baut, die Kommune unterhält. Das vor Planungsbeginn schriftlich festhalten. Breite ≥ 2,50 m, Sicherheitstrennstreifen zur Fahrbahn 0,50–0,75 m (LfS, Vortrag AGFK-SL 02.09.2026)","G|Vor jeder Breitendiskussion zuerst die acht Ausschlusskriterien der ERA 2010, Kap. 3.6 prüfen – sie stehen ausführlich bei »Gehweg – Radfahrer frei«. Greift eines davon, ist die gemeinsame Führung unabhängig von der Breite ausgeschlossen. Besonders häufig übersehen: Hauptverbindungen des Radverkehrs sind ausgenommen","BW|Die gemeinsame Führung mit dem Fußverkehr kommt nur in Ausnahmefällen in Betracht, wenn keine andere Führungsform in Frage kommt","BW|ao|Außerorts bei 10 bis ca. 25 Fußgängern in der Spitzenstunde des Radverkehrs: ≥ 4,00 m im Einrichtungs-, ≥ 5,00 m im Zweirichtungsverkehr; unter 10 Fußgängern keine Verbreiterung nötig","BW|Nur auf Streckenabschnitten ohne starke Längsneigung; bei fahrbahnparalleler Führung zusätzlich der reguläre Sicherheitstrennstreifen","BW|Im Haltestellenbereich gemeinsamer Geh- und Radweg ≥ 3,00 m",
     "G|Regelbreite 2,50 m (ERA 2010)",
     "G|Mindestbreite 2,00 m (nur bei geringem Fußgänger- und Radverkehr)",
     "G|Nur bei geringem Fußgängeraufkommen zulässig (VwV-StVO zu Z 240)",
@@ -645,17 +643,21 @@ const PRAXIS={
     "G|Wichtig zu unterscheiden: Die weiße Furt aus unterbrochenen Querstrichen ist die eigentliche Markierung und muss angeordnet werden. Die rote Fläche darunter ist rechtlich keine Markierung – nach § 39 Abs. 5 StVO sind Markierungen grundsätzlich weiß. Sie zählt als Gestaltung der Fahrbahnoberfläche",
     "G|Daraus folgt für die Zuständigkeit: Über die Roteinfärbung entscheidet der Baulastträger, nicht die Straßenverkehrsbehörde. Eine Anordnung braucht es dafür nicht. Das erklärt, warum sie mal gemacht wird und mal nicht – es gibt keinen Anspruch darauf, sondern eine Ermessens- und Kostenentscheidung",
     "G|Trotzdem sollte die Straßenverkehrsbehörde eingebunden werden, üblicherweise zusammen mit der Polizei. Die Einfärbung verändert, wie die Vorfahrtsituation wahrgenommen wird – das gehört abgestimmt, auch wenn es formal nicht vorgeschrieben ist",
-    "G|Die weiße Furt ist Pflicht, wo ein Radweg entlang einer Vorfahrtstraße über einen Knotenpunkt geführt wird. Das gilt auch für Radwege ohne Benutzungspflicht und für Gehwege, die für den Radverkehr freigegeben sind",
-    "G|Was die rote Fläche bewirkt: Sie macht sichtbar, dass hier mit Radverkehr zu rechnen ist und dass Abbiegende warten müssen. Empfohlen wird sie vor allem dort, wo Kraftfahrende nicht mit Radverkehr rechnen – an Furten von Zweirichtungsradwegen und an Knotenpunkten, an denen der Radweg abgesetzt verläuft",
-    "SL|Im Saarland uneinheitlich gehandhabt: häufig an Landstraßen mit Z 240, gelegentlich auch an innerörtlichen Knotenpunkten mit Schutzstreifen. Eine landesweite Vorgabe gibt es nicht – deshalb lohnt es sich, die Frage im Rahmen der Verkehrsschau grundsätzlich zu klären statt Fall für Fall",
-    "SL|Kostenfrage vorab klären: Epoxidharz hält rund 10 Jahre, durchgefärbter Asphalt rund 20. Wer nur die günstigere Variante einplant, hat den Erneuerungsbedarf früher wieder auf dem Tisch",
+    "G|Die weiße Furtmarkierung ist Pflicht, wo ein Radweg entlang einer Vorfahrtstraße über einen Knotenpunkt geführt wird. Das gilt auch für Radwege ohne Benutzungspflicht und für Gehwege, die für den Radverkehr freigegeben sind",
+    "G|Was die rote Fläche bewirkt: Rot markierte Furten erhöhen die Aufmerksamkeit der übrigen Verkehrsteilnehmer für den Radverkehr und tragen so zur Verkehrssicherheit bei. Empfohlen wird sie vor allem dort, wo Kraftfahrende nicht mit Radverkehr rechnen – an Furten von Zweirichtungsradwegen und an Knotenpunkten, an denen der Radweg abgesetzt verläuft",
+    "G|Wird eine bestehende, bereits angeordnete Furt oder Radverkehrsmarkierung nachträglich rot eingefärbt, braucht es dafür keine neue Anordnung – die Einfärbung ist Gestaltung der Oberfläche, Sache des Baulastträgers",
+    "SL|Roteinfärbung von Furten wird im Saarland uneinheitlich gehandhabt: häufig an Landstraßen mit Z 240, gelegentlich auch an innerörtlichen Knotenpunkten mit Schutzstreifen. Eine landesweite Vorgabe gibt es nicht – deshalb lohnt es sich, die Frage im Rahmen der Verkehrsschau grundsätzlich zu klären statt Fall für Fall",
+    "SL|Kostenfrage vorab klären: Epoxidharz-Beschichtung hält rund 10 Jahre, durchgefärbter Asphalt rund 20 – der lohnt sich aber nur bei großen Flächen. Wer nur die günstigere Variante einplant, hat den Erneuerungsbedarf früher wieder auf dem Tisch",
     "BW|In Baden-Württemberg werden Fahrradstraßen standardmäßig mit roter Furt über Kreuzungen und Einmündungen geführt (Musterblatt 6.3-1)",
     "BW|Piktogrammketten: Zwei Erlasse des Verkehrsministeriums (2024) ermächtigen die Straßenverkehrsbehörden ausdrücklich, sie anzuordnen. Weiße Fahrradpiktogramme mit Richtungspfeilen, Wiederholung in Abständen bis 50 m, Piktogramm 1,00 m breit und 1,30 m hoch nach RMS. Bayern lässt sie nur zu, wenn eine regelkonforme Radverkehrsanlage nicht möglich ist. Im Saarland fehlt eine entsprechende Regelung – die ERA-Neufassung wird das Thema aufgreifen"
   ],
   fahrbahnanhebung:[
     "G|Zwei Dinge sind nötig und werden oft verwechselt: Der Umbau selbst ist Sache des Baulastträgers. Die Beschilderung, die dazugehört, muss die Straßenverkehrsbehörde anordnen. Beide Wege parallel starten, sonst steht die Anhebung fertig da und darf nicht beschildert werden",
     "G|Was eine Anhebung leistet: Sie zwingt zum Langsamfahren, ohne dass jemand kontrollieren muss. Anders als ein Tempo-30-Schild wirkt sie rund um die Uhr und von selbst",
-    "G|An Querungsstellen bringt sie einen zweiten Vorteil: Die Fläche liegt auf Gehwegniveau, es gibt keine Bordkante zu überwinden. Das hilft dem Fußverkehr und ist zugleich der Punkt, an dem Barrierefreiheit und Radverkehrsführung zusammenkommen",
+    "G|An Querungsstellen bringt sie einen zweiten Vorteil: Die Fläche liegt auf Gehwegniveau. Barrierefrei ist sie aber nur mit getrennter Querungsstelle – Nullabsenkung für Rollstuhl und Rollator, daneben eine etwa 6 cm hohe, tastbare Kante mit Bodenindikatoren für blinde und sehbehinderte Menschen (DIN 18040-3, H BVA)",
+    "G|Ingenieurtechnische Detailplanung ist erforderlich: Rampenneigung und Ausrundung, Entwässerung, Barrierefreiheit, Befahrbarkeit für Bus und Rettungsdienste",
+    "G|Anlieger früh beteiligen: Das Überfahren einer Anhebung erhöht die Fahrgeräusche – Beschwerden kommen erfahrungsgemäß nach dem Bau, nicht davor",
+    "SL|An Bundes- und Landstraßen entscheidet der LfS als Baulastträger mit – in der Ortsdurchfahrt möglich, auf der freien Strecke praktisch nicht",
     "G|Grenzen beachten: Auf Strecken mit Linienbusverkehr oder hohem Schwerverkehrsanteil ist die Ausführung mit dem Verkehrsunternehmen abzustimmen. Rampenneigung und Ausrundung entscheiden darüber, ob die Anlage angenommen oder umfahren wird",
     "SL|In der Praxis scheitert die Anhebung selten am Recht, sondern am Geld. Sie kostet ein Vielfaches einer Markierungslösung. Wo Fördermittel in Frage kommen, gehört sie in die Kostenschätzung des Gesamtvorhabens – nachträglich als Einzelmaßnahme ist sie schwer zu finanzieren",
     "SL|Entwässerung früh mitdenken: Eine Anhebung verändert den Wasserablauf. Wird das erst in der Ausführung bemerkt, wird es teuer"
@@ -701,13 +703,13 @@ const PRAXIS={
   ],
   querungshilfe:[
     "G|Platzbedarf zum Aufstellen (ERA 2010, Kap. 2.2.5): Ein einzelnes Fahrrad braucht rund 2,00 m Länge und 1,00 m Breite. Ein Fahrrad mit Anhänger braucht 3,00 bis 3,50 m Länge – dieses Maß passt dann auch für Liegeräder",
-    "G|Aufstellflächen auf Mittelinseln sollen 3,00 m lang und 4,00 m breit sein. Bei Zweirichtungsverkehr oder starkem Radverkehr kommt ein Breitenzuschlag dazu (ERA 2010, Kap. 2.2.5)",
+    "G|Aufstellflächen auf Mittelinseln sollen 3,00 m lang und 4,00 m breit sein – Länge in Querungsrichtung (das ist die Tiefe der Insel), Breite längs der Fahrbahn. Bei Zweirichtungsverkehr oder starkem Radverkehr kommt ein Breitenzuschlag dazu (ERA 2010, Kap. 2.2.5)",
     "G|Absolute Untergrenze: 2,50 m Länge. Wird sie angesetzt, muss die Fläche mindestens 4,00 m breit sein, damit sich Fahrräder mit Anhänger schräg aufstellen können. Wer nur die 2,50 m plant und die Breite vergisst, baut eine Insel, auf der ein Lastenrad nicht sicher steht",
     "G|Die Dimensionierung richtet sich nach der Radverkehrsstärke in der Spitzenstunde und, an einer Ampel, nach der Zahl der während der Sperrzeit wartenden Radfahrenden (ERA 2010, Kap. 2.2.5)",
     "SL|Bordabsenkungen, taktile Elemente und Auffindestreifen mitplanen – Barrierefreiheit nach § 4 i. V. m. § 8 SBGG ist Fördervoraussetzung nach der FRL NMOB-Rad-Fuß, nicht Kür",
     "BW|Mittelinsel-Aufstellfläche ≥ 2,50 m – deckungsgleich mit der ERA-Untergrenze, nicht mit deren Regelmaß",
-    "BW|Ab 5.000 Kfz/24 h Mittelinsel erforderlich",
-    "BW|Ab 15.000 Kfz/24 h LSA oder Über-/Unterführung prüfen"
+    "G|Ob und welche Querungshilfe nötig ist, richtet sich nach der Kfz-Verkehrsstärke und dem Querungsbedarf (RASt 06, EFA, R-FGÜ) – von der ungesicherten Querung über Fußgängerüberweg, vorgezogene Seitenräume und Mittelinsel bis zur Fußgängersignalanlage oder Über-/Unterführung. Für die Detailplanung im Bedarfsfall ein Fachbüro einschalten",
+    "BW|Anhaltswerte aus Baden-Württemberg: ab etwa 5.000 Kfz/24 h Mittelinsel, ab etwa 15.000 Kfz/24 h LSA oder Über-/Unterführung prüfen – maßgeblich bleibt der Querungsbedarf nach RASt"
   ]
 };
 
@@ -716,10 +718,12 @@ const PRAXIS={
    fachlicher Vorgriff auf die ERA-Fortschreibung) */
 const QGRP={G:{txt:"GESETZ",cls:"q-g"},SL:{txt:"SAARLAND",cls:"q-sl"},BW:{txt:"BW · ERA-VORGRIFF",cls:"q-bw"},AL:{txt:"ANDERES BUNDESLAND",cls:"q-al"}};
 const QORDER=["G","SL","BW","AL"];
-function splitQ(p){const i=p.indexOf("|");if(i<1)return{q:null,t:p};const k=p.slice(0,i);return QGRP[k]?{q:k,t:p.slice(i+1)}:{q:null,t:p};}
-function sortPraxis(a){return a.map(splitQ).map((o,i)=>({o,i})).sort((x,y)=>{const rx=x.o.q?QORDER.indexOf(x.o.q):99,ry=y.o.q?QORDER.indexOf(y.o.q):99;return rx-ry||x.i-y.i;}).map(x=>x.o);}
+function splitQ(p){const i=p.indexOf("|");if(i<1)return{q:null,t:p,lage:null};const k=p.slice(0,i);if(!QGRP[k])return{q:null,t:p,lage:null};let t=p.slice(i+1),lage=null;const m=t.match(/^(io|ao)\|/);if(m){lage=m[1];t=t.slice(3);}return{q:k,t:t,lage:lage};}
+/* Hinweise, die nur innerorts (io) oder nur außerorts (ao) gelten, bei bekannter Lage ausblenden */
+function lageOk(o){const l=state.location;if(!o.lage||!l)return true;return l==="ausserorts"?o.lage==="ao":o.lage==="io";}
+function sortPraxis(a){return a.map(splitQ).filter(lageOk).map((o,i)=>({o,i})).sort((x,y)=>{const rx=x.o.q?QORDER.indexOf(x.o.q):99,ry=y.o.q?QORDER.indexOf(y.o.q):99;return rx-ry||x.i-y.i;}).map(x=>x.o);}
 const LERNBOX_MASSE=`<details class="lernbox inresult"><summary><span class="lernbox-t">Was die Zahlen bedeuten: Regelmaß, Mindestmaß, Klammerwert</span><span class="lernbox-sub">Warum die Regelbreite kein Idealwert ist und wann ein Mindestmaß überhaupt zulässig ist</span></summary><div class="lernbox-body">    <p><b>Regelmaß</b> ist der Wert, der zu planen ist – nicht der Idealwert, sondern der Normalfall.</p>    <p><b>Mindestmaß</b> gilt nur bei nachweislich beengten Verhältnissen und ist zu begründen. Mehrere Mindestmaße im selben Querschnitt zu kombinieren, ist nach ERA ausdrücklich zu vermeiden.</p>    <p><b>Klammerwerte</b> in ERA und RASt sind reduzierte Ausnahmewerte. Nach den E Klima 2022 sind sie nicht mehr anzuwenden; die Regelmaße gelten dort als Mindestwerte.</p>    <p>Nicht jede Anlage hat ein Mindestmaß: Für Radfahrstreifen nennt die ERA 2010 nur 1,85 m und eine Vergrößerung nach oben – kein Maß darunter.</p>  </div></details>`;
-const QLEGENDE="GESETZ = StVO und VwV-StVO i. d. F. vom 03.04.2025 (in Kraft seit 10.04.2025) einschließlich der dort in Bezug genommenen Regelwerke (ERA 2010, RASt 06, RiLSA, RMS) · SAARLAND = Maßgaben und Richtlinien beim Ausbau von Radverkehrsanlagen, MUKMAV, Stand 05/2023 – Landesvorgabe der Bewilligungsbehörde; in der FRL NMOB-Rad-Fuß nicht ausdrücklich benannt, im Förderverfahren aber regelmäßig herangezogen. Bei Widerspruch gilt die GESETZ-Ebene · BW · ERA-VORGRIFF = Musterlösungen für Radverkehrsanlagen Baden-Württemberg, Stand 10/2025 – im Saarland nicht eingeführt und damit nicht verbindlich, fachlich aber der aktuellste verfügbare Stand: Systematik (Basisstandard) und Maße nehmen die laufende Fortschreibung der ERA (Veröffentlichung ab 2026 erwartet) weitgehend vorweg. Empfehlung 2Rat: bei Neu- und Umbauten als Zielwert ansetzen und ein Abweichen von der ERA 2010 in der Planung kurz begründen. · ANDERES BUNDESLAND = Leitfäden anderer Länder, im Saarland nicht verbindlich, als fachliche Argumentationshilfe zitiert";
+const QLEGENDE="GESETZ = StVO und VwV-StVO i. d. F. vom 03.04.2025 (in Kraft seit 10.04.2025) einschließlich der dort in Bezug genommenen Regelwerke (ERA 2010, RASt 06, RiLSA, RMS) · SAARLAND = Maßgaben und Richtlinien beim Ausbau von Radverkehrsanlagen, MUKMAV, Stand 05/2023 – fachliche Orientierung des Landes; in der FRL NMOB-Rad-Fuß nicht benannt und im Förderverfahren nicht bindend, dort aber regelmäßig herangezogen. Bei Widerspruch gilt die GESETZ-Ebene · BW · ERA-VORGRIFF = Musterlösungen für Radverkehrsanlagen Baden-Württemberg, Stand 10/2025 – im Saarland nicht eingeführt und damit nicht verbindlich, fachlich aber der aktuellste verfügbare Stand: Systematik (Basisstandard) und Maße nehmen die laufende Fortschreibung der ERA (Veröffentlichung ab 2026 erwartet) weitgehend vorweg. Empfehlung 2Rat: bei Neu- und Umbauten als Zielwert ansetzen und ein Abweichen von der ERA 2010 in der Planung kurz begründen. · ANDERES BUNDESLAND = Leitfäden anderer Länder, im Saarland nicht verbindlich, als fachliche Argumentationshilfe zitiert";
 
 let state={step:0,category:null,measure:null,street:null,blsub:null,location:null,kommune:null,mapPrefill:false,geo:null};
 
@@ -913,7 +917,7 @@ function render(){
     <p class="hint">Hinweis: Im Saarland gibt es keine Kreisstraßen. Das Saarländische Straßengesetz kennt Landstraßen I. und II. Ordnung (§ 3 Abs. 1 SaarlStrG) – die Landstraßen II. Ordnung übernehmen hier die Funktion, die in anderen Ländern die Kreisstraßen haben.</p>`;
     h+=renderCards(STREETS.map(s=>({id:s.id,html:`<div class="card-row"><span class="street-badge" style="background:${s.color}">${s.icon}</span><span class="card-label">${s.label}</span></div>`})),state.street,'selectStreet');
     if(state.street==="bundeslandstrasse"){
-      h+=`<div class="section"><h3>Welche Einstufung?</h3><p class="subtitle">Die Baulast unterscheidet sich – Bund (FStrG) oder Land (SaarlStrG). Landstraßen beider Ordnungen liegen in der Baulast des Landes; die Einstufung ist im Straßenverzeichnis nach § 3 Abs. 2 SaarlStrG festgelegt.</p>`;
+      h+=`<div class="section"><h3>Welche Einstufung?</h3><p class="subtitle">Die Baulast unterscheidet sich – Bund (FStrG) oder Land (SaarlStrG). Landstraßen I. und II. Ordnung liegen gleichermaßen in der Baulast des Landes (§ 46 SaarlStrG); die Einstufung ist im Straßenverzeichnis nach § 3 Abs. 2 SaarlStrG festgelegt und spielt für Zuständigkeit und Baulast keine Rolle.</p>`;
       h+=renderCards(BL_SUB.map(b=>({id:b.id,html:`<div class="card-label sm">${b.label}</div><div class="card-desc">${b.desc}</div>`})),state.blsub,'selectBlsub',true);
       h+=`</div>`;
     }
@@ -1074,7 +1078,8 @@ function renderKommuneBar(){
   h+='</select>';
   const el=document.getElementById('kommuneBar');if(el)el.innerHTML=h;
 }
-function setKommune(v){state.kommune=v||null;if(state.step===3)render();}
+function setKommune(v){state.kommune=v||null;const g=document.getElementById('geoKommune');if(g)g.textContent=state.kommune||'— (bitte wählen)';if(state.step===3||state.mapPrefill)render();}
+function resetGeo(){state.geo=null;state.mapPrefill=false;state.street=null;state.blsub=null;state.location=null;state.step=0;if(zmarker&&zmap){zmap.removeLayer(zmarker);zmarker=null;}const el=document.getElementById('mapStatus');if(el){el.innerHTML='';el.classList.remove('show');}render();}
 
 /* URL-Parameter ?m=<measure-id> auswerten (Sprung aus dem VwV-StVO-Tool) */
 (function applyUrlParam(){
