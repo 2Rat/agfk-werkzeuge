@@ -203,7 +203,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <div class="header-title">Fördermittel-Finder <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br>FRL-NMOB-Rad-Fuß<br><span data-stand>Stand 10/2026 · v8</span></div>
+    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br>FRL-NMOB-Rad-Fuß<br><span data-stand>Stand 10/2026 · v9</span></div>
   </div>
 </div>
 
@@ -231,7 +231,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
 
 <script>
 (function(){var l=document.getElementById('logo');l.alt='AGFK-SL';l.onerror=function(){l.style.display='none';};l.src='agfk-logo.png';})();
-const STAND='Stand 10/2026 · v8';
+const STAND='Stand 10/2026 · v9';
 document.querySelectorAll('[data-stand]').forEach(function(n){n.textContent=STAND;});
 
 /* ── Fördergegenstände nach FRL-NMOB-Rad-Fuß (17.11.2025) ── */
@@ -278,12 +278,14 @@ const PRAXIS={
     "Abstimmung mit Baulastträger dokumentieren und dem Antrag beilegen"
   ],
   "2_2_1":[
+    "Planung nach der Handlungsempfehlung Fahrradabstellanlagen der AGFK-SL: Anlehnbügel in Doppelaufstellung, Abstand 1,50 m (senkrecht) bzw. 2,00 m (schräg), Rangierfläche 2,50 m; Mindestfläche für drei Bügel 4,50 × 2,00 m – das sind sechs Stellplätze und damit die Mindestzahl der Richtlinie",
     "Anlehnbügel (Kreuzberger Bügel) als Standard verwenden – Vorderrad-Klemmen sind nicht förderfähig",
     "Bei Schulen und Kitas: 95%-Quote nutzen – fast vollständige Finanzierung möglich",
     "Überdachung mitbeantragen – wird als Gesamtmaßnahme gefördert und steigert die Nutzung deutlich",
     "Bedarfsnachweis durch Zählung der abgestellten Räder beifügen (Foto + Datum reicht)"
   ],
   "2_2_2":[
+    "Planung nach der Handlungsempfehlung Fahrradabstellanlagen der AGFK-SL: Anlehnbügel in Doppelaufstellung, Abstand 1,50 m (senkrecht) bzw. 2,00 m (schräg), Rangierfläche 2,50 m; Mindestfläche für drei Bügel 4,50 × 2,00 m – das sind sechs Stellplätze und damit die Mindestzahl der Richtlinie",
     "B+R-Anlagen an ÖPNV-Haltestellen: Abstimmung mit dem Saar-VV und Aufgabenträger empfehlenswert",
     "Auch gGmbH antragsberechtigt – z.B. für Fahrradparkhäuser in Kooperation mit der Kommune",
     "Fahrradboxen: Mietmodell für den Betrieb vorbereiten, da Betriebskosten nicht förderfähig sind",
@@ -363,9 +365,13 @@ const STD_NOTES=[
   "Planungskosten sind nur zuwendungsfähig, wenn die Planung von Dritten außerhalb der öffentlichen Verwaltung und von anerkannten Fachbüros erbracht wurde. Reine Planungsvorhaben ohne nachfolgende Umsetzung sind nicht zuwendungsfähig (§6.3)",
   "Publizitätspflicht: Am Standort ist für die Dauer der Zweckbindung in geeigneter Form (Schild/Tafel) auf die Förderung hinzuweisen; das MUKMAV stellt die Bildmarken bereit. Zusätzlich Nennung der Ministerien bei Presse- und Öffentlichkeitsarbeit",
   "Abstimmungsergebnisse und Genehmigungen (u. a. Straßenbau-, Straßenverkehrs- und Umweltbehörden) sind der Bewilligungsbehörde vorzulegen",
-  "Vergabe ist Fördervoraussetzung: Planungs- und Bauleistungen müssen nach dem Vergabeerlass des Saarlandes und den ANBest-P-GK vergeben werden – Verstöße führen zur Kürzung oder Rückforderung. Eine lückenlose Vergabedokumentation (Verfahrenswahl, Angebote, Wertung, Vermerk) gehört zu den Verwendungsnachweis-Unterlagen (siehe Vergabe-Assistent)",
-  "Nachträge und Kostenerhöhungen sofort der Bewilligungsbehörde melden (Mitteilungspflicht Nr. 7.5 der Richtlinie) und möglichst erst nach deren Entscheidung beauftragen – nachträglich gemeldete Mehrkosten sind in der Regel nicht zuwendungsfähig",
   "Vorhaben unterhalb der Bagatellgrenze sind nicht förderfähig. Überschreiten die Kosten die maximale Fördersumme, wird bis zu dieser Obergrenze finanziert – die effektive Förderquote fällt dann geringer aus (FAQ 2.7)"
+];
+
+/* Praxis-Hinweise, die für jede Förderung gelten */
+const STD_PRAXIS=[
+  "Vergabe ist Fördervoraussetzung: Planungs- und Bauleistungen müssen nach dem Vergabeerlass des Saarlandes und den ANBest-P-GK vergeben werden – Verstöße führen zur Kürzung oder Rückforderung. Eine lückenlose Vergabedokumentation (Verfahrenswahl, Angebote, Wertung, Vermerk) gehört zu den Verwendungsnachweis-Unterlagen (siehe Vergabe-Assistent)",
+  "Nachträge und Kostenerhöhungen sofort der Bewilligungsbehörde melden (Mitteilungspflicht Nr. 7.5 der Richtlinie) und möglichst erst nach deren Entscheidung beauftragen – nachträglich gemeldete Mehrkosten sind in der Regel nicht zuwendungsfähig"
 ];
 
 let state={step:0,category:null,foerder:null,applicant:null};
@@ -522,8 +528,8 @@ function render(){
     h+=`</div></div>`;
 
     /* Praxis-Box */
-    const praxisTips = PRAXIS[state.foerder];
-    if(praxisTips && praxisTips.length){
+    const praxisTips = [...(PRAXIS[state.foerder]||[]),...STD_PRAXIS];
+    if(praxisTips.length){
       h+=`<div class="praxis-box"><div class="praxis-title">💡 Praxis-Hinweise</div>${praxisTips.map(t=>`<div class="praxis-item">${t}</div>`).join('')}</div>`;
     }
 
@@ -606,6 +612,7 @@ function buildFVermerk(){
   t+='Beispiele: '+f.beispiele+'\n';
   let allNotes=[...STD_NOTES];if(f.hinweise.length)allNotes=[...f.hinweise,...STD_NOTES];
   t+='\nWichtige Hinweise:\n';allNotes.forEach(n=>{t+='- '+n+'\n';});
+  const pt=[...(PRAXIS[state.foerder]||[]),...STD_PRAXIS];if(pt.length){t+='\nPraxis-Hinweise:\n';pt.forEach(n=>{t+='- '+n+'\n';});}
   t+='\nBewilligungsbehörde: MUKMAV, Referat A/4, Keplerstraße 18, 66117 Saarbrücken\n';
   t+='Fachliche Rückfragen: fahrrad@umwelt.saarland.de · Tel. (0681) 501-1426\n';
   t+='Richtlinie: FRL-NMOB-Rad-Fuß · gültig 17.11.2025 – 17.11.2030\n';
