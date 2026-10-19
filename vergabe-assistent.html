@@ -224,12 +224,13 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
       <span class="chev" aria-hidden="true">▶</span>
       <span>
         <b>Was dieses Werkzeug macht – und was nicht</b>
-        <small>Direktauftrag · Freihändige Vergabe · Beschränkte Ausschreibung · EU-Schwellenwert · Vergabevermerk</small>
+        <small>Direktauftrag · Freihändige Vergabe · Beschränkte Ausschreibung · EU-Schwellenwert · Mindestinhalt Vergabevermerk</small>
       </span>
     </summary>
     <div class="lernbox-body">
-      <p>Sie geben <b>Leistungsart</b> und geschätzten <b>Auftragswert netto</b> ein. Das Werkzeug ordnet das Vorhaben einer von drei Stufen zu und zeigt die Pflichtschritte, sinnvolle Ergänzungen und die passenden Rechtsgrundlagen. Eine Vorlage für den Vergabevermerk lässt sich direkt kopieren.</p>
+      <p>Sie geben <b>Leistungsart</b> und geschätzten <b>Auftragswert netto</b> ein. Das Werkzeug ordnet das Vorhaben einer von drei Stufen zu und zeigt die Pflichtschritte, sinnvolle Ergänzungen und die passenden Rechtsgrundlagen. Der Mindestinhalt eines Vergabevermerks lässt sich als Vorlage kopieren – hat Ihre Vergabestelle ein eigenes Formblatt, gilt dieses.</p>
       <p><b>Warum drei Stufen:</b> Der Vergabeerlass des Saarlandes von 2025 erlaubt Kommunen den <b>Direktauftrag bis 100.000 €</b>. Darüber sind bis zum EU-Schwellenwert Freihändige Vergabe und Beschränkte Ausschreibung frei wählbar. Ab dem EU-Schwellenwert (2026/27: Bau 5.404.000 €, Liefer-/Dienstleistungen 216.000 €) gilt das förmliche EU-Verfahren nach GWB und VgV.</p>
+      <p><b>Erste Einschätzung, nicht die Hausregel:</b> Die Vergabe wird je nach Behörde unterschiedlich gehandhabt und ist in der Praxis oft aufwendiger als die drei Stufen hier. Viele Vergabestellen verlangen auch beim Direktauftrag ihr eigenes Formblatt zur Vergabedokumentation und das Einholen von drei formlosen Angeboten. Das Werkzeug zeigt, was mindestens zu tun ist – maßgeblich sind die Dienstanweisung und das Formblatt Ihrer Vergabestelle.</p>
       <p><b>Nicht abgedeckt:</b> Sektorenauftraggeber, Konzessionen, Rahmenvereinbarungen mit Sonderregeln und die Frage, ob Ihre Hauptsatzung für einen Betrag einen Gremienbeschluss verlangt – das steht nur in Ihrer eigenen Zuständigkeitsordnung. Bei Fördermitteln können die Nebenbestimmungen des Zuwendungsbescheids strenger sein als der Erlass.</p>
     </div>
   </details>
@@ -266,7 +267,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
 </div>
 
 <script>
-const STAND='Stand 10/2026 · v6';
+const STAND='Stand 10/2026 · v7';
 document.querySelectorAll('[data-stand]').forEach(function(n){ n.textContent = STAND; });
 (function(){var l=document.getElementById('logo');l.onerror=function(){l.style.display='none';};l.src='agfk-logo.png';})();
 
@@ -287,14 +288,14 @@ function getVerfahren(wert, art) {
   if (wert <= 100000) {
     return {
       level: "direkt", name: "Direktauftrag", tagLabel: "Einfachstes Verfahren",
-      kurz: "Kein förmliches Verfahren nötig. Auftrag direkt vergeben.",
+      kurz: "Formlos, aber nicht formfrei: kein förmliches Verfahren, aber Bedarf und Wirtschaftlichkeit sind zu dokumentieren – viele Vergabestellen verlangen dafür ihr eigenes Formblatt.",
       pflicht: [
         "Haushaltsmittel verfügbar?",
-        "Vergabevermerk anlegen (Bedarf + Wirtschaftlichkeit)",
+        "Vergabevermerk anlegen – Mindestinhalt: Bedarf, Wirtschaftlichkeit, Auftragnehmer; das Formblatt der eigenen Vergabestelle hat Vorrang",
         "Auftrag erteilen",
       ],
       empfohlen: [
-        "Vergleichsangebot einholen (Markterkundung)",
+        "Drei formlose Angebote einholen – in vielen Verwaltungen per Dienstanweisung vorgeschrieben, in jedem Fall der einfachste Beleg der Wirtschaftlichkeit (§ 82 KSVG)",
         "Mehr-Augen-Prinzip bei > 25.000 €",
       ],
       nurBeiBedarf: [
@@ -381,11 +382,11 @@ function vermerkText(wert, art, verfahren) {
   const today = new Date().toLocaleDateString("de-DE");
   var text;
   if (verfahren.level === "direkt") {
-    text = "Vergabevermerk – Direktauftrag\n\nDatum: " + today + "\nLeistungsart: " + artLabel + "\nGesch. Auftragswert: " + formatEuro(wert) + " (netto)\nVerfahren: Direktauftrag gem. Vergabeerlass SL 2025\n\nBegründung:\nDer geschätzte Auftragswert liegt unterhalb der Wertgrenze von 100.000 € netto für Direktaufträge gem. Vergabeerlass SL 2025 (Amtsbl. Nr. 26/2025). Die Vergabe erfolgt unter Beachtung der Haushaltsgrundsätze der Wirtschaftlichkeit und Sparsamkeit (§ 82 KSVG).\n\nAuftragnehmer: ___________________________\nAngebotssumme: _______________ € netto\nWirtschaftlichkeit: ___________________________\n\nUnterschrift: ___________________________";
+    text = "Vergabevermerk (Mindestinhalt) – Direktauftrag\n\nHinweis: Dieser Vermerk nennt nur den Mindestinhalt. Das Formblatt zur Vergabedokumentation Ihrer Vergabestelle hat Vorrang.\n\nDatum: " + today + "\nLeistungsart: " + artLabel + "\nGesch. Auftragswert: " + formatEuro(wert) + " (netto)\nVerfahren: Direktauftrag gem. Vergabeerlass SL 2025\n\n1. Bedarf / Gegenstand der Leistung:\n___________________________\n\n2. Begründung des Verfahrens:\nDer geschätzte Auftragswert liegt unterhalb der Wertgrenze von 100.000 € netto für Direktaufträge gem. Vergabeerlass SL 2025 (Amtsbl. Nr. 26/2025). Die Vergabe erfolgt unter Beachtung der Haushaltsgrundsätze der Wirtschaftlichkeit und Sparsamkeit (§ 82 KSVG).\n\n3. Eingeholte Angebote (formlos, z. B. per E-Mail):\n1. _______________ – Angebot: ___________ € netto\n2. _______________ – Angebot: ___________ € netto\n3. _______________ – Angebot: ___________ € netto\n(falls weniger als drei Angebote: Grund angeben)\n\n4. Auftragnehmer: ___________________________\nAngebotssumme: _______________ € netto\nBegründung der Wirtschaftlichkeit: ___________________________\n\n5. Haushaltsmittel / Deckung: ___________________________\n6. Bei Fördermitteln: Zuwendungsbescheid vom __________ liegt vor\n\nDatum, Unterschrift: ___________________________";
   } else if (verfahren.level === "vereinfacht") {
-    text = "Vergabevermerk – Verfahren unterhalb EU-Schwellenwert\n\nDatum: " + today + "\nLeistungsart: " + artLabel + "\nGesch. Auftragswert: " + formatEuro(wert) + " (netto)\nGewähltes Verfahren: □ Freihändige Vergabe   □ Beschränkte Ausschreibung\n\nBegründung Verfahrenswahl:\nDer gesch. Auftragswert liegt oberhalb der Direktauftragsgrenze (100.000 €) und unterhalb des EU-Schwellenwerts (" + formatEuro(THRESHOLDS_2026[art]) + "). Nach dem Vergabeerlass SL 2025 (Amtsbl. Nr. 26/2025) sind in diesem Bereich sowohl die Freihändige Vergabe als auch die Beschränkte Ausschreibung ohne weitere Einzelbegründung zulässig.\n\nBeteiligte Bieter:\n1. _______________ – Angebot: ___________ €\n2. _______________ – Angebot: ___________ €\n3. _______________ – Angebot: ___________ €\n\nZuschlag an: ___________________________\nBegründung: ___________________________\n\nUnterschrift: ___________________________";
+    text = "Vergabevermerk (Mindestinhalt) – Verfahren unterhalb EU-Schwellenwert\n\nHinweis: Dieser Vermerk nennt nur den Mindestinhalt. Das Formblatt zur Vergabedokumentation Ihrer Vergabestelle hat Vorrang.\n\nDatum: " + today + "\nLeistungsart: " + artLabel + "\nGesch. Auftragswert: " + formatEuro(wert) + " (netto)\nGewähltes Verfahren: □ Freihändige Vergabe   □ Beschränkte Ausschreibung\n\nBegründung Verfahrenswahl:\nDer gesch. Auftragswert liegt oberhalb der Direktauftragsgrenze (100.000 €) und unterhalb des EU-Schwellenwerts (" + formatEuro(THRESHOLDS_2026[art]) + "). Nach dem Vergabeerlass SL 2025 (Amtsbl. Nr. 26/2025) sind in diesem Bereich sowohl die Freihändige Vergabe als auch die Beschränkte Ausschreibung ohne weitere Einzelbegründung zulässig.\n\nBeteiligte Bieter:\n1. _______________ – Angebot: ___________ €\n2. _______________ – Angebot: ___________ €\n3. _______________ – Angebot: ___________ €\n\nZuschlag an: ___________________________\nBegründung: ___________________________\n\nUnterschrift: ___________________________";
   } else {
-    text = "Vergabevermerk – EU-weites Verfahren\n\nDatum: " + today + "\nLeistungsart: " + artLabel + "\nGesch. Auftragswert: " + formatEuro(wert) + " (netto)\n\nDer Auftragswert erreicht/überschreitet den EU-Schwellenwert (" + formatEuro(THRESHOLDS_2026[art]) + "). Vollständiger Vergabevermerk gem. § 8 VgV erforderlich.\n\n[Hinweis: Rechtliche Beratung empfohlen]";
+    text = "Vergabevermerk (Mindestinhalt) – EU-weites Verfahren\n\nHinweis: Dieser Vermerk nennt nur den Mindestinhalt. Das Formblatt zur Vergabedokumentation Ihrer Vergabestelle hat Vorrang.\n\nDatum: " + today + "\nLeistungsart: " + artLabel + "\nGesch. Auftragswert: " + formatEuro(wert) + " (netto)\n\nDer Auftragswert erreicht/überschreitet den EU-Schwellenwert (" + formatEuro(THRESHOLDS_2026[art]) + "). Vollständiger Vergabevermerk gem. § 8 VgV erforderlich.\n\n[Hinweis: Rechtliche Beratung empfohlen]";
   }
   return text + "\n\n" + lizenzVermerkZeile();
 }
@@ -476,7 +477,7 @@ function renderResult() {
   h += collapsible('bedarf', '\u{1F4CE} Nur bei Bedarf', v.nurBeiBedarf.length, bb);
 
   h += '<div class="card"><button type="button" class="vermerk-btn" data-open="vermerk" aria-expanded="' + !!state.open.vermerk + '">'
-     + '<span class="t">\u{1F4DD} Vergabevermerk-Vorlage</span><span class="chev" aria-hidden="true">▶</span></button>';
+     + '<span class="t">\u{1F4DD} Mindestinhalt Vergabevermerk (Vorlage)</span><span class="chev" aria-hidden="true">▶</span></button>';
   if (state.open.vermerk) {
     h += '<div class="copy-row"><button type="button" class="copy-btn' + (state.copied ? ' ok' : '') + '" id="copyBtn">' + (state.copied ? '✓ Kopiert!' : 'In Zwischenablage kopieren') + '</button></div>'
        + '<pre class="vermerk" id="vermerkPre">' + esc(vermerkText(state.wert, state.art, v)) + '</pre>';
