@@ -52,6 +52,7 @@ body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--gray);ba
 .header-title{font-size:17px;font-weight:700;color:var(--gray);line-height:1.3}
 .header-title span{color:var(--blue)}
 .header-right{text-align:right;font-size:11px;color:var(--gray-light);line-height:1.5}
+.btn-portal{display:inline-block;background:#114B7D;color:#fff!important;font-size:14px;font-weight:700;padding:7px 14px;border-radius:8px;text-decoration:none!important;line-height:1.2;white-space:nowrap;margin-bottom:4px}.btn-portal:hover,.btn-portal:focus-visible{background:#0d3b63;text-decoration:none!important}
 .main{max-width:680px;margin:0 auto;padding:24px 20px 60px}
 .steps{display:flex;gap:6px;align-items:center;margin-bottom:24px}
 .step-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;transition:all .2s}
@@ -203,7 +204,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <div class="header-title">Fördermittel-Finder <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a href="index.html" style="color:#114B7D;text-decoration:none;font-weight:600">← Übersicht</a><br>Saarland<br>FRL-NMOB-Rad-Fuß<br><span data-stand>Stand 10/2026 · v9</span></div>
+    <div class="header-right"><a href="index.html" class="btn-portal">← Zur Übersicht</a><br>Saarland<br>FRL-NMOB-Rad-Fuß<br><span data-stand>Stand 10/2026 · v10</span></div>
   </div>
 </div>
 
@@ -231,7 +232,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
 
 <script>
 (function(){var l=document.getElementById('logo');l.alt='AGFK-SL';l.onerror=function(){l.style.display='none';};l.src='agfk-logo.png';})();
-const STAND='Stand 10/2026 · v9';
+const STAND='Stand 10/2026 · v10';
 document.querySelectorAll('[data-stand]').forEach(function(n){n.textContent=STAND;});
 
 /* ── Fördergegenstände nach FRL-NMOB-Rad-Fuß (17.11.2025) ── */

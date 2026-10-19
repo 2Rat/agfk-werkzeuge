@@ -55,6 +55,7 @@
   .app-header h1 span { color: var(--blue); }
   .header-meta { text-align: right; font-size: 11px; color: var(--gray-light); line-height: 1.5; }
   .header-meta a { text-decoration: none; font-weight: 600; }
+  .btn-portal{display:inline-block;background:#114B7D;color:#fff!important;font-size:14px;font-weight:700;padding:7px 14px;border-radius:8px;text-decoration:none!important;line-height:1.2;white-space:nowrap;margin-bottom:4px}.btn-portal:hover,.btn-portal:focus-visible{background:#0d3b63;text-decoration:none!important}
 
   .main { max-width: 640px; margin: 0 auto; padding: 20px 16px 60px; }
 
@@ -213,7 +214,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <h1>Vergabe-Assistent <span>Saarland</span></h1>
       </div>
     </div>
-    <div class="header-meta"><a href="index.html">← Übersicht</a><br>Saarland<br>Vergabeerlass 2025 · EU-SW 2026/27<br><span data-stand></span></div>
+    <div class="header-meta"><a href="index.html" class="btn-portal">← Zur Übersicht</a><br>Saarland<br>Vergabeerlass 2025 · EU-SW 2026/27<br><span data-stand></span></div>
   </div>
 </div>
 
@@ -267,7 +268,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
 </div>
 
 <script>
-const STAND='Stand 10/2026 · v7';
+const STAND='Stand 10/2026 · v8';
 document.querySelectorAll('[data-stand]').forEach(function(n){ n.textContent = STAND; });
 (function(){var l=document.getElementById('logo');l.onerror=function(){l.style.display='none';};l.src='agfk-logo.png';})();
 
