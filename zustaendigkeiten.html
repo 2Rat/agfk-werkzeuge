@@ -2,35 +2,6 @@
 <html lang="de" data-brand="agfk">
 <head>
 <meta charset="UTF-8">
-<!-- ══ VORSCHAU-BEFRISTUNG (nur AGFK-Fassung) ═════════════════════════════
-     Kennenlern-Vorschau freigeschaltet bis einschließlich VORSCHAU_BIS (Ortszeit).
-     Danach wird statt des Werkzeugs ein Hinweis angezeigt. Verlängern = Datum ändern,
-     aufheben = diesen Block löschen. Greift nicht bei data-brand="2rat" (kunden/).
-     ═══════════════════════════════════════════════════════════════════════ -->
-<script>
-(function(){
-  var VORSCHAU_BIS = [2026, 10, 31];            // Jahr, Monat, Tag – letzter gültiger Tag
-  var b = document.documentElement.getAttribute('data-brand');
-  if (b && b !== 'agfk') return;                // 2Rat-Fassung: keine Befristung
-  var ende = new Date(VORSCHAU_BIS[0], VORSCHAU_BIS[1]-1, VORSCHAU_BIS[2], 23, 59, 59);
-  if (new Date() <= ende) return;
-  var datum = ('0'+VORSCHAU_BIS[2]).slice(-2)+'.'+('0'+VORSCHAU_BIS[1]).slice(-2)+'.'+VORSCHAU_BIS[0];
-  document.write('<style>body>*:not(#vorschau-ende){display:none!important}</style>');
-  document.addEventListener('DOMContentLoaded', function(){
-    var d = document.createElement('div');
-    d.id = 'vorschau-ende';
-    d.setAttribute('role','alert');
-    d.style.cssText = 'max-width:560px;margin:12vh auto;padding:28px 26px;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;'
-      + 'color:#1f2937;background:#fff;border:1px solid #d1d5db;border-top:5px solid #14AB9B;border-radius:10px;line-height:1.55';
-    d.innerHTML = '<h1 style="font-size:1.25rem;color:#114B7D;margin:0 0 10px">Vorschau beendet</h1>'
-      + '<p style="margin:0 0 12px">Dieses Werkzeug war als Vorschau für die AGFK-SL bis zum ' + datum + ' freigeschaltet.</p>'
-      + '<p style="margin:0">Für den weiteren Zugang: <strong>2Rat – Büro für Radverkehrsplanung</strong> · Armin Jung<br>'
-      + '<a href="mailto:fahr2rat@gmail.com" style="color:#0C7A6C">fahr2rat@gmail.com</a> · '
-      + '<a href="https://www.2rat.org" style="color:#0C7A6C">www.2rat.org</a></p>';
-    document.body.appendChild(d);
-  });
-})();
-</script>
 <!-- ══ MARKE ══════════════════════════════════════════════════════════════
      Eine Quelldatei für beide Fassungen. Vor dem Kopieren nur data-brand oben
      in <html> setzen: "agfk" (Repo 2Rat/agfk-werkzeuge) oder "2rat" (Werkzeuge/kunden/).
@@ -40,7 +11,7 @@
      ═══════════════════════════════════════════════════════════════════════ -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Zuständigkeiten Radverkehr Saarland – 2Rat</title>
+<title>Zuständigkeiten · Werkzeuge Radverkehr Saarland · AGFK-SL</title>
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <!-- Karte und Geodaten lokal (kein CDN): Leaflet 1.9.4 in vendor/, amtliche Geodaten in rp-geo.js -->
 <script src="vendor/leaflet/leaflet.js"></script>
@@ -232,7 +203,7 @@ else { document.addEventListener('DOMContentLoaded', lizenzInit); }
         <div class="header-title">Zuständigkeiten <span>Radverkehr Saarland</span></div>
       </div>
     </div>
-    <div class="header-right"><a class="portal-link btn-portal" id="brandPortal" href="index.html"></a><br>Saarland<br><span data-stand>Stand 10/2026 · v46</span><br><span data-lizenz style="font-weight:600"></span></div>
+    <div class="header-right"><a class="portal-link btn-portal" id="brandPortal" href="index.html"></a><br>Saarland<br><span data-stand>Stand 10/2026 · v47</span><br><span data-lizenz style="font-weight:600"></span></div>
   </div>
 </div>
 
@@ -287,7 +258,7 @@ const BRAND=BRANDS[document.documentElement.getAttribute('data-brand')]||BRANDS.
   document.getElementById('brandFoot').innerHTML=BRAND.foot;
   lizenzInit();
 })();
-const STAND='Stand 10/2026 · v46';
+const STAND='Stand 10/2026 · v47';
 document.querySelectorAll('[data-stand]').forEach(function(n){n.textContent=STAND;});
 
 const MEASURES=[
@@ -516,6 +487,7 @@ const PRAXIS={
     "RW|Mindestmaß 1,85 m einschließlich Breitstrich (ERA 2010, Kap. 3.3 – Regelmaß, nach den E Klima 2022 zugleich der Mindestwert). Empfohlen sind 2,25 m einschließlich Markierung, also 2,00 m zuzüglich 0,25 m Breitstrich (Ad-hoc-Arbeitspapier zur RASt 06, FGSV 02/2024; so auch die Musterblätter Bayern 2024, die 1,85 m nur noch im Bestand zulassen)",
     "RW|Bei hohen Kfz- oder Radverkehrsstärken, bei Vzul über 50 km/h, bei häufigem Anhängerverkehr oder neben Parkständen breiter als 2,25 m oder mit zusätzlichem Sicherheitsraum (ERA 2010, Kap. 3.3; VwV-StVO zu § 2 Abs. 4 Satz 2 Rn. 10)",
     "RW|Ein Maß unterhalb von 1,85 m sieht die ERA 2010 nicht vor – es gibt kein Klammer-Mindestmaß für Radfahrstreifen",
+    "RW|Sicherheitstrennstreifen zu parkenden Kfz: mindestens 0,75 m, auch beim Radfahrstreifen (E Klima 2022; Ad-hoc-Arbeitspapier RASt, 02/2024). Die ERA 2010 (Kap. 3.3) nannte bei Längsparkständen noch 0,50 m – dieser Wert ist überholt. Der Sicherheitstrennstreifen darf nicht überparkt werden und zählt nicht zur Streifenbreite",
     "RW|Durchgezogener Breitstrich 0,25 m (Z 295). Kernfahrbahn mindestens 5,50 m mit mittlerer Leitlinie zur Fahrstreifentrennung – das Regelmaß der ERA 2010 gilt nach den E Klima 2022 als Mindestwert und ist möglichst breiter zu wählen; die Musterblätter Bayern 2024 setzen ≥ 6,00 m an, 5,50 m nur im Bestand (ERA 2010, RMS; so auch die Landesbroschüre)",
     "RW|Anwendungsbereich innerorts bei ca. 500 bis 2.000 Kfz/h, abhängig von der zulässigen Höchstgeschwindigkeit (ERA 2010, Kap. 2.3; so auch die Landesbroschüre)",
     "RW|Fortsetzung an Knotenpunkten als Furt mit Breitstrich-Lücke-Markierung 0,50 m / 0,20 m, ggf. Roteinfärbung (ERA 2010, RMS; so auch die Landesbroschüre)",
